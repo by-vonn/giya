@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giya — AI Travel Planner</title>
+
+  <!-- Google Fonts: headings + body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       CSS VARIABLES — brand colours
+       ============================================ */
+    :root {
+      --ember: #c8622a;
+      --paper: #f5f0e8;
+      --ink: #1a1612;
+      --ink-muted: #5c5349;
+      --border: rgba(26, 22, 18, 0.12);
+      --shadow: 0 4px 24px rgba(26, 22, 18, 0.08);
+      --topbar-height: 56px;
+      --footer-height: auto;
+    }
+
+    /* Reset + base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      background-color: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-top: var(--topbar-height);
+      padding-bottom: 2rem;
+    }
+
+    h1, h2, h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    /* ============================================
+       TOP BAR — fixed, always visible
+       ============================================ */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: var(--paper);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 100;
+    }
+
+    .topbar__brand {
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: var(--ember);
+      letter-spacing: 0.02em;
+    }
+
+    .topbar__flight {
+      flex: 1;
+      margin: 0 1rem;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+
+    .topbar__warnings {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .topbar__flight {
+        font-size: 0.72rem;
+        margin: 0 0.5rem;
+      }
+    }
+
+    /* Warning icon buttons — grey until activated */
+    .warning-icon {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a39e96;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .warning-icon:hover {
+      background: rgba(26, 22, 18, 0.06);
+    }
+
+    .warning-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Active state — icon turns brand colour */
+    .warning-icon.is-active {
+      color: var(--ember);
+    }
+
+    .warning-icon.is-active.typhoon { color: #2563eb; }
+    .warning-icon.is-active.temp { color: #dc2626; }
+    .warning-icon.is-active.general { color: #ca8a04; }
+
+    /* Tooltip on hover */
+    .warning-icon::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: -2.25rem;
+      right: 0;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+
+    .warning-icon:hover::after {
+      opacity: 1;
+    }
+
+    /* ============================================
+       MAIN LAYOUT — screens + footer
+       ============================================ */
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 1rem;
+    }
+
+    /* Only one screen visible at a time */
+    .screen {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .screen.is-visible {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       SCREEN 0 — Landing
+       ============================================ */
+    .landing {
+      text-align: center;
+      padding: 2rem 0 3rem;
+    }
+
+    .landing h1 {
+      font-size: clamp(1.75rem, 5vw, 2.35rem);
+      margin-bottom: 1rem;
+      max-width: 28ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .landing .subheading {
+      color: var(--ink-muted);
+      font-size: 1.05rem;
+      max-width: 36ch;
+      margin: 0 auto 2rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.9rem 1.75rem;
+      background: var(--ember);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(200, 98, 42, 0.35);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .landing__note {
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ============================================
+       SCREEN 1 — Flight input form
+       ============================================ */
+    .form-screen h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-family: inherit;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .form-group input:focus {
+      outline: 2px solid var(--ember);
+      outline-offset: 2px;
+      border-color: transparent;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 400px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Toggle link for current location */
+    .location-toggle {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--ember);
+      text-decoration: none;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      text-align: left;
+      padding: 0;
+    }
+
+    .location-toggle:hover {
+      text-decoration: underline;
+    }
+
+    .location-section {
+      display: none;
+      margin-bottom: 1.25rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+
+    .location-section.is-open {
+      display: block;
+    }
+
+    .form-screen .btn-primary {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================
+       SCREEN 2 — Category grid
+       ============================================ */
+    .categories-screen h2 {
+      font-size: 1.65rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .categories-screen .subtitle {
+      color: var(--ink-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+    }
+
+    @media (min-width: 480px) {
+      .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .category-card {
+      aspect-ratio: 1;
+      border: none;
+      border-radius: 16px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .category-card .emoji {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .category-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(26, 22, 18, 0.12);
+    }
+
+    /* Each card gets its own soft background colour */
+    .category-card--urban { background: #e8e0f5; }
+    .category-card--beach { background: #d4eef8; }
+    .category-card--nature { background: #d8ecd4; }
+    .category-card--food { background: #fce8d4; }
+    .category-card--family { background: #f5e0e8; }
+    .category-card--budget { background: #e8f0d4; }
+
+    /* ============================================
+       FOOTER — shown on every screen
+       ============================================ */
+    .site-footer {
+      max-width: 640px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.25rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+
+    .site-footer p + p {
+      margin-top: 0.5rem;
+    }
+
+    .site-footer .credit {
+      margin-top: 0.75rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== TOP BAR (always visible) ========== -->
+  <header class="topbar">
+    <span class="topbar__brand">Giya</span>
+    <span class="topbar__flight" id="bar-flight" aria-live="polite"></span>
+
+    <div class="topbar__warnings" aria-label="Travel warnings">
+      <!-- Typhoon warning -->
+      <button
+        type="button"
+        class="warning-icon typhoon"
+        id="warning-typhoon"
+        data-tooltip="No active warnings"
+        aria-label="Typhoon warning"
+        onclick="activateWarning('typhoon', 'Typhoon advisory in effect')"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+      </button>
+
+      <!-- Temperature warning -->
+      <button
+        type="button"
+        class="warning-icon temp"
+        id="warning-temp"
+        data-tooltip="No active warnings"
+        aria-label="Temperature warning"
+        onclick="activateWarning('temp', 'Extreme heat advisory')"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v2h-1v1h1v2h-2V5z"/>
+        </svg>
+      </button>
+
+      <!-- General warning -->
+      <button
+        type="button"
+        class="warning-icon general"
+        id="warning-general"
+        data-tooltip="No active warnings"
+        aria-label="General warning"
+        onclick="activateWarning('general', 'Travel advisory active')"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========== SCREEN 0 — Landing ========== -->
+    <section id="screen-0" class="screen landing is-visible" aria-label="Welcome">
+      <h1>Found a cheap flight. Dont know what to do with it?</h1>
+      <p class="subheading">
+        Tell us where you're flying in and out of. We'll handle the rest — destinations, hidden gems, local food, transport, and budget.
+      </p>
+      <button type="button" class="btn-primary" id="btn-start">
+        Start Planning →
+      </button>
+      <p class="landing__note">No sign-up · No credit card · Free</p>
+    </section>
+
+    <!-- ========== SCREEN 1 — Flight input ========== -->
+    <section id="screen-1" class="screen form-screen" aria-label="Trip details" hidden>
+      <h2>Let's build your trip.</h2>
+
+      <form id="trip-form">
+        <div class="form-group">
+          <label for="fly-into">✈️ Flying into?</label>
+          <input
+            type="text"
+            id="fly-into"
+            name="flyInto"
+            placeholder="city or airport name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="fly-out">✈️ Flying out from?</label>
+          <input
+            type="text"
+            id="fly-out"
+            name="flyOut"
+            placeholder="same city or different?"
+            required
+          >
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date-from">📅 From</label>
+            <input type="date" id="date-from" name="dateFrom" required>
+          </div>
+          <div class="form-group">
+            <label for="date-to">📅 To</label>
+            <input type="date" id="date-to" name="dateTo" required>
+          </div>
+        </div>
+
+        <!-- Optional location — hidden until user clicks the link -->
+        <button type="button" class="location-toggle" id="location-toggle">
+          Travelling further from your terminal? Add your location →
+        </button>
+
+        <div class="location-section" id="location-section">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="current-location">📍 Where are you right now?</label>
+            <input
+              type="text"
+              id="current-location"
+              name="currentLocation"
+              placeholder="e.g. hotel, neighbourhood"
+            >
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Show me what's possible →
+        </button>
+      </form>
+    </section>
+
+    <!-- ========== SCREEN 2 — Categories ========== -->
+    <section id="screen-2" class="screen categories-screen" aria-label="Explore categories" hidden>
+      <h2 id="categories-title">Here's what's near your destination</h2>
+      <p class="subtitle">Tap a category to explore</p>
+
+      <div class="category-grid">
+        <button type="button" class="category-card category-card--urban">
+          <span class="emoji" aria-hidden="true">🏙️</span>
+          Urban and Culture
+        </button>
+        <button type="button" class="category-card category-card--beach">
+          <span class="emoji" aria-hidden="true">🏖️</span>
+          Beach and Islands
+        </button>
+        <button type="button" class="category-card category-card--nature">
+          <span class="emoji" aria-hidden="true">🏔️</span>
+          Nature and Adventure
+        </button>
+        <button type="button" class="category-card category-card--food">
+          <span class="emoji" aria-hidden="true">🍜</span>
+          Food and Night Life
+        </button>
+        <button type="button" class="category-card category-card--family">
+          <span class="emoji" aria-hidden="true">👨‍👩‍👧</span>
+          Family Friendly
+        </button>
+        <button type="button" class="category-card category-card--budget">
+          <span class="emoji" aria-hidden="true">💸</span>
+          Ultra Budget
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER (all screens) ========== -->
+  <footer class="site-footer">
+    <p>AI-generated content is for planning purposes only. Always verify before booking.</p>
+    <p>Map data © OpenStreetMap contributors · Photos: Unsplash</p>
+    <p class="credit">Built by wyivonn</p>
+  </footer>
+
+  <script>
+    /* ============================================
+       SCREEN NAVIGATION
+       Show exactly one screen at a time.
+       ============================================ */
+
+    /**
+     * Hides every .screen, then shows the one matching screenId.
+     * @param {number} screenId — 0, 1, or 2
+     */
+    function showScreen(screenId) {
+      const screens = document.querySelectorAll('.screen');
+
+      screens.forEach(function (screen, index) {
+        const isTarget = index === screenId;
+
+        if (isTarget) {
+          screen.classList.add('is-visible');
+          screen.removeAttribute('hidden');
+        } else {
+          screen.classList.remove('is-visible');
+          screen.setAttribute('hidden', '');
+        }
+      });
+
+      // Scroll to top when changing screens (nice on mobile)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ============================================
+       LOCATION SECTION TOGGLE
+       ============================================ */
+
+  /**
+   * Shows or hides the optional "current location" fields.
+   */
+    function toggleLocationSection() {
+      const section = document.getElementById('location-section');
+      section.classList.toggle('is-open');
+    }
+
+    /* ============================================
+       WARNING ICONS
+       ============================================ */
+
+    /**
+     * Activates a warning icon and updates its tooltip.
+     * @param {string} name — 'typhoon' | 'temp' | 'general'
+     * @param {string} tooltipText — message shown on hover
+     */
+    function activateWarning(name, tooltipText) {
+      const icon = document.getElementById('warning-' + name);
+
+      if (!icon) return;
+
+      icon.classList.add('is-active');
+      icon.setAttribute('data-tooltip', tooltipText);
+    }
+
+    /* ============================================
+       EVENT LISTENERS — wire up buttons & form
+       ============================================ */
+
+    // Screen 0 → Screen 1
+    document.getElementById('btn-start').addEventListener('click', function () {
+      showScreen(1);
+    });
+
+    // Toggle optional location block
+    document.getElementById('location-toggle').addEventListener('click', function () {
+      toggleLocationSection();
+    });
+
+    /* ============================================
+       DATE RULES
+       - date-from cannot be in the past
+       - date-to cannot be earlier than date-from
+       ============================================ */
+    const dateFromInput = document.getElementById('date-from');
+    const dateToInput = document.getElementById('date-to');
+
+    // Format today's date as YYYY-MM-DD for <input type="date">
+    const today = new Date();
+    const todayFormatted = today.toISOString().split('T')[0];
+
+    // Prevent choosing past departure dates
+    dateFromInput.min = todayFormatted;
+    // Before a departure is selected, return date also starts at today
+    dateToInput.min = todayFormatted;
+
+    // Keep return date on/after departure date
+    dateFromInput.addEventListener('change', function () {
+      const selectedFromDate = dateFromInput.value;
+      dateToInput.min = selectedFromDate || todayFormatted;
+
+      // If current "to" date is now invalid, clear it for user to re-select
+      if (dateToInput.value && dateToInput.value < selectedFromDate) {
+        dateToInput.value = '';
+      }
+    });
+
+    // Screen 1 form → Screen 2, update city in title + top bar flight summary
+    document.getElementById('trip-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      // Supports either the original IDs (fly-into/fly-out) or requested IDs (arrival-city/departure-city)
+      const arrivalInput = document.getElementById('arrival-city') || document.getElementById('fly-into');
+      const departureInput = document.getElementById('departure-city') || document.getElementById('fly-out');
+      const fromDateInput = document.getElementById('date-from');
+      const toDateInput = document.getElementById('date-to');
+      const barFlight = document.getElementById('bar-flight');
+
+      const arrivalCity = arrivalInput ? arrivalInput.value.trim() : '';
+      const departureCity = departureInput ? departureInput.value.trim() : '';
+      const fromDate = fromDateInput ? fromDateInput.value : '';
+      const toDate = toDateInput ? toDateInput.value : '';
+      const titleEl = document.getElementById('categories-title');
+
+      if (arrivalCity) {
+        titleEl.textContent = "Here's what's near " + arrivalCity;
+      } else {
+        titleEl.textContent = "Here's what's near your destination";
+      }
+
+      // Update persistent top bar flight details
+      // Format: ✈️ [arrival city] → [departure city] 📅 [from date] – [to date]
+      if (barFlight) {
+        const arrivalText = arrivalCity || 'Arrival city';
+        const departureText = departureCity || 'Departure city';
+        const fromText = fromDate || 'From date';
+        const toText = toDate || 'To date';
+        barFlight.textContent = `✈️ ${arrivalText} → ${departureText} 📅 ${fromText} – ${toText}`;
+      }
+
+      showScreen(2);
+    });
+
+    /* ============================================
+       DEMO: you can call these from the console
+       activateWarning('typhoon', 'Typhoon watch near coast');
+       activateWarning('temp', 'Heat index above 40°C');
+       activateWarning('general', 'Strikes may affect transport');
+       ============================================ */
+  </script>
+</body>
+</html>
