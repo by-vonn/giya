@@ -1,0 +1,6 @@
+name = "giya-travel-planner"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Store your Gemini API key as a secret (never commit it):
+#   npx wrangler secret put GEMINI_API_KEY
