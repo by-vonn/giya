@@ -1,0 +1,10 @@
+# Never push these to GitHub
+worker.js
+wrangler.toml
+*.toml
+giya-keys.txt
+
+# Never push system files
+.DS_Store
+Thumbs.db
+node_modules/
