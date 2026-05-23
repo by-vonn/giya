@@ -501,6 +501,16 @@
       font-style: italic;
     }
 
+    .results-empty {
+      text-align: center;
+      color: var(--ink-muted);
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+      margin-bottom: 1rem;
+    }
+
     /* ============================================
        FOOTER — shown on every screen
        ============================================ */
@@ -579,7 +589,7 @@
 
   <main>
     <!-- ========== SCREEN 0 — Landing ========== -->
-    <section id="screen-0" class="screen landing is-visible" aria-label="Welcome">
+    <section id="screen-0" class="screen landing is-visible" data-screen-index="0" aria-label="Welcome">
       <h1>Found a cheap flight. Dont know what to do with it?</h1>
       <p class="subheading">
         Tell us where you're flying in and out of. We'll handle the rest — destinations, hidden gems, local food, transport, and budget.
@@ -591,7 +601,7 @@
     </section>
 
     <!-- ========== SCREEN 1 — Flight input ========== -->
-    <section id="screen-1" class="screen form-screen" aria-label="Trip details" hidden>
+    <section id="screen-1" class="screen form-screen" data-screen-index="1" aria-label="Trip details" hidden>
       <h2>Let's build your trip.</h2>
 
       <form id="trip-form">
@@ -640,7 +650,7 @@
     </section>
 
     <!-- ========== SCREEN 2 — Categories ========== -->
-    <section id="screen-2" class="screen categories-screen" aria-label="Explore categories" hidden>
+    <section id="screen-2" class="screen categories-screen" data-screen-index="2" aria-label="Explore categories" hidden>
       <h2 id="categories-title">Here's what's near your destination</h2>
       <p class="subtitle">Tap a category to explore</p>
 
@@ -673,8 +683,9 @@
     </section>
 
     <!-- ========== SCREEN 3 — Results ========== -->
-    <section id="screen-results" class="screen results-screen" aria-label="Suggested spots" hidden>
+    <section id="screen-results" class="screen results-screen" data-screen-index="3" aria-label="Suggested spots" hidden>
       <h2 id="results-heading">Here's what's near</h2>
+      <p id="results-empty" class="results-empty" hidden>Giya did not return any spots. Please try again.</p>
       <div id="results-categories" class="results-categories"></div>
       <p class="results-note">Tap any spot to add it to your map</p>
     </section>
@@ -688,22 +699,48 @@
   </footer>
 
   <script>
+    // First line — if you do NOT see this, the browser blocked the whole script file
+    console.log('[Giya] SCRIPT STARTED');
+
+    /* ============================================
+       GIYA — FRONTEND ↔ WORKER CONNECTION
+       ============================================
+       index.html (this file)  →  POST JSON  →  worker.js (Cloudflare)
+       worker.js  →  builds prompt  →  Gemini API  →  JSON back here
+       Set GIYA_DEBUG to true to see logs in the browser console (F12).
+       ============================================ */
+
+    document.addEventListener('DOMContentLoaded', function () {
+    console.log('[Giya] DOM ready — wiring up the page');
+
     const GIYA_WORKER_URL = 'https://giya-ai-worker.calleylearn.workers.dev';
+    const GIYA_DEBUG = true;
+
+    /** Full AI response — used later for the map */
     let giyaData = null;
+
+    function logGiya(step, detail) {
+      if (!GIYA_DEBUG) return;
+      if (detail !== undefined) {
+        console.log('[Giya]', step, detail);
+      } else {
+        console.log('[Giya]', step);
+      }
+    }
 
     /* ============================================
        SCREEN NAVIGATION
-       Show exactly one screen at a time.
+       Screens use data-screen-index="0" … "3"
        ============================================ */
 
     /**
-     * Hides every .screen, then shows the one matching screenId.
-     * @param {number} screenId — 0, 1, 2, or 3
+     * Shows one screen by index: 0=landing, 1=form, 2=categories, 3=results
      */
     function showScreen(screenId) {
       const screens = document.querySelectorAll('.screen');
 
-      screens.forEach(function (screen, index) {
+      screens.forEach(function (screen) {
+        const index = Number(screen.getAttribute('data-screen-index'));
         const isTarget = index === screenId;
 
         if (isTarget) {
@@ -715,7 +752,7 @@
         }
       });
 
-      // Scroll to top when changing screens (nice on mobile)
+      logGiya('showScreen', screenId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -742,12 +779,25 @@
       }
     }
 
+    /**
+     * Safely attach an event listener — skips if element is missing.
+     */
+    function safeAddListener(elementId, eventName, handler) {
+      const el = document.getElementById(elementId);
+      if (!el) {
+        console.warn('[Giya] Missing #' + elementId + ' — cannot attach ' + eventName);
+        return false;
+      }
+      el.addEventListener(eventName, handler);
+      return true;
+    }
+
     /* ============================================
        EVENT LISTENERS — wire up buttons & form
        ============================================ */
 
     // Screen 0 → Screen 1
-    document.getElementById('btn-start').addEventListener('click', function () {
+    safeAddListener('btn-start', 'click', function () {
       showScreen(1);
     });
 
@@ -759,25 +809,24 @@
     const dateFromInput = document.getElementById('date-from');
     const dateToInput = document.getElementById('date-to');
 
-    // Format today's date as YYYY-MM-DD for <input type="date">
-    const today = new Date();
-    const todayFormatted = today.toISOString().split('T')[0];
+    if (dateFromInput && dateToInput) {
+      const today = new Date();
+      const todayFormatted = today.toISOString().split('T')[0];
 
-    // Prevent choosing past departure dates
-    dateFromInput.min = todayFormatted;
-    // Before a departure is selected, return date also starts at today
-    dateToInput.min = todayFormatted;
+      dateFromInput.min = todayFormatted;
+      dateToInput.min = todayFormatted;
 
-    // Keep return date on/after departure date
-    dateFromInput.addEventListener('change', function () {
-      const selectedFromDate = dateFromInput.value;
-      dateToInput.min = selectedFromDate || todayFormatted;
+      dateFromInput.addEventListener('change', function () {
+        const selectedFromDate = dateFromInput.value;
+        dateToInput.min = selectedFromDate || todayFormatted;
 
-      // If current "to" date is now invalid, clear it for user to re-select
-      if (dateToInput.value && dateToInput.value < selectedFromDate) {
-        dateToInput.value = '';
-      }
-    });
+        if (dateToInput.value && dateToInput.value < selectedFromDate) {
+          dateToInput.value = '';
+        }
+      });
+    } else {
+      console.warn('[Giya] Missing #date-from or #date-to — date rules skipped');
+    }
 
     function calculateTripDuration(dateFrom, dateTo) {
       const start = new Date(dateFrom + 'T00:00:00');
@@ -851,11 +900,26 @@
       }
     }
 
+    function countSpots(categories) {
+      if (!Array.isArray(categories)) return 0;
+      return categories.reduce(function (total, cat) {
+        return total + (Array.isArray(cat.spots) ? cat.spots.length : 0);
+      }, 0);
+    }
+
+    /**
+     * Draws spot cards into #results-categories on screen 3.
+     */
     function renderSpotsList(categories) {
       const container = document.getElementById('results-categories');
-      if (!container) return;
+      const emptyEl = document.getElementById('results-empty');
+      if (!container) {
+        logGiya('renderSpotsList: missing #results-categories');
+        return 0;
+      }
 
       container.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = true;
 
       (categories || []).forEach(function (category) {
         const section = document.createElement('section');
@@ -898,6 +962,27 @@
         section.appendChild(spotsGrid);
         container.appendChild(section);
       });
+
+      const total = countSpots(categories);
+      logGiya('renderSpotsList: spots drawn', total);
+      return total;
+    }
+
+    function showFormError(message) {
+      const errorEl = document.getElementById('form-error');
+      if (!errorEl) return;
+      errorEl.textContent = message;
+      errorEl.classList.add('is-visible');
+      errorEl.removeAttribute('hidden');
+      logGiya('form error shown', message);
+    }
+
+    function clearFormError() {
+      const errorEl = document.getElementById('form-error');
+      if (!errorEl) return;
+      errorEl.textContent = '';
+      errorEl.classList.remove('is-visible');
+      errorEl.setAttribute('hidden', '');
     }
 
     function escapeHtml(text) {
@@ -907,36 +992,50 @@
     }
 
     /**
-     * Handles trip form submit: calls the Giya Worker, then updates
-     * warnings, stores giyaData, and shows the results list.
+     * FORM SUBMIT → WORKER → GEMINI → DISPLAY RESULTS
+     * Connected to worker.js via GIYA_WORKER_URL (POST JSON).
      */
     async function submitFlightDetails(event) {
       event.preventDefault();
+      logGiya('submitFlightDetails: started');
 
-      const arrivalCity = document.getElementById('arrival-city').value.trim();
-      const departureCity = document.getElementById('departure-city').value.trim();
-      const dateFrom = document.getElementById('date-from').value;
-      const dateTo = document.getElementById('date-to').value;
+      const arrivalEl = document.getElementById('arrival-city');
+      const departureEl = document.getElementById('departure-city');
+      const dateFromEl = document.getElementById('date-from');
+      const dateToEl = document.getElementById('date-to');
+
+      if (!arrivalEl || !departureEl || !dateFromEl || !dateToEl) {
+        showFormError('Form fields are missing on this page. Please refresh and try again.');
+        return;
+      }
+
+      const arrivalCity = arrivalEl.value.trim();
+      const departureCity = departureEl.value.trim();
+      const dateFrom = dateFromEl.value;
+      const dateTo = dateToEl.value;
       const duration = calculateTripDuration(dateFrom, dateTo);
+
+      const requestBody = {
+        arrival: arrivalCity,
+        departure: departureCity,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+        duration: duration,
+      };
+
+      logGiya('trip payload (sent to worker)', requestBody);
 
       const barFlight = document.getElementById('bar-flight');
       const resultsHeading = document.getElementById('results-heading');
       const loadingEl = document.getElementById('loading-state');
-      const errorEl = document.getElementById('form-error');
       const submitBtn = document.getElementById('btn-submit-trip');
 
-      // Reset UI from any previous attempt
-      if (errorEl) {
-        errorEl.textContent = '';
-        errorEl.classList.remove('is-visible');
-        errorEl.hidden = true;
-      }
+      clearFormError();
       resetWarnings();
 
-      // Loading: "Plotting your escape..."
       if (loadingEl) {
         loadingEl.classList.add('is-visible');
-        loadingEl.hidden = false;
+        loadingEl.removeAttribute('hidden');
       }
       if (submitBtn) submitBtn.disabled = true;
 
@@ -948,60 +1047,78 @@
       }
 
       try {
+        logGiya('fetch → worker', GIYA_WORKER_URL);
+
         const response = await fetch(GIYA_WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            arrival: arrivalCity,
-            departure: departureCity,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
-            duration: duration,
-          }),
+          body: JSON.stringify(requestBody),
         });
+
+        logGiya('worker HTTP status', response.status);
+
+        const responseText = await response.text();
+        logGiya('worker raw response (first 500 chars)', responseText.slice(0, 500));
 
         let data;
         try {
-          data = await response.json();
+          data = JSON.parse(responseText);
         } catch (parseErr) {
-          throw new Error('Invalid response from server');
+          throw new Error('Server returned non-JSON. Check worker deployment.');
         }
+
+        logGiya('worker parsed JSON', data);
 
         if (!response.ok) {
-          throw new Error(data.error || 'Worker request failed');
+          throw new Error(data.error || 'Worker request failed (HTTP ' + response.status + ')');
         }
 
-        // Store full response for map page later
         giyaData = data;
 
-        // a. Warnings → top bar icons
+        const spotCount = countSpots(data.categories);
+        if (spotCount === 0) {
+          throw new Error('Giya returned no spots. Try a more specific city name.');
+        }
+
         applyWarnings(data.warnings);
 
-        // Results screen — heading + category grid
         const nearTitle = "Here's what's near " + arrivalCity;
         if (resultsHeading) resultsHeading.textContent = nearTitle;
-        renderSpotsList(data.categories);
         document.title = nearTitle + ' — Giya';
 
+        renderSpotsList(data.categories);
         showScreen(3);
+
+        logGiya('success — showing screen 3 with spots', spotCount);
       } catch (err) {
-        console.error('Giya worker error:', err);
-        if (errorEl) {
-          errorEl.textContent =
-            'Something went wrong planning your trip. Please try again.';
-          errorEl.classList.add('is-visible');
-          errorEl.hidden = false;
+        console.error('[Giya] submitFlightDetails failed:', err);
+
+        var message = 'Something went wrong planning your trip. Please try again.';
+        if (err.message) {
+          if (err.message.indexOf('Failed to fetch') !== -1) {
+            message =
+              'Could not reach the Giya server. Open the site from ' +
+              'https://by-vonn.github.io/giya (not a local file) and try again.';
+          } else {
+            message = err.message;
+          }
         }
+        showFormError(message);
       } finally {
         if (loadingEl) {
           loadingEl.classList.remove('is-visible');
-          loadingEl.hidden = true;
+          loadingEl.setAttribute('hidden', '');
         }
         if (submitBtn) submitBtn.disabled = false;
       }
     }
 
-    document.getElementById('trip-form').addEventListener('submit', submitFlightDetails);
+    /* Wire form when page is ready */
+  if (safeAddListener('trip-form', 'submit', submitFlightDetails)) {
+      logGiya('ready', 'Form listener attached to #trip-form');
+    } else {
+      console.error('[Giya] #trip-form not found — submit will not work');
+    }
 
     /* ============================================
        DEMO: you can call these from the console
@@ -1009,6 +1126,8 @@
        activateWarning('temp', 'Heat index above 40°C');
        activateWarning('general', 'Strikes may affect transport');
        ============================================ */
+
+    }); // end DOMContentLoaded
   </script>
 </body>
 </html>
