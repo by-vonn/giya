@@ -410,8 +410,10 @@
       align-items: center;
       gap: 0.5rem;
       margin-bottom: 0.85rem;
-      padding-bottom: 0.5rem;
+      padding: 0.5rem 0 0.5rem 0.75rem;
       border-bottom: 2px solid var(--border);
+      border-left: 4px solid var(--ember);
+      border-radius: 0 4px 4px 0;
     }
 
     .results-category__emoji {
@@ -480,6 +482,14 @@
       line-height: 1.5;
     }
 
+    /* Season circle on spot cards — green / amber / red from season_status */
+    .spot-card__season {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
     .season-badge {
       flex-shrink: 0;
       width: 12px;
@@ -492,6 +502,13 @@
     .season-badge--good { background: #16a34a; }
     .season-badge--caution { background: #d97706; }
     .season-badge--avoid { background: #dc2626; }
+
+    .season-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
 
     .results-note {
       margin-top: 2rem;
@@ -781,7 +798,7 @@
 
     /**
      * Safely attach an event listener — skips if element is missing.
-     */
+     */git add .
     function safeAddListener(elementId, eventName, handler) {
       const el = document.getElementById(elementId);
       if (!el) {
@@ -835,10 +852,36 @@
       return diffDays >= 1 ? diffDays : 1;
     }
 
+    /** Fallback colours if JSON omits category.color (matches worker prompt) */
+    const CATEGORY_COLORS = {
+      'Urban and Culture': '#E8892B',
+      'Beach and Islands': '#2B9BE8',
+      'Nature and Adventure': '#2BE87A',
+      'Food and Night Life': '#E82B6B',
+      'Family Friendly': '#9B2BE8',
+      'Ultra Budget': '#E8E82B',
+    };
+
+    function getCategoryColor(category) {
+      if (category.color && /^#[0-9A-Fa-f]{6}$/.test(category.color)) {
+        return category.color;
+      }
+      if (category.name && CATEGORY_COLORS[category.name]) {
+        return CATEGORY_COLORS[category.name];
+      }
+      return '#E8892B';
+    }
+
     function seasonBadgeClass(status) {
       if (status === 'good') return 'season-badge--good';
       if (status === 'avoid') return 'season-badge--avoid';
       return 'season-badge--caution';
+    }
+
+    function getSeasonLabel(status) {
+      if (status === 'good') return 'Good time';
+      if (status === 'avoid') return 'Avoid this period';
+      return 'Check conditions';
     }
 
     function resetWarnings() {
@@ -925,8 +968,11 @@
         const section = document.createElement('section');
         section.className = 'results-category';
 
+        const categoryColor = getCategoryColor(category);
+
         const header = document.createElement('div');
         header.className = 'results-category__header';
+        header.style.borderLeftColor = categoryColor;
         header.innerHTML =
           '<span class="results-category__emoji" aria-hidden="true">' +
             escapeHtml(category.emoji || '') +
@@ -951,8 +997,11 @@
               '<span class="spot-card__name">' +
                 escapeHtml(spot.spot_name || 'Unnamed spot') +
               '</span>' +
-              '<span class="season-badge ' + seasonBadgeClass(status) + '" ' +
-                'role="img" aria-label="Season: ' + escapeHtml(status) + '"></span>' +
+              '<div class="spot-card__season">' +
+                '<span class="season-badge ' + seasonBadgeClass(status) + '" ' +
+                  'role="img" aria-label="Season: ' + escapeHtml(status) + '"></span>' +
+                '<span class="season-label">' + escapeHtml(getSeasonLabel(status)) + '</span>' +
+              '</div>' +
             '</div>' +
             '<p class="spot-card__area">' + escapeHtml(spot.area || '') + '</p>' +
             '<p class="spot-card__why">' + escapeHtml(spot.why || '') + '</p>';
