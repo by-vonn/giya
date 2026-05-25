@@ -36,9 +36,7 @@
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: "DM Sans", system-ui, sans-serif;
@@ -61,9 +59,7 @@
        ============================================ */
     .topbar {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: var(--topbar-height);
       background: var(--paper);
       border-bottom: 1px solid var(--border);
@@ -100,17 +96,12 @@
     }
 
     @media (max-width: 640px) {
-      .topbar__flight {
-        font-size: 0.72rem;
-        margin: 0 0.5rem;
-      }
+      .topbar__flight { font-size: 0.72rem; margin: 0 0.5rem; }
     }
 
-    /* Warning icon buttons — grey until activated */
     .warning-icon {
       position: relative;
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       border: none;
       background: transparent;
       cursor: pointer;
@@ -122,22 +113,11 @@
       transition: color 0.2s, background 0.2s;
     }
 
-    .warning-icon:hover {
-      background: rgba(26, 22, 18, 0.06);
-    }
+    .warning-icon:hover { background: rgba(26, 22, 18, 0.06); }
+    .warning-icon svg { width: 22px; height: 22px; fill: currentColor; }
 
-    .warning-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-    }
-
-    /* Active state — icon turns brand colour */
     .warning-icon.active,
-    .warning-icon.is-active {
-      color: var(--ember);
-    }
-
+    .warning-icon.is-active { color: var(--ember); }
     .warning-icon.active.typhoon,
     .warning-icon.is-active.typhoon { color: #2563eb; }
     .warning-icon.active.temp,
@@ -145,16 +125,12 @@
     .warning-icon.active.general,
     .warning-icon.is-active.general { color: #ca8a04; }
 
-    .warning-icon__text {
-      display: none;
-    }
+    .warning-icon__text { display: none; }
 
-    /* Tooltip on hover */
     .warning-icon::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: -2.25rem;
-      right: 0;
+      bottom: -2.25rem; right: 0;
       font-size: 0.7rem;
       white-space: nowrap;
       background: var(--ink);
@@ -167,12 +143,10 @@
       z-index: 10;
     }
 
-    .warning-icon:hover::after {
-      opacity: 1;
-    }
+    .warning-icon:hover::after { opacity: 1; }
 
     /* ============================================
-       MAIN LAYOUT — screens + footer
+       MAIN LAYOUT
        ============================================ */
     main {
       max-width: 640px;
@@ -180,19 +154,12 @@
       padding: 2rem 1.25rem 1rem;
     }
 
-    /* Only one screen visible at a time */
-    .screen {
-      display: none;
-      animation: fadeIn 0.35s ease;
-    }
-
-    .screen.is-visible {
-      display: block;
-    }
+    .screen { display: none; animation: fadeIn 0.35s ease; }
+    .screen.is-visible { display: block; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ============================================
@@ -241,9 +208,7 @@
       box-shadow: 0 8px 28px rgba(200, 98, 42, 0.35);
     }
 
-    .btn-primary:active {
-      transform: translateY(0);
-    }
+    .btn-primary:active { transform: translateY(0); }
 
     .landing__note {
       margin-top: 1.25rem;
@@ -255,14 +220,9 @@
     /* ============================================
        SCREEN 1 — Flight input form
        ============================================ */
-    .form-screen h2 {
-      font-size: 1.75rem;
-      margin-bottom: 1.5rem;
-    }
+    .form-screen h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
 
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
+    .form-group { margin-bottom: 1.25rem; }
 
     .form-group label {
       display: block;
@@ -295,28 +255,16 @@
     }
 
     @media (max-width: 400px) {
-      .form-row {
-        grid-template-columns: 1fr;
-      }
+      .form-row { grid-template-columns: 1fr; }
     }
 
-    .form-screen .btn-primary {
-      width: 100%;
-      margin-top: 0.5rem;
-    }
+    .form-screen .btn-primary { width: 100%; margin-top: 0.5rem; }
 
     /* ============================================
        SCREEN 2 — Category grid
        ============================================ */
-    .categories-screen h2 {
-      font-size: 1.65rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .categories-screen .subtitle {
-      color: var(--ink-muted);
-      margin-bottom: 1.5rem;
-    }
+    .categories-screen h2 { font-size: 1.65rem; margin-bottom: 0.35rem; }
+    .categories-screen .subtitle { color: var(--ink-muted); margin-bottom: 1.5rem; }
 
     .category-grid {
       display: grid;
@@ -325,9 +273,7 @@
     }
 
     @media (min-width: 480px) {
-      .category-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .category-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     .category-card {
@@ -351,32 +297,25 @@
       line-height: 1.3;
     }
 
-    .category-card .emoji {
-      font-size: 2rem;
-      line-height: 1;
-    }
+    .category-card .emoji { font-size: 2rem; line-height: 1; }
 
     .category-card:hover {
       transform: translateY(-4px) scale(1.02);
       box-shadow: 0 12px 32px rgba(26, 22, 18, 0.12);
     }
 
-    /* Each card gets its own soft background colour */
-    .category-card--urban { background: #e8e0f5; }
-    .category-card--beach { background: #d4eef8; }
+    .category-card--urban  { background: #e8e0f5; }
+    .category-card--beach  { background: #d4eef8; }
     .category-card--nature { background: #d8ecd4; }
-    .category-card--food { background: #fce8d4; }
+    .category-card--food   { background: #fce8d4; }
     .category-card--family { background: #f5e0e8; }
     .category-card--budget { background: #e8f0d4; }
 
-    /* Loading screen — two-phase animation while waiting for AI */
-    .loading-state {
-      display: none;
-    }
-
-    .loading-state.is-visible {
-      display: block;
-    }
+    /* ============================================
+       LOADING SCREEN
+       ============================================ */
+    .loading-state { display: none; }
+    .loading-state.is-visible { display: block; }
 
     .loading-screen {
       max-width: 480px;
@@ -385,9 +324,7 @@
       text-align: center;
     }
 
-    .loading-map-wrap {
-      margin-bottom: 1.25rem;
-    }
+    .loading-map-wrap { margin-bottom: 1.25rem; }
 
     .loading-map {
       height: 200px;
@@ -396,17 +333,13 @@
       border: 1px solid var(--border);
     }
 
-    .loading-map-pin {
-      background: transparent;
-      border: none;
-    }
+    .loading-map-pin { background: transparent; border: none; }
 
     .loading-map-marker {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
+      width: 48px; height: 48px;
       background: var(--ember);
       border: 3px solid #fff;
       border-radius: 50%;
@@ -437,32 +370,15 @@
       transition: opacity 0.4s ease;
     }
 
-    .loading-message.is-visible {
-      opacity: 1;
-    }
+    .loading-message.is-visible { opacity: 1; }
 
-    .form-error {
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 1.05rem;
-    }
-
-    .form-error {
-      display: none;
-      color: #b91c1c;
-    }
-
-    .form-error.is-visible {
-      display: block;
-    }
+    .form-error { display: none; color: #b91c1c; }
+    .form-error.is-visible { display: block; }
 
     /* ============================================
        SCREEN 3 — Results
        ============================================ */
-    .results-screen h2 {
-      font-size: 1.65rem;
-      margin-bottom: 1.25rem;
-    }
+    .results-screen h2 { font-size: 1.65rem; margin-bottom: 1.25rem; }
 
     .results-categories {
       display: flex;
@@ -481,10 +397,7 @@
       border-radius: 0 4px 4px 0;
     }
 
-    .results-category__emoji {
-      font-size: 1.35rem;
-      line-height: 1;
-    }
+    .results-category__emoji { font-size: 1.35rem; line-height: 1; }
 
     .results-category__name {
       font-family: "Playfair Display", Georgia, serif;
@@ -500,9 +413,7 @@
     }
 
     @media (min-width: 520px) {
-      .results-spots {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .results-spots { grid-template-columns: repeat(2, 1fr); }
     }
 
     .spot-card {
@@ -528,26 +439,10 @@
       margin-bottom: 0.25rem;
     }
 
-    .spot-card__name {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--ink);
-    }
+    .spot-card__name { font-weight: 700; font-size: 1rem; color: var(--ink); }
+    .spot-card__area { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 0.5rem; }
+    .spot-card__why  { font-size: 0.9rem; font-style: italic; color: var(--ink); line-height: 1.5; }
 
-    .spot-card__area {
-      font-size: 0.8rem;
-      color: var(--ink-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .spot-card__why {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--ink);
-      line-height: 1.5;
-    }
-
-    /* Season circle on spot cards — green / amber / red from season_status */
     .spot-card__season {
       display: flex;
       align-items: center;
@@ -557,16 +452,15 @@
 
     .season-badge {
       flex-shrink: 0;
-      width: 12px;
-      height: 12px;
+      width: 12px; height: 12px;
       border-radius: 50%;
       border: 2px solid #fff;
       box-shadow: 0 0 0 1px var(--border);
     }
 
-    .season-badge--good { background: #16a34a; }
+    .season-badge--good    { background: #16a34a; }
     .season-badge--caution { background: #d97706; }
-    .season-badge--avoid { background: #dc2626; }
+    .season-badge--avoid   { background: #dc2626; }
 
     .season-label {
       font-size: 0.7rem;
@@ -594,7 +488,7 @@
     }
 
     /* ============================================
-       FOOTER — shown on every screen
+       FOOTER
        ============================================ */
     .site-footer {
       max-width: 640px;
@@ -606,9 +500,7 @@
       line-height: 1.7;
     }
 
-    .site-footer p + p {
-      margin-top: 0.5rem;
-    }
+    .site-footer p + p { margin-top: 0.5rem; }
 
     .site-footer .credit {
       margin-top: 0.75rem;
@@ -619,48 +511,30 @@
 </head>
 <body>
 
-  <!-- ========== TOP BAR (always visible) ========== -->
+  <!-- ========== TOP BAR ========== -->
   <header class="topbar">
     <span class="topbar__brand">Giya</span>
     <span class="topbar__flight" id="bar-flight" aria-live="polite"></span>
 
     <div class="topbar__warnings" aria-label="Travel warnings">
-      <!-- Typhoon warning -->
-      <button
-        type="button"
-        class="warning-icon typhoon"
-        id="warn-typhoon"
-        data-tooltip="No active warnings"
-        aria-label="Typhoon warning"
-      >
+      <button type="button" class="warning-icon typhoon" id="warn-typhoon"
+        data-tooltip="No active warnings" aria-label="Typhoon warning">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
         </svg>
         <span id="warn-typhoon-text" class="warning-icon__text" hidden></span>
       </button>
 
-      <!-- Temperature warning -->
-      <button
-        type="button"
-        class="warning-icon temp"
-        id="warn-temp"
-        data-tooltip="No active warnings"
-        aria-label="Temperature warning"
-      >
+      <button type="button" class="warning-icon temp" id="warn-temp"
+        data-tooltip="No active warnings" aria-label="Temperature warning">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v2h-1v1h1v2h-2V5z"/>
         </svg>
         <span id="warn-temp-text" class="warning-icon__text" hidden></span>
       </button>
 
-      <!-- General warning -->
-      <button
-        type="button"
-        class="warning-icon general"
-        id="warn-general"
-        data-tooltip="No active warnings"
-        aria-label="General warning"
-      >
+      <button type="button" class="warning-icon general" id="warn-general"
+        data-tooltip="No active warnings" aria-label="General warning">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
         </svg>
@@ -671,10 +545,12 @@
 
   <main>
     <!-- ========== SCREEN 0 — Landing ========== -->
-    <section id="screen-0" class="screen landing is-visible" data-screen-index="0" aria-label="Welcome">
-      <h1>Found a cheap flight. Dont know what to do with it?</h1>
+    <section id="screen-0" class="screen landing is-visible"
+      data-screen-index="0" aria-label="Welcome">
+      <h1>Found a cheap flight. Don't know what to do with it?</h1>
       <p class="subheading">
-        Tell us where you're flying in and out of. We'll handle the rest — destinations, hidden gems, local food, transport, and budget.
+        Tell us where you're flying in and out of. We'll handle the rest —
+        destinations, hidden gems, local food, transport, and budget.
       </p>
       <button type="button" class="btn-primary" id="btn-start">
         Start Planning →
@@ -683,30 +559,21 @@
     </section>
 
     <!-- ========== SCREEN 1 — Flight input ========== -->
-    <section id="screen-1" class="screen form-screen" data-screen-index="1" aria-label="Trip details" hidden>
+    <section id="screen-1" class="screen form-screen"
+      data-screen-index="1" aria-label="Trip details" hidden>
       <h2>Let's build your trip.</h2>
 
       <form id="trip-form">
         <div class="form-group">
           <label for="arrival-city">✈️ Flying into?</label>
-          <input
-            type="text"
-            id="arrival-city"
-            name="flyInto"
-            placeholder="city or airport name"
-            required
-          >
+          <input type="text" id="arrival-city" name="flyInto"
+            placeholder="city or airport name" required>
         </div>
 
         <div class="form-group">
           <label for="departure-city">✈️ Flying out from?</label>
-          <input
-            type="text"
-            id="departure-city"
-            name="flyOut"
-            placeholder="same city or different?"
-            required
-          >
+          <input type="text" id="departure-city" name="flyOut"
+            placeholder="same city or different?" required>
         </div>
 
         <div class="form-row">
@@ -732,6 +599,7 @@
             <p id="loading-message" class="loading-message"></p>
           </div>
         </div>
+
         <p id="form-error" class="form-error" role="alert" hidden></p>
 
         <button type="submit" class="btn-primary" id="btn-submit-trip">
@@ -741,48 +609,45 @@
     </section>
 
     <!-- ========== SCREEN 2 — Categories ========== -->
-    <section id="screen-2" class="screen categories-screen" data-screen-index="2" aria-label="Explore categories" hidden>
+    <section id="screen-2" class="screen categories-screen"
+      data-screen-index="2" aria-label="Explore categories" hidden>
       <h2 id="categories-title">Here's what's near your destination</h2>
       <p class="subtitle">Tap a category to explore</p>
-
       <div class="category-grid">
         <button type="button" class="category-card category-card--urban">
-          <span class="emoji" aria-hidden="true">🏙️</span>
-          Urban and Culture
+          <span class="emoji" aria-hidden="true">🏙️</span>Urban and Culture
         </button>
         <button type="button" class="category-card category-card--beach">
-          <span class="emoji" aria-hidden="true">🏖️</span>
-          Beach and Islands
+          <span class="emoji" aria-hidden="true">🏖️</span>Beach and Islands
         </button>
         <button type="button" class="category-card category-card--nature">
-          <span class="emoji" aria-hidden="true">🏔️</span>
-          Nature and Adventure
+          <span class="emoji" aria-hidden="true">🏔️</span>Nature and Adventure
         </button>
         <button type="button" class="category-card category-card--food">
-          <span class="emoji" aria-hidden="true">🍜</span>
-          Food and Night Life
+          <span class="emoji" aria-hidden="true">🍜</span>Food and Night Life
         </button>
         <button type="button" class="category-card category-card--family">
-          <span class="emoji" aria-hidden="true">👨‍👩‍👧</span>
-          Family Friendly
+          <span class="emoji" aria-hidden="true">👨‍👩‍👧</span>Family Friendly
         </button>
         <button type="button" class="category-card category-card--budget">
-          <span class="emoji" aria-hidden="true">💸</span>
-          Ultra Budget
+          <span class="emoji" aria-hidden="true">💸</span>Ultra Budget
         </button>
       </div>
     </section>
 
     <!-- ========== SCREEN 3 — Results ========== -->
-    <section id="screen-results" class="screen results-screen" data-screen-index="3" aria-label="Suggested spots" hidden>
+    <section id="screen-results" class="screen results-screen"
+      data-screen-index="3" aria-label="Suggested spots" hidden>
       <h2 id="results-heading">Here's what's near</h2>
-      <p id="results-empty" class="results-empty" hidden>Giya did not return any spots. Please try again.</p>
+      <p id="results-empty" class="results-empty" hidden>
+        Giya did not return any spots. Please try again.
+      </p>
       <div id="results-categories" class="results-categories"></div>
       <p class="results-note">Tap any spot to add it to your map</p>
     </section>
   </main>
 
-  <!-- ========== FOOTER (all screens) ========== -->
+  <!-- ========== FOOTER ========== -->
   <footer class="site-footer">
     <p>AI-generated content is for planning purposes only. Always verify before booking.</p>
     <p>Map data © OpenStreetMap contributors · Photos: Unsplash</p>
@@ -790,654 +655,694 @@
   </footer>
 
   <script>
-    // First line — if you do NOT see this, the browser blocked the whole script file
     console.log('[Giya] SCRIPT STARTED');
 
-    /* ============================================
-       GIYA — FRONTEND ↔ WORKER CONNECTION
-       ============================================
-       index.html (this file)  →  POST JSON  →  worker.js (Cloudflare)
-       worker.js  →  builds prompt  →  Gemini API  →  JSON back here
-       Set GIYA_DEBUG to true to see logs in the browser console (F12).
-       ============================================ */
-
     document.addEventListener('DOMContentLoaded', function () {
-    console.log('[Giya] DOM ready — wiring up the page');
+      console.log('[Giya] DOM ready — wiring up the page');
 
-    const GIYA_WORKER_URL = 'https://giya-ai-worker.calleylearn.workers.dev';
-    const GIYA_DEBUG = true;
+      const GIYA_WORKER_URL = 'https://giya-ai-worker.calleylearn.workers.dev';
+      const GIYA_DEBUG = true;
 
-    /** Full AI response — used later for the map */
-    let giyaData = null;
+      let giyaData = null;
 
-    function logGiya(step, detail) {
-      if (!GIYA_DEBUG) return;
-      if (detail !== undefined) {
-        console.log('[Giya]', step, detail);
-      } else {
-        console.log('[Giya]', step);
-      }
-    }
-
-    /* ============================================
-       SCREEN NAVIGATION
-       Screens use data-screen-index="0" … "3"
-       ============================================ */
-
-    /**
-     * Shows one screen by index: 0=landing, 1=form, 2=categories, 3=results
-     */
-    function showScreen(screenId) {
-      const screens = document.querySelectorAll('.screen');
-
-      screens.forEach(function (screen) {
-        const index = Number(screen.getAttribute('data-screen-index'));
-        const isTarget = index === screenId;
-
-        if (isTarget) {
-          screen.classList.add('is-visible');
-          screen.removeAttribute('hidden');
+      function logGiya(step, detail) {
+        if (!GIYA_DEBUG) return;
+        if (detail !== undefined) {
+          console.log('[Giya]', step, detail);
         } else {
-          screen.classList.remove('is-visible');
-          screen.setAttribute('hidden', '');
+          console.log('[Giya]', step);
         }
-      });
-
-      logGiya('showScreen', screenId);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    /* ============================================
-       WARNING ICONS
-       ============================================ */
-
-    /**
-     * Activates a warning icon and updates its tooltip.
-     * @param {string} name — 'typhoon' | 'temp' | 'general'
-     * @param {string} tooltipText — message shown on hover
-     */
-    function activateWarning(name, tooltipText) {
-      const icon = document.getElementById('warn-' + name);
-      const textEl = document.getElementById('warn-' + name + '-text');
-
-      if (!icon) return;
-
-      icon.classList.add('active');
-      icon.setAttribute('data-tooltip', tooltipText);
-      if (textEl) {
-        textEl.textContent = tooltipText;
-        textEl.hidden = false;
       }
-    }
 
-    /**
-     * Safely attach an event listener — skips if element is missing.
-     */
-    function safeAddListener(elementId, eventName, handler) {
-      const el = document.getElementById(elementId);
-      if (!el) {
-        console.warn('[Giya] Missing #' + elementId + ' — cannot attach ' + eventName);
-        return false;
+      /* ============================================
+         SCREEN NAVIGATION
+         ============================================ */
+      function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(function (screen) {
+          const index = Number(screen.getAttribute('data-screen-index'));
+          const isTarget = index === screenId;
+          if (isTarget) {
+            screen.classList.add('is-visible');
+            screen.removeAttribute('hidden');
+          } else {
+            screen.classList.remove('is-visible');
+            screen.setAttribute('hidden', '');
+          }
+        });
+        logGiya('showScreen', screenId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-      el.addEventListener(eventName, handler);
-      return true;
-    }
 
-    /* ============================================
-       EVENT LISTENERS — wire up buttons & form
-       ============================================ */
-
-    // Screen 0 → Screen 1
-    safeAddListener('btn-start', 'click', function () {
-      showScreen(1);
-    });
-
-    /* ============================================
-       DATE RULES
-       - date-from cannot be in the past
-       - date-to cannot be earlier than date-from
-       ============================================ */
-    const dateFromInput = document.getElementById('date-from');
-    const dateToInput = document.getElementById('date-to');
-
-    if (dateFromInput && dateToInput) {
-      const today = new Date();
-      const todayFormatted = today.toISOString().split('T')[0];
-
-      dateFromInput.min = todayFormatted;
-      dateToInput.min = todayFormatted;
-
-      dateFromInput.addEventListener('change', function () {
-        const selectedFromDate = dateFromInput.value;
-        dateToInput.min = selectedFromDate || todayFormatted;
-
-        if (dateToInput.value && dateToInput.value < selectedFromDate) {
-          dateToInput.value = '';
-        }
-      });
-    } else {
-      console.warn('[Giya] Missing #date-from or #date-to — date rules skipped');
-    }
-
-    function calculateTripDuration(dateFrom, dateTo) {
-      const start = new Date(dateFrom + 'T00:00:00');
-      const end = new Date(dateTo + 'T00:00:00');
-      const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
-      return diffDays >= 1 ? diffDays : 1;
-    }
-
-    /** Fallback colours if JSON omits category.color (matches worker prompt) */
-    const CATEGORY_COLORS = {
-      'Urban and Culture': '#E8892B',
-      'Beach and Islands': '#2B9BE8',
-      'Nature and Adventure': '#2BE87A',
-      'Food and Night Life': '#E82B6B',
-      'Family Friendly': '#9B2BE8',
-      'Ultra Budget': '#E8E82B',
-    };
-
-    function getCategoryColor(category) {
-      if (category.color && /^#[0-9A-Fa-f]{6}$/.test(category.color)) {
-        return category.color;
-      }
-      if (category.name && CATEGORY_COLORS[category.name]) {
-        return CATEGORY_COLORS[category.name];
-      }
-      return '#E8892B';
-    }
-
-    function seasonBadgeClass(status) {
-      if (status === 'good') return 'season-badge--good';
-      if (status === 'avoid') return 'season-badge--avoid';
-      return 'season-badge--caution';
-    }
-
-    function getSeasonLabel(status) {
-      if (status === 'good') return 'Good time';
-      if (status === 'avoid') return 'Avoid this period';
-      return 'Check conditions';
-    }
-
-    function resetWarnings() {
-      ['typhoon', 'temp', 'general'].forEach(function (name) {
+      /* ============================================
+         WARNING ICONS
+         ============================================ */
+      function activateWarning(name, tooltipText) {
         const icon = document.getElementById('warn-' + name);
         const textEl = document.getElementById('warn-' + name + '-text');
-        if (icon) {
-          icon.classList.remove('active');
-          icon.setAttribute('data-tooltip', 'No active warnings');
-        }
-        if (textEl) {
-          textEl.textContent = '';
-          textEl.hidden = true;
-        }
-      });
-    }
-
-    function applyWarnings(warnings) {
-      if (!warnings) return;
-
-      if (warnings.typhoon_risk) {
-        const icon = document.getElementById('warn-typhoon');
-        const textEl = document.getElementById('warn-typhoon-text');
-        const note = warnings.typhoon_note || 'Typhoon risk during your dates';
-        if (icon) {
-          icon.classList.add('active');
-          icon.setAttribute('data-tooltip', note);
-        }
-        if (textEl) {
-          textEl.textContent = note;
-          textEl.hidden = false;
-        }
+        if (!icon) return;
+        icon.classList.add('active');
+        icon.setAttribute('data-tooltip', tooltipText);
+        if (textEl) { textEl.textContent = tooltipText; textEl.hidden = false; }
       }
 
-      if (warnings.temperature_note) {
-        const icon = document.getElementById('warn-temp');
-        const textEl = document.getElementById('warn-temp-text');
-        if (icon) {
-          icon.classList.add('active');
-          icon.setAttribute('data-tooltip', warnings.temperature_note);
+      function safeAddListener(elementId, eventName, handler) {
+        const el = document.getElementById(elementId);
+        if (!el) {
+          console.warn('[Giya] Missing #' + elementId + ' — cannot attach ' + eventName);
+          return false;
         }
-        if (textEl) {
-          textEl.textContent = warnings.temperature_note;
-          textEl.hidden = false;
-        }
+        el.addEventListener(eventName, handler);
+        return true;
       }
 
-      if (warnings.general_note) {
-        const icon = document.getElementById('warn-general');
-        const textEl = document.getElementById('warn-general-text');
-        if (icon) {
-          icon.classList.add('active');
-          icon.setAttribute('data-tooltip', warnings.general_note);
-        }
-        if (textEl) {
-          textEl.textContent = warnings.general_note;
-          textEl.hidden = false;
-        }
-      }
-    }
+      safeAddListener('btn-start', 'click', function () { showScreen(1); });
 
-    function countSpots(categories) {
-      if (!Array.isArray(categories)) return 0;
-      return categories.reduce(function (total, cat) {
-        return total + (Array.isArray(cat.spots) ? cat.spots.length : 0);
-      }, 0);
-    }
+      /* ============================================
+         DATE RULES
+         ============================================ */
+      const dateFromInput = document.getElementById('date-from');
+      const dateToInput   = document.getElementById('date-to');
 
-    /**
-     * Draws spot cards into #results-categories on screen 3.
-     */
-    function renderSpotsList(categories) {
-      const container = document.getElementById('results-categories');
-      const emptyEl = document.getElementById('results-empty');
-      if (!container) {
-        logGiya('renderSpotsList: missing #results-categories');
-        return 0;
-      }
+      if (dateFromInput && dateToInput) {
+        const todayFormatted = new Date().toISOString().split('T')[0];
+        dateFromInput.min = todayFormatted;
+        dateToInput.min   = todayFormatted;
 
-      container.innerHTML = '';
-      if (emptyEl) emptyEl.hidden = true;
-
-      (categories || []).forEach(function (category) {
-        const section = document.createElement('section');
-        section.className = 'results-category';
-
-        const categoryColor = getCategoryColor(category);
-
-        const header = document.createElement('div');
-        header.className = 'results-category__header';
-        header.style.borderLeftColor = categoryColor;
-        header.innerHTML =
-          '<span class="results-category__emoji" aria-hidden="true">' +
-            escapeHtml(category.emoji || '') +
-          '</span>' +
-          '<span class="results-category__name">' +
-            escapeHtml(category.name || 'Category') +
-          '</span>';
-        section.appendChild(header);
-
-        const spotsGrid = document.createElement('div');
-        spotsGrid.className = 'results-spots';
-
-        (category.spots || []).forEach(function (spot) {
-          const status = spot.season_status || 'caution';
-          const card = document.createElement('article');
-          card.className = 'spot-card';
-          card.setAttribute('role', 'button');
-          card.setAttribute('tabindex', '0');
-          card.setAttribute('title', 'Tap to add to your map');
-          card.innerHTML =
-            '<div class="spot-card__header">' +
-              '<span class="spot-card__name">' +
-                escapeHtml(spot.spot_name || 'Unnamed spot') +
-              '</span>' +
-              '<div class="spot-card__season">' +
-                '<span class="season-badge ' + seasonBadgeClass(status) + '" ' +
-                  'role="img" aria-label="Season: ' + escapeHtml(status) + '"></span>' +
-                '<span class="season-label">' + escapeHtml(getSeasonLabel(status)) + '</span>' +
-              '</div>' +
-            '</div>' +
-            '<p class="spot-card__area">' + escapeHtml(spot.area || '') + '</p>' +
-            '<p class="spot-card__why">' + escapeHtml(spot.why || '') + '</p>';
-          spotsGrid.appendChild(card);
+        dateFromInput.addEventListener('change', function () {
+          const selectedFromDate = dateFromInput.value;
+          dateToInput.min = selectedFromDate || todayFormatted;
+          if (dateToInput.value && dateToInput.value < selectedFromDate) {
+            dateToInput.value = '';
+          }
         });
-
-        section.appendChild(spotsGrid);
-        container.appendChild(section);
-      });
-
-      const total = countSpots(categories);
-      logGiya('renderSpotsList: spots drawn', total);
-      return total;
-    }
-
-    function showFormError(message) {
-      const errorEl = document.getElementById('form-error');
-      if (!errorEl) return;
-      errorEl.textContent = message;
-      errorEl.classList.add('is-visible');
-      errorEl.removeAttribute('hidden');
-      logGiya('form error shown', message);
-    }
-
-    function clearFormError() {
-      const errorEl = document.getElementById('form-error');
-      if (!errorEl) return;
-      errorEl.textContent = '';
-      errorEl.classList.remove('is-visible');
-      errorEl.setAttribute('hidden', '');
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    /* ============================================
-       LOADING SCREEN — map/globe + rotating messages
-       ============================================ */
-
-    const CITY_COORDINATES = {
-      'osaka': [34.6937, 135.5023],
-      'tokyo': [35.6762, 139.6503],
-      'kyoto': [35.0116, 135.7681],
-      'bangkok': [13.7563, 100.5018],
-      'kuala lumpur': [3.1390, 101.6869],
-      'singapore': [1.3521, 103.8198],
-      'bali': [-8.3405, 115.0920],
-      'hanoi': [21.0278, 105.8342],
-      'ho chi minh city': [10.8231, 106.6297],
-      'seoul': [37.5665, 126.9780],
-      'busan': [35.1796, 129.0756],
-      'taipei': [25.0330, 121.5654],
-      'hong kong': [22.3193, 114.1694],
-      'manila': [14.5995, 120.9842],
-      'yangon': [16.8661, 96.1951],
-      'phnom penh': [11.5564, 104.9282],
-      'kathmandu': [27.7172, 85.3240],
-      'mumbai': [19.0760, 72.8777],
-      'delhi': [28.6139, 77.2090],
-      'london': [51.5074, -0.1278],
-      'paris': [48.8566, 2.3522],
-      'barcelona': [41.3851, 2.1734],
-      'amsterdam': [52.3676, 4.9041],
-      'berlin': [52.5200, 13.4050],
-      'prague': [50.0755, 14.4378],
-      'budapest': [47.4979, 19.0402],
-      'lisbon': [38.7169, -9.1395],
-      'rome': [41.9028, 12.4964],
-      'athens': [37.9838, 23.7275],
-      'istanbul': [41.0082, 28.9784],
-      'tbilisi': [41.6938, 44.8015],
-      'dubai': [25.2048, 55.2708],
-      'cairo': [30.0444, 31.2357],
-      'marrakech': [31.6295, -7.9811],
-      'nairobi': [-1.2921, 36.8219],
-      'cape town': [-33.9249, 18.4241],
-      'sydney': [-33.8688, 151.2093],
-      'melbourne': [-37.8136, 144.9631],
-      'auckland': [-36.8509, 174.7645],
-      'new york': [40.7128, -74.0060],
-      'mexico city': [19.4326, -99.1332],
-      'bogota': [4.7110, -74.0721],
-      'medellin': [6.2442, -75.5812],
-      'lima': [-12.0464, -77.0428],
-      'buenos aires': [-34.6037, -58.3816],
-      'rio de janeiro': [-22.9068, -43.1729],
-    };
-
-    const LOADING_MESSAGES = [
-      { emoji: '🗺️', text: 'Plotting your escape...' },
-      { emoji: '💎', text: 'Scanning for hidden gems...' },
-      { emoji: '🌀', text: "Checking if it's typhoon season..." },
-      { emoji: '🍜', text: 'Finding the best street food nearby...' },
-      { emoji: '🎒', text: "Asking backpackers who've been there..." },
-      { emoji: '🚫', text: 'Avoiding the tourist traps...' },
-      { emoji: '🗓️', text: 'Checking local festivals and events...' },
-      { emoji: '🚌', text: 'Mapping out transport options...' },
-      { emoji: '🌅', text: 'Finding the best sunrise spots...' },
-      { emoji: '🤫', text: 'Finding spots the guidebooks left out...' },
-      { emoji: '✈️', text: 'Almost there...' },
-    ];
-
-    let loadingMapInstance = null;
-    let loadingMessageInterval = null;
-    let loadingMessageIndex = 0;
-
-    function initLoadingMap(coords, cityName) {
-      destroyLoadingMap();
-      const mapEl = document.getElementById('loading-map');
-      if (!mapEl || typeof L === 'undefined') return;
-
-      loadingMapInstance = L.map(mapEl, {
-        center: coords,
-        zoom: 5,
-        dragging: false,
-        zoomControl: false,
-        scrollWheelZoom: false,
-        doubleClickZoom: false,
-        boxZoom: false,
-        keyboard: false,
-        touchZoom: false,
-      });
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-      }).addTo(loadingMapInstance);
-
-      const planeIcon = L.divIcon({
-        html: '<div class="loading-map-marker" aria-hidden="true">✈️</div>',
-        className: 'loading-map-pin',
-        iconSize: [48, 48],
-        iconAnchor: [24, 24],
-      });
-
-      const marker = L.marker(coords, { icon: planeIcon }).addTo(loadingMapInstance);
-      marker.bindPopup(cityName || 'Your destination').openPopup();
-
-      setTimeout(function () {
-        if (loadingMapInstance) loadingMapInstance.invalidateSize();
-      }, 150);
-    }
-
-    function destroyLoadingMap() {
-      if (loadingMapInstance) {
-        loadingMapInstance.remove();
-        loadingMapInstance = null;
-      }
-    }
-
-    function showLoadingMessage(index, skipFade) {
-      const el = document.getElementById('loading-message');
-      if (!el || !LOADING_MESSAGES.length) return;
-
-      const msg = LOADING_MESSAGES[index];
-
-      function applyText() {
-        el.textContent = msg.emoji + ' ' + msg.text;
-        el.classList.add('is-visible');
       }
 
-      if (skipFade) {
-        applyText();
-        return;
+      function calculateTripDuration(dateFrom, dateTo) {
+        const start    = new Date(dateFrom + 'T00:00:00');
+        const end      = new Date(dateTo   + 'T00:00:00');
+        const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+        return diffDays >= 1 ? diffDays : 1;
       }
 
-      el.classList.remove('is-visible');
-      setTimeout(applyText, 400);
-    }
-
-    function startLoadingMessages() {
-      stopLoadingMessages();
-      loadingMessageIndex = 0;
-      showLoadingMessage(0, true);
-
-      loadingMessageInterval = setInterval(function () {
-        loadingMessageIndex = (loadingMessageIndex + 1) % LOADING_MESSAGES.length;
-        showLoadingMessage(loadingMessageIndex, false);
-      }, 8000);
-    }
-
-    function stopLoadingMessages() {
-      if (loadingMessageInterval) {
-        clearInterval(loadingMessageInterval);
-        loadingMessageInterval = null;
-      }
-      const el = document.getElementById('loading-message');
-      if (el) el.classList.remove('is-visible');
-    }
-
-    function showLoadingScreen(arrivalCity) {
-      const loadingEl = document.getElementById('loading-state');
-      const mapWrap = document.getElementById('loading-map-wrap');
-      const globe = document.getElementById('loading-globe');
-      const cityText = document.getElementById('loading-city-text');
-
-      if (!loadingEl) return;
-
-      const cityKey = arrivalCity.trim().toLowerCase();
-      const coords = CITY_COORDINATES[cityKey];
-      const displayCity = arrivalCity.trim();
-
-      if (coords && mapWrap && globe && cityText) {
-        mapWrap.hidden = false;
-        globe.hidden = true;
-        cityText.textContent = "You're heading to " + displayCity;
-        setTimeout(function () {
-          initLoadingMap(coords, displayCity);
-        }, 100);
-      } else if (mapWrap && globe && cityText) {
-        mapWrap.hidden = true;
-        globe.hidden = false;
-        cityText.textContent = 'Exploring somewhere off the beaten path...';
-        destroyLoadingMap();
-      }
-
-      loadingEl.classList.add('is-visible');
-      loadingEl.removeAttribute('hidden');
-      startLoadingMessages();
-    }
-
-    function hideLoadingScreen() {
-      stopLoadingMessages();
-      destroyLoadingMap();
-
-      const loadingEl = document.getElementById('loading-state');
-      if (loadingEl) {
-        loadingEl.classList.remove('is-visible');
-        loadingEl.setAttribute('hidden', '');
-      }
-    }
-
-    /**
-     * FORM SUBMIT → WORKER → GEMINI → DISPLAY RESULTS
-     * Connected to worker.js via GIYA_WORKER_URL (POST JSON).
-     */
-    async function submitFlightDetails(event) {
-      event.preventDefault();
-      logGiya('submitFlightDetails: started');
-
-      const arrivalEl = document.getElementById('arrival-city');
-      const departureEl = document.getElementById('departure-city');
-      const dateFromEl = document.getElementById('date-from');
-      const dateToEl = document.getElementById('date-to');
-
-      if (!arrivalEl || !departureEl || !dateFromEl || !dateToEl) {
-        showFormError('Form fields are missing on this page. Please refresh and try again.');
-        return;
-      }
-
-      const arrivalCity = arrivalEl.value.trim();
-      const departureCity = departureEl.value.trim();
-      const dateFrom = dateFromEl.value;
-      const dateTo = dateToEl.value;
-      const duration = calculateTripDuration(dateFrom, dateTo);
-
-      const requestBody = {
-        arrival: arrivalCity,
-        departure: departureCity,
-        dateFrom: dateFrom,
-        dateTo: dateTo,
-        duration: duration,
+      /* ============================================
+         CATEGORY COLOURS + SEASON BADGES
+         ============================================ */
+      const CATEGORY_COLORS = {
+        'Urban and Culture':    '#E8892B',
+        'Beach and Islands':    '#2B9BE8',
+        'Nature and Adventure': '#2BE87A',
+        'Food and Night Life':  '#E82B6B',
+        'Family Friendly':      '#9B2BE8',
+        'Ultra Budget':         '#E8E82B',
       };
 
-      logGiya('trip payload (sent to worker)', requestBody);
-
-      const barFlight = document.getElementById('bar-flight');
-      const resultsHeading = document.getElementById('results-heading');
-      const submitBtn = document.getElementById('btn-submit-trip');
-
-      clearFormError();
-      resetWarnings();
-
-      showLoadingScreen(arrivalCity);
-      if (submitBtn) submitBtn.disabled = true;
-
-      if (barFlight) {
-        barFlight.textContent =
-          '✈️ Arrival: ' + arrivalCity +
-          ' → Departure: ' + departureCity +
-          ' 📅 ' + dateFrom + ' – ' + dateTo;
+      function getCategoryColor(category) {
+        if (category.color && /^#[0-9A-Fa-f]{6}$/.test(category.color)) return category.color;
+        if (category.name && CATEGORY_COLORS[category.name]) return CATEGORY_COLORS[category.name];
+        return '#E8892B';
       }
 
-      try {
-        logGiya('fetch → worker', GIYA_WORKER_URL);
+      function seasonBadgeClass(status) {
+        if (status === 'good')  return 'season-badge--good';
+        if (status === 'avoid') return 'season-badge--avoid';
+        return 'season-badge--caution';
+      }
 
-        const response = await fetch(GIYA_WORKER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody),
+      function getSeasonLabel(status) {
+        if (status === 'good')  return 'Good time';
+        if (status === 'avoid') return 'Avoid this period';
+        return 'Check conditions';
+      }
+
+      /* ============================================
+         WARNING RESET + APPLY
+         ============================================ */
+      function resetWarnings() {
+        ['typhoon', 'temp', 'general'].forEach(function (name) {
+          const icon   = document.getElementById('warn-' + name);
+          const textEl = document.getElementById('warn-' + name + '-text');
+          if (icon)   { icon.classList.remove('active'); icon.setAttribute('data-tooltip', 'No active warnings'); }
+          if (textEl) { textEl.textContent = ''; textEl.hidden = true; }
+        });
+      }
+
+      function applyWarnings(warnings) {
+        if (!warnings) return;
+
+        if (warnings.typhoon_risk) {
+          const note = warnings.typhoon_note || 'Typhoon risk during your dates';
+          const icon   = document.getElementById('warn-typhoon');
+          const textEl = document.getElementById('warn-typhoon-text');
+          if (icon)   { icon.classList.add('active'); icon.setAttribute('data-tooltip', note); }
+          if (textEl) { textEl.textContent = note; textEl.hidden = false; }
+        }
+
+        if (warnings.temperature_note) {
+          const icon   = document.getElementById('warn-temp');
+          const textEl = document.getElementById('warn-temp-text');
+          if (icon)   { icon.classList.add('active'); icon.setAttribute('data-tooltip', warnings.temperature_note); }
+          if (textEl) { textEl.textContent = warnings.temperature_note; textEl.hidden = false; }
+        }
+
+        if (warnings.general_note) {
+          const icon   = document.getElementById('warn-general');
+          const textEl = document.getElementById('warn-general-text');
+          if (icon)   { icon.classList.add('active'); icon.setAttribute('data-tooltip', warnings.general_note); }
+          if (textEl) { textEl.textContent = warnings.general_note; textEl.hidden = false; }
+        }
+      }
+
+      /* ============================================
+         RESULTS RENDERING
+         ============================================ */
+      function countSpots(categories) {
+        if (!Array.isArray(categories)) return 0;
+        return categories.reduce(function (total, cat) {
+          return total + (Array.isArray(cat.spots) ? cat.spots.length : 0);
+        }, 0);
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function renderSpotsList(categories) {
+        const container = document.getElementById('results-categories');
+        const emptyEl   = document.getElementById('results-empty');
+        if (!container) { logGiya('renderSpotsList: missing #results-categories'); return 0; }
+
+        container.innerHTML = '';
+        if (emptyEl) emptyEl.hidden = true;
+
+        (categories || []).forEach(function (category) {
+          const section       = document.createElement('section');
+          section.className   = 'results-category';
+          const categoryColor = getCategoryColor(category);
+
+          const header = document.createElement('div');
+          header.className = 'results-category__header';
+          header.style.borderLeftColor = categoryColor;
+          header.innerHTML =
+            '<span class="results-category__emoji" aria-hidden="true">' + escapeHtml(category.emoji || '') + '</span>' +
+            '<span class="results-category__name">'                     + escapeHtml(category.name  || 'Category') + '</span>';
+          section.appendChild(header);
+
+          const spotsGrid     = document.createElement('div');
+          spotsGrid.className = 'results-spots';
+
+          (category.spots || []).forEach(function (spot) {
+            const status = spot.season_status || 'caution';
+            const card   = document.createElement('article');
+            card.className = 'spot-card';
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('title', 'Tap to add to your map');
+            card.innerHTML =
+              '<div class="spot-card__header">' +
+                '<span class="spot-card__name">'  + escapeHtml(spot.spot_name || 'Unnamed spot') + '</span>' +
+                '<div class="spot-card__season">' +
+                  '<span class="season-badge ' + seasonBadgeClass(status) + '" role="img" aria-label="Season: ' + escapeHtml(status) + '"></span>' +
+                  '<span class="season-label">' + escapeHtml(getSeasonLabel(status)) + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<p class="spot-card__area">' + escapeHtml(spot.area || '')  + '</p>' +
+              '<p class="spot-card__why">'  + escapeHtml(spot.why  || '')  + '</p>';
+            spotsGrid.appendChild(card);
+          });
+
+          section.appendChild(spotsGrid);
+          container.appendChild(section);
         });
 
-        logGiya('worker HTTP status', response.status);
-
-        const responseText = await response.text();
-        logGiya('worker raw response (first 500 chars)', responseText.slice(0, 500));
-
-        let data;
-        try {
-          data = JSON.parse(responseText);
-        } catch (parseErr) {
-          throw new Error('Server returned non-JSON. Check worker deployment.');
-        }
-
-        logGiya('worker parsed JSON', data);
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Worker request failed (HTTP ' + response.status + ')');
-        }
-
-        giyaData = data;
-
-        const spotCount = countSpots(data.categories);
-        if (spotCount === 0) {
-          throw new Error('Giya returned no spots. Try a more specific city name.');
-        }
-
-        applyWarnings(data.warnings);
-
-        const nearTitle = "Here's what's near " + arrivalCity;
-        if (resultsHeading) resultsHeading.textContent = nearTitle;
-        document.title = nearTitle + ' — Giya';
-
-        renderSpotsList(data.categories);
-        showScreen(3);
-
-        logGiya('success — showing screen 3 with spots', spotCount);
-      } catch (err) {
-        console.error('[Giya] submitFlightDetails failed:', err);
-
-        var message = 'Something went wrong planning your trip. Please try again.';
-        if (err.message) {
-          if (err.message.indexOf('Failed to fetch') !== -1) {
-            message =
-              'Could not reach the Giya server. Open the site from ' +
-              'https://by-vonn.github.io/giya (not a local file) and try again.';
-          } else {
-            message = err.message;
-          }
-        }
-        showFormError(message);
-      } finally {
-        hideLoadingScreen();
-        if (submitBtn) submitBtn.disabled = false;
+        const total = countSpots(categories);
+        logGiya('renderSpotsList: spots drawn', total);
+        return total;
       }
-    }
 
-    /* Wire form when page is ready */
-  if (safeAddListener('trip-form', 'submit', submitFlightDetails)) {
-      logGiya('ready', 'Form listener attached to #trip-form');
-    } else {
-      console.error('[Giya] #trip-form not found — submit will not work');
-    }
+      function showFormError(message) {
+        const errorEl = document.getElementById('form-error');
+        if (!errorEl) return;
+        errorEl.textContent = message;
+        errorEl.classList.add('is-visible');
+        errorEl.removeAttribute('hidden');
+        logGiya('form error shown', message);
+      }
 
-    /* ============================================
-       DEMO: you can call these from the console
-       activateWarning('typhoon', 'Typhoon watch near coast');
-       activateWarning('temp', 'Heat index above 40°C');
-       activateWarning('general', 'Strikes may affect transport');
-       ============================================ */
+      function clearFormError() {
+        const errorEl = document.getElementById('form-error');
+        if (!errorEl) return;
+        errorEl.textContent = '';
+        errorEl.classList.remove('is-visible');
+        errorEl.setAttribute('hidden', '');
+      }
+
+      /* ============================================
+         CITY COORDINATES LOOKUP TABLE
+         — CHANGE 1: expanded with 80+ cities
+         ============================================ */
+      const CITY_COORDINATES = {
+        /* East Asia */
+        'osaka':           [34.6937,  135.5023],
+        'tokyo':           [35.6762,  139.6503],
+        'kyoto':           [35.0116,  135.7681],
+        'seoul':           [37.5665,  126.9780],
+        'busan':           [35.1796,  129.0756],
+        'taipei':          [25.0330,  121.5654],
+        'hong kong':       [22.3193,  114.1694],
+        'shanghai':        [31.2304,  121.4737],
+        'beijing':         [39.9042,  116.4074],
+        'chengdu':         [30.5728,  104.0668],
+        'guangzhou':       [23.1291,  113.2644],
+        'shenzhen':        [22.5431,  114.0579],
+        'xian':            [34.3416,  108.9398],
+        /* Southeast Asia */
+        'bangkok':         [13.7563,  100.5018],
+        'kuala lumpur':    [ 3.1390,  101.6869],
+        'singapore':       [ 1.3521,  103.8198],
+        'bali':            [-8.3405,  115.0920],
+        'jakarta':         [-6.2088,  106.8456],
+        'hanoi':           [21.0278,  105.8342],
+        'ho chi minh city':[10.8231,  106.6297],
+        'danang':          [16.0544,  108.2022],
+        'manila':          [14.5995,  120.9842],
+        'cebu':            [10.3157,  123.8854],
+        'yangon':          [16.8661,   96.1951],
+        'phnom penh':      [11.5564,  104.9282],
+        'siem reap':       [13.3671,  103.8448],
+        'vientiane':       [17.9757,  102.6331],
+        'luang prabang':   [19.8845,  102.1348],
+        /* South Asia */
+        'kathmandu':       [27.7172,   85.3240],
+        'mumbai':          [19.0760,   72.8777],
+        'delhi':           [28.6139,   77.2090],
+        'bangalore':       [12.9716,   77.5946],
+        'chennai':         [13.0827,   80.2707],
+        'kolkata':         [22.5726,   88.3639],
+        'colombo':         [ 6.9271,   79.8612],
+        'dhaka':           [23.8103,   90.4125],
+        'karachi':         [24.8607,   67.0011],
+        'lahore':          [31.5204,   74.3587],
+        /* Central Asia / Middle East */
+        'islamabad':       [33.6844,   73.0479],
+        'tehran':          [35.6892,   51.3890],
+        'dubai':           [25.2048,   55.2708],
+        'abu dhabi':       [24.4539,   54.3773],
+        'doha':            [25.2854,   51.5310],
+        'riyadh':          [24.7136,   46.6753],
+        'jeddah':          [21.5433,   39.1728],
+        'muscat':          [23.5880,   58.3829],
+        'amman':           [31.9454,   35.9284],
+        'beirut':          [33.8938,   35.5018],
+        'tel aviv':        [32.0853,   34.7818],
+        'istanbul':        [41.0082,   28.9784],
+        'tbilisi':         [41.6938,   44.8015],
+        'yerevan':         [40.1872,   44.5152],
+        'baku':            [40.4093,   49.8671],
+        /* Europe */
+        'london':          [51.5074,   -0.1278],
+        'paris':           [48.8566,    2.3522],
+        'barcelona':       [41.3851,    2.1734],
+        'madrid':          [40.4168,   -3.7038],
+        'amsterdam':       [52.3676,    4.9041],
+        'berlin':          [52.5200,   13.4050],
+        'munich':          [48.1351,   11.5820],
+        'frankfurt':       [50.1109,    8.6821],
+        'prague':          [50.0755,   14.4378],
+        'budapest':        [47.4979,   19.0402],
+        'vienna':          [48.2082,   16.3738],
+        'warsaw':          [52.2297,   21.0122],
+        'lisbon':          [38.7169,   -9.1395],
+        'porto':           [41.1579,   -8.6291],
+        'rome':            [41.9028,   12.4964],
+        'milan':           [45.4654,    9.1859],
+        'florence':        [43.7696,   11.2558],
+        'venice':          [45.4408,   12.3155],
+        'athens':          [37.9838,   23.7275],
+        'dubrovnik':       [42.6507,   18.0944],
+        'split':           [43.5081,   16.4402],
+        'sarajevo':        [43.8563,   18.4131],
+        'belgrade':        [44.7866,   20.4489],
+        'zagreb':          [45.8150,   15.9819],
+        'sofia':           [42.6977,   23.3219],
+        'bucharest':       [44.4268,   26.1025],
+        'copenhagen':      [55.6761,   12.5683],
+        'stockholm':       [59.3293,   18.0686],
+        'oslo':            [59.9139,   10.7522],
+        'helsinki':        [60.1699,   24.9384],
+        'reykjavik':       [64.1466,  -21.9426],
+        'brussels':        [50.8503,    4.3517],
+        'zurich':          [47.3769,    8.5417],
+        'geneva':          [46.2044,    6.1432],
+        'dublin':          [53.3498,   -6.2603],
+        'edinburgh':       [55.9533,   -3.1883],
+        'manchester':      [53.4808,   -2.2426],
+        /* Africa */
+        'cairo':           [30.0444,   31.2357],
+        'marrakech':       [31.6295,   -7.9811],
+        'casablanca':      [33.5731,   -7.5898],
+        'tunis':           [36.8065,   10.1815],
+        'nairobi':         [-1.2921,   36.8219],
+        'dar es salaam':   [-6.7924,   39.2083],
+        'addis ababa':     [ 9.0320,   38.7469],
+        'lagos':           [ 6.5244,    3.3792],
+        'accra':           [ 5.6037,   -0.1870],
+        'cape town':       [-33.9249,  18.4241],
+        'johannesburg':    [-26.2041,  28.0473],
+        /* Americas */
+        'new york':        [40.7128,  -74.0060],
+        'los angeles':     [34.0522, -118.2437],
+        'miami':           [25.7617,  -80.1918],
+        'chicago':         [41.8781,  -87.6298],
+        'san francisco':   [37.7749, -122.4194],
+        'seattle':         [47.6062, -122.3321],
+        'boston':          [42.3601,  -71.0589],
+        'washington':      [38.9072,  -77.0369],
+        'toronto':         [43.6532,  -79.3832],
+        'vancouver':       [49.2827, -123.1207],
+        'montreal':        [45.5017,  -73.5673],
+        'mexico city':     [19.4326,  -99.1332],
+        'cancun':          [21.1619,  -86.8515],
+        'havana':          [23.1136,  -82.3666],
+        'bogota':          [ 4.7110,  -74.0721],
+        'medellin':        [ 6.2442,  -75.5812],
+        'lima':            [-12.0464, -77.0428],
+        'cusco':           [-13.5320, -71.9675],
+        'quito':           [ 0.1807,  -78.4678],
+        'buenos aires':    [-34.6037, -58.3816],
+        'santiago':        [-33.4489, -70.6693],
+        'rio de janeiro':  [-22.9068, -43.1729],
+        'sao paulo':       [-23.5505, -46.6333],
+        'montevideo':      [-34.9011, -56.1645],
+        /* Pacific / Oceania */
+        'sydney':          [-33.8688,  151.2093],
+        'melbourne':       [-37.8136,  144.9631],
+        'brisbane':        [-27.4698,  153.0251],
+        'perth':           [-31.9505,  115.8605],
+        'auckland':        [-36.8509,  174.7645],
+        'christchurch':    [-43.5321,  172.6362],
+      };
+
+      /* ============================================
+         LOADING MESSAGES
+         ============================================ */
+      const LOADING_MESSAGES = [
+        { emoji: '🗺️', text: 'Plotting your escape...' },
+        { emoji: '💎', text: 'Scanning for hidden gems...' },
+        { emoji: '🌀', text: "Checking if it's typhoon season..." },
+        { emoji: '🍜', text: 'Finding the best street food nearby...' },
+        { emoji: '🎒', text: "Asking backpackers who've been there..." },
+        { emoji: '🚫', text: 'Avoiding the tourist traps...' },
+        { emoji: '🗓️', text: 'Checking local festivals and events...' },
+        { emoji: '🚌', text: 'Mapping out transport options...' },
+        { emoji: '🌅', text: 'Finding the best sunrise spots...' },
+        { emoji: '🤫', text: 'Finding spots the guidebooks left out...' },
+        { emoji: '✈️', text: 'Almost there...' },
+      ];
+
+      /*
+       * CHANGE 2 — Decreasing message duration:
+       * Messages 1-3 (index 0-2): 8 seconds
+       * Messages 4-6 (index 3-5): 7 seconds
+       * Messages 7+  (index 6+):  6 seconds
+       * Uses recursive setTimeout instead of setInterval.
+       */
+      function getDuration(index) {
+        if (index <= 2) return 8000;
+        if (index <= 5) return 7000;
+        return 6000;
+      }
+
+      let loadingMapInstance    = null;
+      let loadingMessageTimeout = null;
+      let loadingMessageActive  = false;
+
+      function showLoadingMessage(index, skipFade) {
+        if (!loadingMessageActive) return;
+        const el  = document.getElementById('loading-message');
+        if (!el || !LOADING_MESSAGES.length) return;
+        const msg = LOADING_MESSAGES[index % LOADING_MESSAGES.length];
+
+        function applyText() {
+          if (!loadingMessageActive) return;
+          el.textContent = msg.emoji + ' ' + msg.text;
+          el.classList.add('is-visible');
+
+          /* Schedule the NEXT message with its own duration */
+          const nextIndex    = (index + 1) % LOADING_MESSAGES.length;
+          const nextDuration = getDuration(nextIndex);
+          loadingMessageTimeout = setTimeout(function () {
+            el.classList.remove('is-visible');
+            setTimeout(function () {
+              showLoadingMessage(nextIndex, false);
+            }, 400); /* wait for fade-out before showing next */
+          }, nextDuration);
+        }
+
+        if (skipFade) {
+          applyText();
+        } else {
+          el.classList.remove('is-visible');
+          setTimeout(applyText, 400);
+        }
+      }
+
+      function startLoadingMessages() {
+        stopLoadingMessages();
+        loadingMessageActive = true;
+        showLoadingMessage(0, true);
+      }
+
+      function stopLoadingMessages() {
+        loadingMessageActive = false;
+        if (loadingMessageTimeout) {
+          clearTimeout(loadingMessageTimeout);
+          loadingMessageTimeout = null;
+        }
+        const el = document.getElementById('loading-message');
+        if (el) el.classList.remove('is-visible');
+      }
+
+      /* ============================================
+         LOADING MAP
+         — CHANGE 1: CartoDB Positron tiles (no labels)
+         ============================================ */
+      function initLoadingMap(coords, cityName) {
+        destroyLoadingMap();
+        const mapEl = document.getElementById('loading-map');
+        if (!mapEl || typeof L === 'undefined') return;
+
+        loadingMapInstance = L.map(mapEl, {
+          center:           coords,
+          zoom:             5,
+          dragging:         false,
+          zoomControl:      false,
+          scrollWheelZoom:  false,
+          doubleClickZoom:  false,
+          boxZoom:          false,
+          keyboard:         false,
+          touchZoom:        false,
+        });
+
+        /*
+         * CartoDB Positron — no labels, minimal style, clean country outlines.
+         * Free to use, no API key required.
+         */
+        L.tileLayer(
+          'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+          {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+            subdomains:  'abcd',
+            maxZoom:     19,
+          }
+        ).addTo(loadingMapInstance);
+
+        const planeIcon = L.divIcon({
+          html:       '<div class="loading-map-marker" aria-hidden="true">✈️</div>',
+          className:  'loading-map-pin',
+          iconSize:   [48, 48],
+          iconAnchor: [24, 24],
+        });
+
+        const marker = L.marker(coords, { icon: planeIcon }).addTo(loadingMapInstance);
+        marker.bindPopup(cityName || 'Your destination').openPopup();
+
+        setTimeout(function () {
+          if (loadingMapInstance) loadingMapInstance.invalidateSize();
+        }, 150);
+      }
+
+      function destroyLoadingMap() {
+        if (loadingMapInstance) {
+          loadingMapInstance.remove();
+          loadingMapInstance = null;
+        }
+      }
+
+      /* ============================================
+         SHOW / HIDE LOADING SCREEN
+         — CHANGE 1: fallback text uses city name
+         ============================================ */
+      function showLoadingScreen(arrivalCity) {
+        const loadingEl  = document.getElementById('loading-state');
+        const mapWrap    = document.getElementById('loading-map-wrap');
+        const globe      = document.getElementById('loading-globe');
+        const cityText   = document.getElementById('loading-city-text');
+        if (!loadingEl) return;
+
+        const cityKey    = arrivalCity.trim().toLowerCase();
+        const coords     = CITY_COORDINATES[cityKey];
+        const displayCity = arrivalCity.trim();
+
+        if (coords) {
+          /* Known city — show map */
+          if (mapWrap)  mapWrap.hidden = false;
+          if (globe)    globe.hidden   = true;
+          if (cityText) cityText.textContent = "You're heading to " + displayCity;
+          setTimeout(function () { initLoadingMap(coords, displayCity); }, 100);
+        } else {
+          /* Unknown city — show globe + dynamic fallback message */
+          if (mapWrap)  mapWrap.hidden = true;
+          if (globe)    globe.hidden   = false;
+          /* CHANGE 1: use city name in fallback, no "beaten path" */
+          if (cityText) cityText.textContent = 'Mapping your route to ' + displayCity + '...';
+          destroyLoadingMap();
+        }
+
+        loadingEl.classList.add('is-visible');
+        loadingEl.removeAttribute('hidden');
+        startLoadingMessages();
+      }
+
+      function hideLoadingScreen() {
+        stopLoadingMessages();
+        destroyLoadingMap();
+        const loadingEl = document.getElementById('loading-state');
+        if (loadingEl) {
+          loadingEl.classList.remove('is-visible');
+          loadingEl.setAttribute('hidden', '');
+        }
+      }
+
+      /* ============================================
+         FORM SUBMIT → WORKER → GEMINI → RESULTS
+         ============================================ */
+      async function submitFlightDetails(event) {
+        event.preventDefault();
+        logGiya('submitFlightDetails: started');
+
+        const arrivalEl   = document.getElementById('arrival-city');
+        const departureEl = document.getElementById('departure-city');
+        const dateFromEl  = document.getElementById('date-from');
+        const dateToEl    = document.getElementById('date-to');
+
+        if (!arrivalEl || !departureEl || !dateFromEl || !dateToEl) {
+          showFormError('Form fields are missing. Please refresh and try again.');
+          return;
+        }
+
+        const arrivalCity   = arrivalEl.value.trim();
+        const departureCity = departureEl.value.trim();
+        const dateFrom      = dateFromEl.value;
+        const dateTo        = dateToEl.value;
+        const duration      = calculateTripDuration(dateFrom, dateTo);
+
+        const requestBody = {
+          arrival:   arrivalCity,
+          departure: departureCity,
+          dateFrom:  dateFrom,
+          dateTo:    dateTo,
+          duration:  duration,
+        };
+
+        logGiya('trip payload (sent to worker)', requestBody);
+
+        const barFlight      = document.getElementById('bar-flight');
+        const resultsHeading = document.getElementById('results-heading');
+        const submitBtn      = document.getElementById('btn-submit-trip');
+
+        clearFormError();
+        resetWarnings();
+        showLoadingScreen(arrivalCity);
+        if (submitBtn) submitBtn.disabled = true;
+
+        if (barFlight) {
+          barFlight.textContent =
+            '✈️ Arrival: ' + arrivalCity +
+            ' → Departure: ' + departureCity +
+            ' 📅 ' + dateFrom + ' – ' + dateTo;
+        }
+
+        try {
+          logGiya('fetch → worker', GIYA_WORKER_URL);
+
+          const response = await fetch(GIYA_WORKER_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify(requestBody),
+          });
+
+          logGiya('worker HTTP status', response.status);
+
+          const responseText = await response.text();
+          logGiya('worker raw response (first 500 chars)', responseText.slice(0, 500));
+
+          let data;
+          try {
+            data = JSON.parse(responseText);
+          } catch (parseErr) {
+            throw new Error('Server returned non-JSON. Check worker deployment.');
+          }
+
+          logGiya('worker parsed JSON', data);
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Worker request failed (HTTP ' + response.status + ')');
+          }
+
+          giyaData = data;
+
+          const spotCount = countSpots(data.categories);
+          if (spotCount === 0) {
+            throw new Error('Giya returned no spots. Try a more specific city name.');
+          }
+
+          applyWarnings(data.warnings);
+
+          const nearTitle = "Here's what's near " + arrivalCity;
+          if (resultsHeading) resultsHeading.textContent = nearTitle;
+          document.title = nearTitle + ' — Giya';
+
+          renderSpotsList(data.categories);
+          showScreen(3);
+
+          logGiya('success — showing screen 3 with spots', spotCount);
+
+        } catch (err) {
+          console.error('[Giya] submitFlightDetails failed:', err);
+          let message = 'Something went wrong planning your trip. Please try again.';
+          if (err.message) {
+            if (err.message.indexOf('Failed to fetch') !== -1) {
+              message =
+                'Could not reach the Giya server. Open the site from ' +
+                'https://by-vonn.github.io/giya and try again.';
+            } else {
+              message = err.message;
+            }
+          }
+          showFormError(message);
+        } finally {
+          hideLoadingScreen();
+          if (submitBtn) submitBtn.disabled = false;
+        }
+      }
+
+      if (safeAddListener('trip-form', 'submit', submitFlightDetails)) {
+        logGiya('ready', 'Form listener attached to #trip-form');
+      } else {
+        console.error('[Giya] #trip-form not found — submit will not work');
+      }
 
     }); // end DOMContentLoaded
   </script>
