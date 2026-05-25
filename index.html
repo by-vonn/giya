@@ -401,10 +401,18 @@
       border: none;
     }
 
-    .loading-map-pin__plane {
-      font-size: 1.5rem;
+    .loading-map-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--ember);
+      border: 3px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px rgba(26, 22, 18, 0.3);
+      font-size: 1.75rem;
       line-height: 1;
-      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
     }
 
     .loading-globe {
@@ -1166,6 +1174,10 @@
       { emoji: '🍜', text: 'Finding the best street food nearby...' },
       { emoji: '🎒', text: "Asking backpackers who've been there..." },
       { emoji: '🚫', text: 'Avoiding the tourist traps...' },
+      { emoji: '🗓️', text: 'Checking local festivals and events...' },
+      { emoji: '🚌', text: 'Mapping out transport options...' },
+      { emoji: '🌅', text: 'Finding the best sunrise spots...' },
+      { emoji: '🤫', text: 'Finding spots the guidebooks left out...' },
       { emoji: '✈️', text: 'Almost there...' },
     ];
 
@@ -1173,14 +1185,14 @@
     let loadingMessageInterval = null;
     let loadingMessageIndex = 0;
 
-    function initLoadingMap(coords) {
+    function initLoadingMap(coords, cityName) {
       destroyLoadingMap();
       const mapEl = document.getElementById('loading-map');
       if (!mapEl || typeof L === 'undefined') return;
 
       loadingMapInstance = L.map(mapEl, {
         center: coords,
-        zoom: 8,
+        zoom: 5,
         dragging: false,
         zoomControl: false,
         scrollWheelZoom: false,
@@ -1195,13 +1207,14 @@
       }).addTo(loadingMapInstance);
 
       const planeIcon = L.divIcon({
-        html: '<span class="loading-map-pin__plane" aria-hidden="true">✈️</span>',
+        html: '<div class="loading-map-marker" aria-hidden="true">✈️</div>',
         className: 'loading-map-pin',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
+        iconSize: [48, 48],
+        iconAnchor: [24, 24],
       });
 
-      L.marker(coords, { icon: planeIcon }).addTo(loadingMapInstance);
+      const marker = L.marker(coords, { icon: planeIcon }).addTo(loadingMapInstance);
+      marker.bindPopup(cityName || 'Your destination').openPopup();
 
       setTimeout(function () {
         if (loadingMapInstance) loadingMapInstance.invalidateSize();
@@ -1243,7 +1256,7 @@
       loadingMessageInterval = setInterval(function () {
         loadingMessageIndex = (loadingMessageIndex + 1) % LOADING_MESSAGES.length;
         showLoadingMessage(loadingMessageIndex, false);
-      }, 7000);
+      }, 8000);
     }
 
     function stopLoadingMessages() {
@@ -1272,7 +1285,7 @@
         globe.hidden = true;
         cityText.textContent = "You're heading to " + displayCity;
         setTimeout(function () {
-          initLoadingMap(coords);
+          initLoadingMap(coords, displayCity);
         }, 100);
       } else if (mapWrap && globe && cityText) {
         mapWrap.hidden = true;
