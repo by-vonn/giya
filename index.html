@@ -10,6 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
+  <!-- Leaflet — used by the loading screen mini map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <style>
     /* ============================================
        CSS VARIABLES — brand colours
@@ -365,21 +369,74 @@
     .category-card--family { background: #f5e0e8; }
     .category-card--budget { background: #e8f0d4; }
 
-    /* Loading + error states */
-    .loading-state,
-    .form-error {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--ink-muted);
-      font-size: 1.05rem;
-    }
-
+    /* Loading screen — two-phase animation while waiting for AI */
     .loading-state {
       display: none;
     }
 
     .loading-state.is-visible {
       display: block;
+    }
+
+    .loading-screen {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .loading-map-wrap {
+      margin-bottom: 1.25rem;
+    }
+
+    .loading-map {
+      height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .loading-map-pin {
+      background: transparent;
+      border: none;
+    }
+
+    .loading-map-pin__plane {
+      font-size: 1.5rem;
+      line-height: 1;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+    }
+
+    .loading-globe {
+      font-size: 4rem;
+      display: block;
+      margin-bottom: 0.75rem;
+      line-height: 1;
+    }
+
+    .loading-city-text {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      color: var(--ink);
+    }
+
+    .loading-message {
+      min-height: 2.5rem;
+      font-size: 1rem;
+      color: var(--ink-muted);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .loading-message.is-visible {
+      opacity: 1;
+    }
+
+    .form-error {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 1.05rem;
     }
 
     .form-error {
@@ -656,7 +713,16 @@
         </div>
 
         <div id="loading-state" class="loading-state" aria-live="polite" hidden>
-          Plotting your escape...
+          <div class="loading-screen">
+            <div id="loading-phase1">
+              <div id="loading-map-wrap" class="loading-map-wrap" hidden>
+                <div id="loading-map" class="loading-map"></div>
+              </div>
+              <span id="loading-globe" class="loading-globe" hidden aria-hidden="true">🌍</span>
+              <p id="loading-city-text" class="loading-city-text"></p>
+            </div>
+            <p id="loading-message" class="loading-message"></p>
+          </div>
         </div>
         <p id="form-error" class="form-error" role="alert" hidden></p>
 
@@ -1040,6 +1106,197 @@
       return div.innerHTML;
     }
 
+    /* ============================================
+       LOADING SCREEN — map/globe + rotating messages
+       ============================================ */
+
+    const CITY_COORDINATES = {
+      'osaka': [34.6937, 135.5023],
+      'tokyo': [35.6762, 139.6503],
+      'kyoto': [35.0116, 135.7681],
+      'bangkok': [13.7563, 100.5018],
+      'kuala lumpur': [3.1390, 101.6869],
+      'singapore': [1.3521, 103.8198],
+      'bali': [-8.3405, 115.0920],
+      'hanoi': [21.0278, 105.8342],
+      'ho chi minh city': [10.8231, 106.6297],
+      'seoul': [37.5665, 126.9780],
+      'busan': [35.1796, 129.0756],
+      'taipei': [25.0330, 121.5654],
+      'hong kong': [22.3193, 114.1694],
+      'manila': [14.5995, 120.9842],
+      'yangon': [16.8661, 96.1951],
+      'phnom penh': [11.5564, 104.9282],
+      'kathmandu': [27.7172, 85.3240],
+      'mumbai': [19.0760, 72.8777],
+      'delhi': [28.6139, 77.2090],
+      'london': [51.5074, -0.1278],
+      'paris': [48.8566, 2.3522],
+      'barcelona': [41.3851, 2.1734],
+      'amsterdam': [52.3676, 4.9041],
+      'berlin': [52.5200, 13.4050],
+      'prague': [50.0755, 14.4378],
+      'budapest': [47.4979, 19.0402],
+      'lisbon': [38.7169, -9.1395],
+      'rome': [41.9028, 12.4964],
+      'athens': [37.9838, 23.7275],
+      'istanbul': [41.0082, 28.9784],
+      'tbilisi': [41.6938, 44.8015],
+      'dubai': [25.2048, 55.2708],
+      'cairo': [30.0444, 31.2357],
+      'marrakech': [31.6295, -7.9811],
+      'nairobi': [-1.2921, 36.8219],
+      'cape town': [-33.9249, 18.4241],
+      'sydney': [-33.8688, 151.2093],
+      'melbourne': [-37.8136, 144.9631],
+      'auckland': [-36.8509, 174.7645],
+      'new york': [40.7128, -74.0060],
+      'mexico city': [19.4326, -99.1332],
+      'bogota': [4.7110, -74.0721],
+      'medellin': [6.2442, -75.5812],
+      'lima': [-12.0464, -77.0428],
+      'buenos aires': [-34.6037, -58.3816],
+      'rio de janeiro': [-22.9068, -43.1729],
+    };
+
+    const LOADING_MESSAGES = [
+      { emoji: '🗺️', text: 'Plotting your escape...' },
+      { emoji: '💎', text: 'Scanning for hidden gems...' },
+      { emoji: '🌀', text: "Checking if it's typhoon season..." },
+      { emoji: '🍜', text: 'Finding the best street food nearby...' },
+      { emoji: '🎒', text: "Asking backpackers who've been there..." },
+      { emoji: '🚫', text: 'Avoiding the tourist traps...' },
+      { emoji: '✈️', text: 'Almost there...' },
+    ];
+
+    let loadingMapInstance = null;
+    let loadingMessageInterval = null;
+    let loadingMessageIndex = 0;
+
+    function initLoadingMap(coords) {
+      destroyLoadingMap();
+      const mapEl = document.getElementById('loading-map');
+      if (!mapEl || typeof L === 'undefined') return;
+
+      loadingMapInstance = L.map(mapEl, {
+        center: coords,
+        zoom: 8,
+        dragging: false,
+        zoomControl: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        touchZoom: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+      }).addTo(loadingMapInstance);
+
+      const planeIcon = L.divIcon({
+        html: '<span class="loading-map-pin__plane" aria-hidden="true">✈️</span>',
+        className: 'loading-map-pin',
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+      });
+
+      L.marker(coords, { icon: planeIcon }).addTo(loadingMapInstance);
+
+      setTimeout(function () {
+        if (loadingMapInstance) loadingMapInstance.invalidateSize();
+      }, 150);
+    }
+
+    function destroyLoadingMap() {
+      if (loadingMapInstance) {
+        loadingMapInstance.remove();
+        loadingMapInstance = null;
+      }
+    }
+
+    function showLoadingMessage(index, skipFade) {
+      const el = document.getElementById('loading-message');
+      if (!el || !LOADING_MESSAGES.length) return;
+
+      const msg = LOADING_MESSAGES[index];
+
+      function applyText() {
+        el.textContent = msg.emoji + ' ' + msg.text;
+        el.classList.add('is-visible');
+      }
+
+      if (skipFade) {
+        applyText();
+        return;
+      }
+
+      el.classList.remove('is-visible');
+      setTimeout(applyText, 400);
+    }
+
+    function startLoadingMessages() {
+      stopLoadingMessages();
+      loadingMessageIndex = 0;
+      showLoadingMessage(0, true);
+
+      loadingMessageInterval = setInterval(function () {
+        loadingMessageIndex = (loadingMessageIndex + 1) % LOADING_MESSAGES.length;
+        showLoadingMessage(loadingMessageIndex, false);
+      }, 7000);
+    }
+
+    function stopLoadingMessages() {
+      if (loadingMessageInterval) {
+        clearInterval(loadingMessageInterval);
+        loadingMessageInterval = null;
+      }
+      const el = document.getElementById('loading-message');
+      if (el) el.classList.remove('is-visible');
+    }
+
+    function showLoadingScreen(arrivalCity) {
+      const loadingEl = document.getElementById('loading-state');
+      const mapWrap = document.getElementById('loading-map-wrap');
+      const globe = document.getElementById('loading-globe');
+      const cityText = document.getElementById('loading-city-text');
+
+      if (!loadingEl) return;
+
+      const cityKey = arrivalCity.trim().toLowerCase();
+      const coords = CITY_COORDINATES[cityKey];
+      const displayCity = arrivalCity.trim();
+
+      if (coords && mapWrap && globe && cityText) {
+        mapWrap.hidden = false;
+        globe.hidden = true;
+        cityText.textContent = "You're heading to " + displayCity;
+        setTimeout(function () {
+          initLoadingMap(coords);
+        }, 100);
+      } else if (mapWrap && globe && cityText) {
+        mapWrap.hidden = true;
+        globe.hidden = false;
+        cityText.textContent = 'Exploring somewhere off the beaten path...';
+        destroyLoadingMap();
+      }
+
+      loadingEl.classList.add('is-visible');
+      loadingEl.removeAttribute('hidden');
+      startLoadingMessages();
+    }
+
+    function hideLoadingScreen() {
+      stopLoadingMessages();
+      destroyLoadingMap();
+
+      const loadingEl = document.getElementById('loading-state');
+      if (loadingEl) {
+        loadingEl.classList.remove('is-visible');
+        loadingEl.setAttribute('hidden', '');
+      }
+    }
+
     /**
      * FORM SUBMIT → WORKER → GEMINI → DISPLAY RESULTS
      * Connected to worker.js via GIYA_WORKER_URL (POST JSON).
@@ -1076,16 +1333,12 @@
 
       const barFlight = document.getElementById('bar-flight');
       const resultsHeading = document.getElementById('results-heading');
-      const loadingEl = document.getElementById('loading-state');
       const submitBtn = document.getElementById('btn-submit-trip');
 
       clearFormError();
       resetWarnings();
 
-      if (loadingEl) {
-        loadingEl.classList.add('is-visible');
-        loadingEl.removeAttribute('hidden');
-      }
+      showLoadingScreen(arrivalCity);
       if (submitBtn) submitBtn.disabled = true;
 
       if (barFlight) {
@@ -1154,10 +1407,7 @@
         }
         showFormError(message);
       } finally {
-        if (loadingEl) {
-          loadingEl.classList.remove('is-visible');
-          loadingEl.setAttribute('hidden', '');
-        }
+        hideLoadingScreen();
         if (submitBtn) submitBtn.disabled = false;
       }
     }
