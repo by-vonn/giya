@@ -68,8 +68,8 @@
 
     .topbar__flight {
       flex: 1;
-      margin: 0 1rem;
-      font-size: 0.8rem;
+      margin: 0 0.5rem;
+      font-size: 0.75rem;
       color: var(--ink-muted);
       white-space: nowrap;
       overflow: hidden;
@@ -77,13 +77,35 @@
       text-align: center;
     }
 
-    .topbar__warnings {
+    .topbar__actions {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.5rem;
       align-items: center;
+      flex-shrink: 0;
     }
 
-    /* Spots counter badge in top bar */
+    /* View Map button — hidden until spots added */
+    .topbar__map-btn {
+      display: none;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: transform 0.15s, background 0.15s;
+    }
+
+    .topbar__map-btn.is-visible { display: flex; }
+    .topbar__map-btn:hover { background: var(--ember); transform: scale(1.05); }
+
+    /* Spots counter badge */
     .topbar__spots-count {
       display: none;
       align-items: center;
@@ -96,24 +118,27 @@
       border-radius: 999px;
       white-space: nowrap;
       cursor: pointer;
+      border: none;
+      font-family: inherit;
       transition: transform 0.15s;
     }
 
-    .topbar__spots-count.is-visible {
+    .topbar__spots-count.is-visible { display: flex; }
+    .topbar__spots-count:hover { transform: scale(1.05); }
+
+    .topbar__warnings {
       display: flex;
+      gap: 0.5rem;
+      align-items: center;
     }
 
-    .topbar__spots-count:hover {
-      transform: scale(1.05);
-    }
-
-    @media (max-width: 640px) {
-      .topbar__flight { font-size: 0.72rem; margin: 0 0.5rem; }
+    @media (max-width: 480px) {
+      .topbar__flight { display: none; }
     }
 
     .warning-icon {
       position: relative;
-      width: 40px; height: 40px;
+      width: 36px; height: 36px;
       border: none;
       background: transparent;
       cursor: pointer;
@@ -126,10 +151,8 @@
     }
 
     .warning-icon:hover { background: rgba(26, 22, 18, 0.06); }
-    .warning-icon svg { width: 22px; height: 22px; fill: currentColor; }
+    .warning-icon svg { width: 20px; height: 20px; fill: currentColor; }
 
-    .warning-icon.active,
-    .warning-icon.is-active { color: var(--ember); }
     .warning-icon.active.typhoon,
     .warning-icon.is-active.typhoon { color: #2563eb; }
     .warning-icon.active.temp,
@@ -142,8 +165,8 @@
     .warning-icon::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: -2.25rem; right: 0;
-      font-size: 0.7rem;
+      bottom: -2.5rem; right: 0;
+      font-size: 0.68rem;
       white-space: nowrap;
       background: var(--ink);
       color: var(--paper);
@@ -153,6 +176,9 @@
       pointer-events: none;
       transition: opacity 0.15s;
       z-index: 10;
+      max-width: 200px;
+      white-space: normal;
+      text-align: left;
     }
 
     .warning-icon:hover::after { opacity: 1; }
@@ -172,6 +198,12 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Map screen needs full width — override main constraints */
+    #screen-map.is-visible {
+      display: flex;
+      flex-direction: column;
     }
 
     /* ============================================
@@ -212,11 +244,7 @@
       box-shadow: var(--shadow);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(200, 98, 42, 0.35);
-    }
-
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
@@ -258,9 +286,7 @@
     }
 
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
     @media (max-width: 400px) { .form-row { grid-template-columns: 1fr; } }
-
     .form-screen .btn-primary { width: 100%; margin-top: 0.5rem; }
 
     /* ============================================
@@ -268,9 +294,7 @@
        ============================================ */
     .categories-screen h2 { font-size: 1.65rem; margin-bottom: 0.35rem; }
     .categories-screen .subtitle { color: var(--ink-muted); margin-bottom: 1.5rem; }
-
     .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
-
     @media (min-width: 480px) { .category-grid { grid-template-columns: repeat(3, 1fr); } }
 
     .category-card {
@@ -295,12 +319,7 @@
     }
 
     .category-card .emoji { font-size: 2rem; line-height: 1; }
-
-    .category-card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 32px rgba(26, 22, 18, 0.12);
-    }
-
+    .category-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 32px rgba(26,22,18,0.12); }
     .category-card--urban  { background: #e8e0f5; }
     .category-card--beach  { background: #d4eef8; }
     .category-card--nature { background: #d8ecd4; }
@@ -314,13 +333,7 @@
     .loading-state { display: none; }
     .loading-state.is-visible { display: block; }
 
-    .loading-screen {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 2rem;
-      text-align: center;
-    }
-
+    .loading-screen { max-width: 480px; margin: 0 auto; padding: 2rem; text-align: center; }
     .loading-map-wrap { margin-bottom: 1.25rem; }
 
     .loading-map {
@@ -340,17 +353,12 @@
       background: var(--ember);
       border: 3px solid #fff;
       border-radius: 50%;
-      box-shadow: 0 2px 10px rgba(26, 22, 18, 0.3);
+      box-shadow: 0 2px 10px rgba(26,22,18,0.3);
       font-size: 1.75rem;
       line-height: 1;
     }
 
-    .loading-globe {
-      font-size: 4rem;
-      display: block;
-      margin-bottom: 0.75rem;
-      line-height: 1;
-    }
+    .loading-globe { font-size: 4rem; display: block; margin-bottom: 0.75rem; line-height: 1; }
 
     .loading-city-text {
       font-family: "Playfair Display", Georgia, serif;
@@ -368,7 +376,6 @@
     }
 
     .loading-message.is-visible { opacity: 1; }
-
     .form-error { display: none; color: #b91c1c; }
     .form-error.is-visible { display: block; }
 
@@ -376,7 +383,6 @@
        SCREEN 3 — Results
        ============================================ */
     .results-screen h2 { font-size: 1.65rem; margin-bottom: 1.25rem; }
-
     .results-categories { display: flex; flex-direction: column; gap: 2rem; }
 
     .results-category__header {
@@ -400,7 +406,6 @@
     }
 
     .results-spots { display: grid; grid-template-columns: 1fr; gap: 0.85rem; }
-
     @media (min-width: 520px) { .results-spots { grid-template-columns: repeat(2, 1fr); } }
 
     .spot-card {
@@ -414,15 +419,8 @@
       position: relative;
     }
 
-    .spot-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(26, 22, 18, 0.1);
-    }
-
-    /* Added state — subtle left border indicator */
-    .spot-card.is-added {
-      border-left: 3px solid var(--ember);
-    }
+    .spot-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,22,18,0.1); }
+    .spot-card.is-added { border-left: 3px solid var(--ember); }
 
     .spot-card__header {
       display: flex;
@@ -435,7 +433,6 @@
     .spot-card__name { font-weight: 700; font-size: 1rem; color: var(--ink); }
     .spot-card__area { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 0.5rem; }
     .spot-card__why  { font-size: 0.9rem; font-style: italic; color: var(--ink); line-height: 1.5; }
-
     .spot-card__season { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
 
     .season-badge {
@@ -450,12 +447,7 @@
     .season-badge--caution { background: #d97706; }
     .season-badge--avoid   { background: #dc2626; }
 
-    .season-label {
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--ink-muted);
-      white-space: nowrap;
-    }
+    .season-label { font-size: 0.7rem; font-weight: 500; color: var(--ink-muted); white-space: nowrap; }
 
     .results-note {
       margin-top: 2rem;
@@ -469,76 +461,58 @@
       text-align: center;
       color: var(--ink-muted);
       padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255,255,255,0.6);
       border-radius: 12px;
       border: 1px dashed var(--border);
       margin-bottom: 1rem;
     }
 
     /* ============================================
-       SPOT DETAIL PANEL — slide up from bottom
+       SPOT DETAIL PANEL
        ============================================ */
-
-    /* Dark overlay behind the panel */
     .spot-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(26, 22, 18, 0.5);
+      background: rgba(26,22,18,0.5);
       z-index: 200;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
 
-    .spot-overlay.is-open {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .spot-overlay.is-open { opacity: 1; pointer-events: auto; }
 
-    /* The panel itself */
     .spot-panel {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       max-height: 70vh;
       background: #fff;
       border-radius: 16px 16px 0 0;
-      box-shadow: 0 -8px 40px rgba(26, 22, 18, 0.18);
+      box-shadow: 0 -8px 40px rgba(26,22,18,0.18);
       z-index: 201;
       overflow-y: auto;
       transform: translateY(100%);
       transition: transform 0.3s ease;
-      /* Category colour accent — set via JS */
       border-top: 4px solid var(--ember);
     }
 
-    .spot-panel.is-open {
-      transform: translateY(0);
-    }
+    .spot-panel.is-open { transform: translateY(0); }
 
-    /* Drag handle at the top */
     .spot-panel__handle {
-      width: 40px;
-      height: 4px;
+      width: 40px; height: 4px;
       background: var(--border);
       border-radius: 2px;
       margin: 0.75rem auto 0;
     }
 
-    .spot-panel__inner {
-      padding: 1rem 1.5rem 2rem;
-    }
+    .spot-panel__inner { padding: 1rem 1.5rem 2rem; }
 
-    /* Close button */
     .spot-panel__close {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 32px;
-      height: 32px;
+      top: 1rem; right: 1rem;
+      width: 32px; height: 32px;
       border: none;
-      background: rgba(26, 22, 18, 0.08);
+      background: rgba(26,22,18,0.08);
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -547,28 +521,21 @@
       font-size: 1.1rem;
       color: var(--ink-muted);
       transition: background 0.15s;
-      line-height: 1;
     }
 
-    .spot-panel__close:hover { background: rgba(26, 22, 18, 0.15); }
+    .spot-panel__close:hover { background: rgba(26,22,18,0.15); }
 
-    /* Panel header */
     .spot-panel__name {
       font-family: "Playfair Display", Georgia, serif;
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--ink);
       margin-bottom: 0.2rem;
-      padding-right: 2.5rem; /* avoid overlap with close button */
+      padding-right: 2.5rem;
     }
 
-    .spot-panel__area {
-      font-size: 0.85rem;
-      color: var(--ink-muted);
-      margin-bottom: 0.85rem;
-    }
+    .spot-panel__area { font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 0.85rem; }
 
-    /* Season row */
     .spot-panel__season {
       display: inline-flex;
       align-items: center;
@@ -576,30 +543,21 @@
       background: var(--paper);
       padding: 0.35rem 0.75rem;
       border-radius: 999px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
+
+    .spot-panel__season .season-badge { width: 10px; height: 10px; }
+    .spot-panel__season .season-label { font-size: 0.75rem; }
 
     .spot-panel__season-note {
-       font-size: 0.82rem;
-       color: var(--ink-muted);
-       margin-bottom: 1rem;
-       line-height: 1.5;
-       font-style: italic;
-    }
-
-    .spot-panel__season .season-badge {
-      width: 10px;
-      height: 10px;
-    }
-
-    .spot-panel__season .season-label {
-      font-size: 0.75rem;
-    }
-
-    /* Content sections */
-    .spot-panel__section {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
       margin-bottom: 1rem;
+      line-height: 1.5;
+      font-style: italic;
     }
+
+    .spot-panel__section { margin-bottom: 1rem; }
 
     .spot-panel__section-label {
       font-size: 0.7rem;
@@ -610,20 +568,9 @@
       margin-bottom: 0.3rem;
     }
 
-    .spot-panel__section-text {
-      font-size: 0.95rem;
-      color: var(--ink);
-      line-height: 1.6;
-    }
+    .spot-panel__section-text { font-size: 0.95rem; color: var(--ink); line-height: 1.6; }
+    .spot-panel__divider { height: 1px; background: var(--border); margin: 1rem 0; }
 
-    /* Divider */
-    .spot-panel__divider {
-      height: 1px;
-      background: var(--border);
-      margin: 1rem 0;
-    }
-
-    /* Add to map button */
     .spot-panel__add-btn {
       width: 100%;
       padding: 0.9rem;
@@ -640,19 +587,167 @@
       margin-top: 0.5rem;
     }
 
-    .spot-panel__add-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(200, 98, 42, 0.35);
-    }
-
+    .spot-panel__add-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
     .spot-panel__add-btn:active { transform: translateY(0); }
 
-    /* Already added state */
     .spot-panel__add-btn.is-added {
       background: #16a34a;
       cursor: default;
       transform: none;
       box-shadow: none;
+    }
+
+    .spot-panel__remove-btn {
+      width: 100%;
+      padding: 0.65rem;
+      background: transparent;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.15s;
+    }
+
+    .spot-panel__remove-btn:hover { background: #fef2f2; }
+
+    /* ============================================
+       SCREEN 4 — MAP
+       ============================================ */
+    #screen-map {
+      /* Full viewport minus topbar — no main padding constraints */
+      position: fixed;
+      top: var(--topbar-height);
+      left: 0; right: 0; bottom: 0;
+      z-index: 50;
+      background: var(--paper);
+    }
+
+    /* Map wrapper fills screen */
+    .map-screen-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Leaflet map container */
+    #main-map {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Back link — floats over map top-left */
+    .map-back-link {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 500;
+      background: #fff;
+      color: var(--ember);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: transform 0.15s;
+    }
+
+    .map-back-link:hover { transform: translateY(-1px); }
+
+    /* Filter panel — floats over map right side */
+    .map-filters {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Each filter button — circular with emoji */
+    .map-filter-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2.5px solid transparent;
+      background: #fff;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: transform 0.15s, opacity 0.2s;
+      position: relative;
+    }
+
+    .map-filter-btn:hover { transform: scale(1.1); }
+
+    /* Active = coloured border + slight bg tint */
+    .map-filter-btn.is-active {
+      opacity: 1;
+    }
+
+    /* Inactive = greyed out */
+    .map-filter-btn.is-inactive {
+      opacity: 0.35;
+      filter: grayscale(0.8);
+    }
+
+    /* Clear all button — slightly different style */
+    .map-filter-btn--clear {
+      background: var(--ink);
+      font-size: 0.9rem;
+      color: var(--paper);
+    }
+
+    /* Empty map state */
+    .map-empty-state {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 400;
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      max-width: 280px;
+    }
+
+    .map-empty-state h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .map-empty-state p {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      margin-bottom: 1rem;
+    }
+
+    /* Custom map pin styles */
+    .map-pin-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 8px rgba(26,22,18,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: "DM Sans", sans-serif;
     }
 
     /* ============================================
@@ -670,11 +765,7 @@
 
     .site-footer p + p { margin-top: 0.5rem; }
 
-    .site-footer .credit {
-      margin-top: 0.75rem;
-      font-weight: 600;
-      color: var(--ink);
-    }
+    .site-footer .credit { margin-top: 0.75rem; font-weight: 600; color: var(--ink); }
   </style>
 </head>
 <body>
@@ -684,56 +775,52 @@
     <span class="topbar__brand">Giya</span>
     <span class="topbar__flight" id="bar-flight" aria-live="polite"></span>
 
-    <div class="topbar__warnings" aria-label="Travel warnings">
+    <div class="topbar__actions">
+      <!-- View map button — appears after first spot added -->
+      <button type="button" class="topbar__map-btn" id="btn-view-map"
+        aria-label="View my map">
+        🗺️ My Map
+      </button>
 
-      <!-- Spots counter badge — hidden until first spot is added -->
-      <button
-        type="button"
-        class="topbar__spots-count"
-        id="spots-count-badge"
-        aria-label="Spots added to map"
-        title="Spots added to your map"
-      >
+      <!-- Spots counter -->
+      <button type="button" class="topbar__spots-count" id="spots-count-badge"
+        aria-label="Spots added to map" title="Spots added to your map">
         📍 <span id="spots-count-number">0</span> spots
       </button>
 
-      <button type="button" class="warning-icon typhoon" id="warn-typhoon"
-        data-tooltip="No active warnings" aria-label="Typhoon warning">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-        </svg>
-        <span id="warn-typhoon-text" class="warning-icon__text" hidden></span>
-      </button>
+      <div class="topbar__warnings" aria-label="Travel warnings">
+        <button type="button" class="warning-icon typhoon" id="warn-typhoon"
+          data-tooltip="No active warnings" aria-label="Typhoon warning">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          <span id="warn-typhoon-text" class="warning-icon__text" hidden></span>
+        </button>
 
-      <button type="button" class="warning-icon temp" id="warn-temp"
-        data-tooltip="No active warnings" aria-label="Temperature warning">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v2h-1v1h1v2h-2V5z"/>
-        </svg>
-        <span id="warn-temp-text" class="warning-icon__text" hidden></span>
-      </button>
+        <button type="button" class="warning-icon temp" id="warn-temp"
+          data-tooltip="No active warnings" aria-label="Temperature warning">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v2h-1v1h1v2h-2V5z"/>
+          </svg>
+          <span id="warn-temp-text" class="warning-icon__text" hidden></span>
+        </button>
 
-      <button type="button" class="warning-icon general" id="warn-general"
-        data-tooltip="No active warnings" aria-label="General warning">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
-        </svg>
-        <span id="warn-general-text" class="warning-icon__text" hidden></span>
-      </button>
+        <button type="button" class="warning-icon general" id="warn-general"
+          data-tooltip="No active warnings" aria-label="General warning">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+          </svg>
+          <span id="warn-general-text" class="warning-icon__text" hidden></span>
+        </button>
+      </div>
     </div>
   </header>
 
   <!-- ========== SPOT DETAIL PANEL + OVERLAY ========== -->
   <div class="spot-overlay" id="spot-overlay" aria-hidden="true"></div>
 
-  <div
-    class="spot-panel"
-    id="spot-panel"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="spot-panel-name"
-    hidden
-  >
+  <div class="spot-panel" id="spot-panel" role="dialog" aria-modal="true"
+    aria-labelledby="spot-panel-name" hidden>
     <div class="spot-panel__handle" aria-hidden="true"></div>
     <button type="button" class="spot-panel__close" id="spot-panel-close" aria-label="Close">×</button>
 
@@ -746,11 +833,8 @@
           role="img" aria-label="Season status"></span>
         <span class="season-label" id="spot-panel-season-label">Good time</span>
       </div>
+      <p class="spot-panel__season-note" id="spot-panel-season-note"></p>
 
-      <p class="spot-panel__season-note" 
-        id="spot-panel-season-note"></p>
-
-      <!-- Why backpackers love it -->
       <div class="spot-panel__section" id="spot-panel-why-section">
         <p class="spot-panel__section-label">Why backpackers love it</p>
         <p class="spot-panel__section-text" id="spot-panel-why"></p>
@@ -758,13 +842,11 @@
 
       <div class="spot-panel__divider"></div>
 
-      <!-- Hidden angle — only shown if data exists -->
       <div class="spot-panel__section" id="spot-panel-hidden-section" hidden>
         <p class="spot-panel__section-label">💎 What most visitors miss</p>
         <p class="spot-panel__section-text" id="spot-panel-hidden"></p>
       </div>
 
-      <!-- Food nearby — only shown if data exists -->
       <div class="spot-panel__section" id="spot-panel-food-section" hidden>
         <p class="spot-panel__section-label">🍜 What to eat nearby</p>
         <p class="spot-panel__section-text" id="spot-panel-food"></p>
@@ -772,6 +854,11 @@
 
       <button type="button" class="spot-panel__add-btn" id="spot-panel-add-btn">
         + Add to my map
+      </button>
+      <!-- Remove button — shown only when already added -->
+      <button type="button" class="spot-panel__remove-btn" id="spot-panel-remove-btn"
+        style="display:none">
+        Remove from map
       </button>
     </div>
   </div>
@@ -785,9 +872,7 @@
         Tell us where you're flying in and out of. We'll handle the rest —
         destinations, hidden gems, local food, transport, and budget.
       </p>
-      <button type="button" class="btn-primary" id="btn-start">
-        Start Planning →
-      </button>
+      <button type="button" class="btn-primary" id="btn-start">Start Planning →</button>
       <p class="landing__note">No sign-up · No credit card · Free</p>
     </section>
 
@@ -795,20 +880,17 @@
     <section id="screen-1" class="screen form-screen"
       data-screen-index="1" aria-label="Trip details" hidden>
       <h2>Let's build your trip.</h2>
-
       <form id="trip-form">
         <div class="form-group">
           <label for="arrival-city">✈️ Flying into?</label>
           <input type="text" id="arrival-city" name="flyInto"
             placeholder="city or airport name" required>
         </div>
-
         <div class="form-group">
           <label for="departure-city">✈️ Flying out from?</label>
           <input type="text" id="departure-city" name="flyOut"
             placeholder="same city or different?" required>
         </div>
-
         <div class="form-row">
           <div class="form-group">
             <label for="date-from">📅 From</label>
@@ -878,6 +960,43 @@
       <div id="results-categories" class="results-categories"></div>
       <p class="results-note">Tap any spot to explore and add to your map</p>
     </section>
+
+    <!-- ========== SCREEN 4 — MAP ========== -->
+    <!--
+      Map screen uses position:fixed (see CSS) so it sits outside the
+      normal main flow and fills the full viewport below the topbar.
+      It starts hidden and is shown by showScreen(4).
+    -->
+    <section id="screen-map" class="screen" data-screen-index="4"
+      aria-label="Trip map" hidden>
+      <div class="map-screen-wrap">
+
+        <!-- Leaflet map -->
+        <div id="main-map"></div>
+
+        <!-- Back to results -->
+        <button type="button" class="map-back-link" id="btn-map-back">
+          ← Results
+        </button>
+
+        <!-- Category filter buttons (right side) -->
+        <div class="map-filters" id="map-filters" aria-label="Filter by category">
+          <!-- Populated by JavaScript when map opens -->
+        </div>
+
+        <!-- Empty state — shown when no spots added yet -->
+        <div class="map-empty-state" id="map-empty-state">
+          <h3>No spots yet</h3>
+          <p>Go back to results and add spots to see them on your map.</p>
+          <button type="button" class="btn-primary"
+            style="font-size:0.85rem;padding:0.7rem 1.25rem"
+            onclick="document.getElementById('btn-map-back').click()">
+            ← Browse spots
+          </button>
+        </div>
+
+      </div>
+    </section>
   </main>
 
   <!-- ========== FOOTER ========== -->
@@ -896,9 +1015,12 @@
       const GIYA_WORKER_URL = 'https://giya-ai-worker.calleylearn.workers.dev';
       const GIYA_DEBUG      = true;
 
-      let giyaData      = null;
-      let giyaAddedSpots = [];      /* spots Sam has added to map */
-      let panelCurrentSpot = null;  /* spot currently shown in panel */
+      let giyaData         = null;
+      let giyaAddedSpots   = [];     /* { spot, categoryName, categoryColor, cardEl } */
+      let panelCurrentSpot = null;
+      let mainMapInstance  = null;
+      let mainMapMarkers   = [];     /* { marker, categoryName } */
+      let filterState      = {};     /* categoryName → true/false */
 
       function logGiya(step, detail) {
         if (!GIYA_DEBUG) return;
@@ -913,92 +1035,45 @@
         document.querySelectorAll('.screen').forEach(function (screen) {
           const index    = Number(screen.getAttribute('data-screen-index'));
           const isTarget = index === screenId;
-          if (isTarget) { screen.classList.add('is-visible'); screen.removeAttribute('hidden'); }
-          else           { screen.classList.remove('is-visible'); screen.setAttribute('hidden', ''); }
+          if (isTarget) {
+            screen.classList.add('is-visible');
+            screen.removeAttribute('hidden');
+          } else {
+            screen.classList.remove('is-visible');
+            screen.setAttribute('hidden', '');
+          }
         });
+
+        /* Body scroll: disable on map screen (it fills viewport) */
+        document.body.style.overflow = (screenId === 4) ? 'hidden' : '';
+
         logGiya('showScreen', screenId);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (screenId !== 4) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* Initialise or refresh map when screen 4 opens */
+        if (screenId === 4) {
+          setTimeout(function () { initOrRefreshMainMap(); }, 80);
+        }
       }
 
       /* ============================================
          WARNING ICONS
          ============================================ */
-      function activateWarning(name, tooltipText) {
-        const icon   = document.getElementById('warn-' + name);
-        const textEl = document.getElementById('warn-' + name + '-text');
-        if (!icon) return;
-        icon.classList.add('active');
-        icon.setAttribute('data-tooltip', tooltipText);
-        if (textEl) { textEl.textContent = tooltipText; textEl.hidden = false; }
-      }
-
       function safeAddListener(elementId, eventName, handler) {
         const el = document.getElementById(elementId);
-        if (!el) { console.warn('[Giya] Missing #' + elementId + ' — cannot attach ' + eventName); return false; }
+        if (!el) {
+          console.warn('[Giya] Missing #' + elementId);
+          return false;
+        }
         el.addEventListener(eventName, handler);
         return true;
       }
 
       safeAddListener('btn-start', 'click', function () { showScreen(1); });
 
-      /* ============================================
-         DATE RULES
-         ============================================ */
-      const dateFromInput = document.getElementById('date-from');
-      const dateToInput   = document.getElementById('date-to');
-
-      if (dateFromInput && dateToInput) {
-        const todayFormatted = new Date().toISOString().split('T')[0];
-        dateFromInput.min = todayFormatted;
-        dateToInput.min   = todayFormatted;
-
-        dateFromInput.addEventListener('change', function () {
-          const sel = dateFromInput.value;
-          dateToInput.min = sel || todayFormatted;
-          if (dateToInput.value && dateToInput.value < sel) dateToInput.value = '';
-        });
-      }
-
-      function calculateTripDuration(dateFrom, dateTo) {
-        const start    = new Date(dateFrom + 'T00:00:00');
-        const end      = new Date(dateTo   + 'T00:00:00');
-        const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
-        return diffDays >= 1 ? diffDays : 1;
-      }
-
-      /* ============================================
-         CATEGORY COLOURS + SEASON BADGES
-         ============================================ */
-      const CATEGORY_COLORS = {
-        'Urban and Culture':    '#E8892B',
-        'Beach and Islands':    '#2B9BE8',
-        'Nature and Adventure': '#2BE87A',
-        'Food and Night Life':  '#E82B6B',
-        'Family Friendly':      '#9B2BE8',
-        'Ultra Budget':         '#E8E82B',
-      };
-
-      function getCategoryColor(category) {
-        if (category.color && /^#[0-9A-Fa-f]{6}$/.test(category.color)) return category.color;
-        if (category.name && CATEGORY_COLORS[category.name]) return CATEGORY_COLORS[category.name];
-        return '#E8892B';
-      }
-
-      function seasonBadgeClass(status) {
-        if (status === 'good')  return 'season-badge--good';
-        if (status === 'avoid') return 'season-badge--avoid';
-        return 'season-badge--caution';
-      }
-
-      function getSeasonLabel(status) {
-        if (status === 'good')  return 'Good time';
-        if (status === 'avoid') return 'Avoid this period';
-        return 'Check conditions';
-      }
-
-      /* ============================================
-         WARNING RESET + APPLY
-         ============================================ */
       function resetWarnings() {
         ['typhoon', 'temp', 'general'].forEach(function (name) {
           const icon   = document.getElementById('warn-' + name);
@@ -1032,59 +1107,286 @@
       }
 
       /* ============================================
-         SPOTS COUNTER BADGE
+         DATE RULES
+         ============================================ */
+      const dateFromInput = document.getElementById('date-from');
+      const dateToInput   = document.getElementById('date-to');
+
+      if (dateFromInput && dateToInput) {
+        const todayFormatted = new Date().toISOString().split('T')[0];
+        dateFromInput.min = todayFormatted;
+        dateToInput.min   = todayFormatted;
+
+        dateFromInput.addEventListener('change', function () {
+          const sel = dateFromInput.value;
+          dateToInput.min = sel || todayFormatted;
+          if (dateToInput.value && dateToInput.value < sel) dateToInput.value = '';
+        });
+      }
+
+      function calculateTripDuration(dateFrom, dateTo) {
+        const start    = new Date(dateFrom + 'T00:00:00');
+        const end      = new Date(dateTo   + 'T00:00:00');
+        const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+        return diffDays >= 1 ? diffDays : 1;
+      }
+
+      /* ============================================
+         CATEGORY COLOURS
+         ============================================ */
+      const CATEGORY_COLORS = {
+        'Urban and Culture':    '#E8892B',
+        'Beach and Islands':    '#2B9BE8',
+        'Nature and Adventure': '#2BE87A',
+        'Food and Night Life':  '#E82B6B',
+        'Family Friendly':      '#9B2BE8',
+        'Ultra Budget':         '#E8E82B',
+      };
+
+      const CATEGORY_EMOJIS = {
+        'Urban and Culture':    '🏙️',
+        'Beach and Islands':    '🏖️',
+        'Nature and Adventure': '🏔️',
+        'Food and Night Life':  '🍜',
+        'Family Friendly':      '👨‍👩‍👧',
+        'Ultra Budget':         '💸',
+      };
+
+      function getCategoryColor(category) {
+        if (category.color && /^#[0-9A-Fa-f]{6}$/.test(category.color)) return category.color;
+        if (category.name && CATEGORY_COLORS[category.name]) return CATEGORY_COLORS[category.name];
+        return '#E8892B';
+      }
+
+      function seasonBadgeClass(status) {
+        if (status === 'good')  return 'season-badge--good';
+        if (status === 'avoid') return 'season-badge--avoid';
+        return 'season-badge--caution';
+      }
+
+      function getSeasonLabel(status) {
+        if (status === 'good')  return 'Good time';
+        if (status === 'avoid') return 'Avoid this period';
+        return 'Check conditions';
+      }
+
+      /* ============================================
+         SPOTS COUNTER + MAP BUTTON
          ============================================ */
       function updateSpotsCounter() {
-        const badge  = document.getElementById('spots-count-badge');
-        const number = document.getElementById('spots-count-number');
-        if (!badge || !number) return;
+        const badge    = document.getElementById('spots-count-badge');
+        const number   = document.getElementById('spots-count-number');
+        const mapBtn   = document.getElementById('btn-view-map');
+        const count    = giyaAddedSpots.length;
 
-        const count = giyaAddedSpots.length;
-        number.textContent = count;
+        if (number) number.textContent = count;
+        if (badge)  { count > 0 ? badge.classList.add('is-visible') : badge.classList.remove('is-visible'); }
+        if (mapBtn) { count > 0 ? mapBtn.classList.add('is-visible') : mapBtn.classList.remove('is-visible'); }
+      }
 
-        if (count > 0) {
-          badge.classList.add('is-visible');
-        } else {
-          badge.classList.remove('is-visible');
+      safeAddListener('btn-view-map', 'click', function () { showScreen(4); });
+      safeAddListener('btn-map-back', 'click', function () { showScreen(3); });
+
+      /* ============================================
+         MAIN MAP — initialise / refresh
+         ============================================ */
+      function initOrRefreshMainMap() {
+        const mapEl = document.getElementById('main-map');
+        const emptyState = document.getElementById('map-empty-state');
+        if (!mapEl || typeof L === 'undefined') return;
+
+        /* Show or hide empty state */
+        if (emptyState) {
+          emptyState.style.display = giyaAddedSpots.length === 0 ? 'block' : 'none';
         }
+
+        if (giyaAddedSpots.length === 0) return;
+
+        /* Destroy existing map if present */
+        if (mainMapInstance) {
+          mainMapInstance.remove();
+          mainMapInstance = null;
+          mainMapMarkers  = [];
+        }
+
+        /* Create map */
+        mainMapInstance = L.map(mapEl, {
+          zoomControl: true,
+          scrollWheelZoom: true,
+        });
+
+        /* CartoDB Positron — clean, no labels */
+        L.tileLayer(
+          'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+          {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19,
+          }
+        ).addTo(mainMapInstance);
+
+        /* Place pins for every added spot */
+        const bounds = [];
+
+        giyaAddedSpots.forEach(function (entry, idx) {
+          const spot  = entry.spot;
+          const color = entry.categoryColor;
+          const lat   = spot.coordinates && spot.coordinates.lat;
+          const lng   = spot.coordinates && spot.coordinates.lng;
+
+          if (!lat || !lng) return; /* skip spots without coordinates */
+
+          bounds.push([lat, lng]);
+
+          /* Custom numbered dot icon */
+          const icon = L.divIcon({
+            html: '<div class="map-pin-dot" style="background:' + color +
+                  ';border-color:#fff">' + (idx + 1) + '</div>',
+            className: '',
+            iconSize:   [36, 36],
+            iconAnchor: [18, 18],
+          });
+
+          const marker = L.marker([lat, lng], { icon: icon }).addTo(mainMapInstance);
+
+          marker.bindPopup(
+            '<div style="font-family:\'DM Sans\',sans-serif;min-width:160px">' +
+              '<strong style="font-size:0.95rem">' + spot.spot_name + '</strong><br/>' +
+              '<span style="font-size:0.78rem;color:#5c5349">' + (spot.area || '') + '</span>' +
+            '</div>',
+            { maxWidth: 220 }
+          );
+
+          mainMapMarkers.push({ marker: marker, categoryName: entry.categoryName });
+        });
+
+        /* Fit map to show all pins */
+        if (bounds.length > 0) {
+          mainMapInstance.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+        }
+
+        /* Ensure map renders correctly after container becomes visible */
+        setTimeout(function () {
+          if (mainMapInstance) mainMapInstance.invalidateSize();
+        }, 100);
+
+        /* Build filter buttons */
+        buildFilterButtons();
+      }
+
+      /* ============================================
+         FILTER BUTTONS
+         ============================================ */
+      function buildFilterButtons() {
+        const container = document.getElementById('map-filters');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        /* Collect unique categories from added spots */
+        const categories = [];
+        const seen       = {};
+
+        giyaAddedSpots.forEach(function (entry) {
+          if (!seen[entry.categoryName]) {
+            seen[entry.categoryName] = true;
+            categories.push({
+              name:  entry.categoryName,
+              color: entry.categoryColor,
+              emoji: CATEGORY_EMOJIS[entry.categoryName] || '📍',
+            });
+          }
+        });
+
+        /* Initialise all filters as active */
+        categories.forEach(function (cat) {
+          if (filterState[cat.name] === undefined) filterState[cat.name] = true;
+        });
+
+        /* Create a button per category */
+        categories.forEach(function (cat) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'map-filter-btn ' +
+            (filterState[cat.name] ? 'is-active' : 'is-inactive');
+          btn.style.borderColor = cat.color;
+          btn.style.boxShadow   = filterState[cat.name]
+            ? '0 0 0 2px ' + cat.color + '44, 0 2px 8px rgba(26,22,18,0.15)'
+            : 'var(--shadow)';
+          btn.setAttribute('aria-label', cat.name);
+          btn.setAttribute('title', cat.name);
+          btn.textContent = cat.emoji;
+
+          btn.addEventListener('click', function () {
+            filterState[cat.name] = !filterState[cat.name];
+            applyFilters();
+            buildFilterButtons(); /* re-render to update active state */
+          });
+
+          container.appendChild(btn);
+        });
+
+        /* Clear all filters button */
+        if (categories.length > 0) {
+          const clearBtn = document.createElement('button');
+          clearBtn.type      = 'button';
+          clearBtn.className = 'map-filter-btn map-filter-btn--clear';
+          clearBtn.setAttribute('title', 'Show all categories');
+          clearBtn.textContent = '⟳';
+
+          clearBtn.addEventListener('click', function () {
+            Object.keys(filterState).forEach(function (k) { filterState[k] = true; });
+            applyFilters();
+            buildFilterButtons();
+          });
+
+          container.appendChild(clearBtn);
+        }
+      }
+
+      function applyFilters() {
+        mainMapMarkers.forEach(function (entry) {
+          const visible = filterState[entry.categoryName] !== false;
+          if (visible) {
+            if (!mainMapInstance.hasLayer(entry.marker)) {
+              entry.marker.addTo(mainMapInstance);
+            }
+          } else {
+            if (mainMapInstance.hasLayer(entry.marker)) {
+              mainMapInstance.removeLayer(entry.marker);
+            }
+          }
+        });
       }
 
       /* ============================================
          SPOT DETAIL PANEL
          ============================================ */
-
-      /**
-       * Opens the slide-up detail panel for a spot.
-       * @param {object} spot          — spot data object from Gemini JSON
-       * @param {string} categoryColor — hex colour for the category
-       * @param {HTMLElement} cardEl   — the card element (to mark as added)
-       */
       function openSpotDetail(spot, categoryColor, cardEl) {
         const panel   = document.getElementById('spot-panel');
         const overlay = document.getElementById('spot-overlay');
         if (!panel || !overlay) return;
 
-        panelCurrentSpot = { spot: spot, cardEl: cardEl };
-
-        /* Set category colour accent on top border */
+        panelCurrentSpot = { spot, cardEl };
         panel.style.borderTopColor = categoryColor || 'var(--ember)';
 
-        /* Populate fields */
-        const nameEl   = document.getElementById('spot-panel-name');
-        const areaEl   = document.getElementById('spot-panel-area');
-        const badgeEl  = document.getElementById('spot-panel-season-badge');
-        const labelEl  = document.getElementById('spot-panel-season-label');
-        const whyEl    = document.getElementById('spot-panel-why');
-
+        const nameEl        = document.getElementById('spot-panel-name');
+        const areaEl        = document.getElementById('spot-panel-area');
+        const badgeEl       = document.getElementById('spot-panel-season-badge');
+        const labelEl       = document.getElementById('spot-panel-season-label');
+        const seasonNoteEl  = document.getElementById('spot-panel-season-note');
+        const whyEl         = document.getElementById('spot-panel-why');
         const hiddenSection = document.getElementById('spot-panel-hidden-section');
         const hiddenEl      = document.getElementById('spot-panel-hidden');
         const foodSection   = document.getElementById('spot-panel-food-section');
         const foodEl        = document.getElementById('spot-panel-food');
         const addBtn        = document.getElementById('spot-panel-add-btn');
+        const removeBtn     = document.getElementById('spot-panel-remove-btn');
 
-        if (nameEl)  nameEl.textContent  = spot.spot_name || 'Unnamed spot';
-        if (areaEl)  areaEl.textContent  = spot.area      || '';
-        if (whyEl)   whyEl.textContent   = spot.why       || '';
+        if (nameEl)       nameEl.textContent       = spot.spot_name || 'Unnamed spot';
+        if (areaEl)       areaEl.textContent       = spot.area      || '';
+        if (whyEl)        whyEl.textContent        = spot.why       || '';
+        if (seasonNoteEl) seasonNoteEl.textContent = spot.season_note || '';
 
         const status = spot.season_status || 'caution';
         if (badgeEl) {
@@ -1093,60 +1395,40 @@
         }
         if (labelEl) labelEl.textContent = getSeasonLabel(status);
 
-        const seasonNoteEl = document.getElementById('spot-panel-season-note');
-        if (seasonNoteEl) {
-          seasonNoteEl.textContent = spot.season_note || '';
-        }
-
-        /* Hidden angle — only show if available */
         if (hiddenSection && hiddenEl) {
-          const hiddenText = spot.hidden_angle || '';
-          if (hiddenText) {
-            hiddenEl.textContent = hiddenText;
-            hiddenSection.hidden = false;
-          } else {
-            hiddenSection.hidden = true;
-          }
+          const t = spot.hidden_angle || '';
+          hiddenEl.textContent   = t;
+          hiddenSection.hidden   = !t;
         }
 
-        /* Food nearby — only show if available */
         if (foodSection && foodEl) {
-          const foodText = spot.food_nearby || '';
-          if (foodText) {
-            foodEl.textContent = foodText;
-            foodSection.hidden = false;
-          } else {
-            foodSection.hidden = true;
-          }
+          const t = spot.food_nearby || '';
+          foodEl.textContent  = t;
+          foodSection.hidden  = !t;
         }
 
-        /* Set add button state */
+        const alreadyAdded = giyaAddedSpots.some(function (e) {
+          return e.spot.spot_name === spot.spot_name;
+        });
+
         if (addBtn) {
-          const alreadyAdded = giyaAddedSpots.some(function (s) {
-            return s.spot_name === spot.spot_name;
-          });
-
-          if (alreadyAdded) {
-            addBtn.textContent = '✅ Added to map';
-            addBtn.classList.add('is-added');
-            addBtn.disabled = true;
-          } else {
-            addBtn.textContent = '+ Add to my map';
-            addBtn.classList.remove('is-added');
-            addBtn.disabled = false;
-          }
+          addBtn.textContent = alreadyAdded ? '✅ Added to map' : '+ Add to my map';
+          addBtn.classList.toggle('is-added', alreadyAdded);
+          addBtn.disabled = alreadyAdded;
         }
 
-        /* Open panel and overlay */
+        /* Show remove button only if already added */
+        if (removeBtn) {
+          removeBtn.style.display = alreadyAdded ? 'block' : 'none';
+        }
+
         panel.hidden = false;
         overlay.setAttribute('aria-hidden', 'false');
-
-        /* Force reflow before adding open class for animation */
         panel.getBoundingClientRect();
         panel.classList.add('is-open');
         overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
 
-        document.body.style.overflow = 'hidden'; /* prevent background scroll */
         logGiya('openSpotDetail', spot.spot_name);
       }
 
@@ -1160,55 +1442,73 @@
         overlay.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
 
-        /* Hide panel after animation completes */
         setTimeout(function () {
           panel.hidden = true;
           panelCurrentSpot = null;
         }, 320);
-
-        logGiya('closeSpotDetail');
       }
 
-      /* Wire close button and overlay tap */
       safeAddListener('spot-panel-close', 'click', closeSpotDetail);
       safeAddListener('spot-overlay',     'click', closeSpotDetail);
 
-      /* Add to map button */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSpotDetail();
+      });
+
+      /* ADD TO MAP */
       safeAddListener('spot-panel-add-btn', 'click', function () {
         if (!panelCurrentSpot) return;
-
         const { spot, cardEl } = panelCurrentSpot;
-        const addBtn = document.getElementById('spot-panel-add-btn');
+        const addBtn    = document.getElementById('spot-panel-add-btn');
+        const removeBtn = document.getElementById('spot-panel-remove-btn');
 
-        /* Prevent duplicate additions */
-        const alreadyAdded = giyaAddedSpots.some(function (s) {
-          return s.spot_name === spot.spot_name;
+        const alreadyAdded = giyaAddedSpots.some(function (e) {
+          return e.spot.spot_name === spot.spot_name;
         });
 
         if (alreadyAdded) return;
 
-        giyaAddedSpots.push(spot);
-        logGiya('spot added to map', spot.spot_name);
+        /* Find category info from giyaData */
+        let categoryName  = 'Unknown';
+        let categoryColor = '#E8892B';
 
-        /* Update button to added state */
-        if (addBtn) {
-          addBtn.textContent = '✅ Added to map';
-          addBtn.classList.add('is-added');
-          addBtn.disabled = true;
+        if (giyaData && giyaData.categories) {
+          giyaData.categories.forEach(function (cat) {
+            if (cat.spots && cat.spots.some(function (s) { return s.spot_name === spot.spot_name; })) {
+              categoryName  = cat.name;
+              categoryColor = getCategoryColor(cat);
+            }
+          });
         }
 
-        /* Mark the card in the results list */
-        if (cardEl) {
-          cardEl.classList.add('is-added');
-        }
+        giyaAddedSpots.push({ spot, categoryName, categoryColor, cardEl });
+        logGiya('spot added', spot.spot_name);
 
-        /* Update top bar counter */
+        if (addBtn) { addBtn.textContent = '✅ Added to map'; addBtn.classList.add('is-added'); addBtn.disabled = true; }
+        if (removeBtn) { removeBtn.style.display = 'block'; }
+        if (cardEl) { cardEl.classList.add('is-added'); }
+
         updateSpotsCounter();
       });
 
-      /* Close panel on Escape key */
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeSpotDetail();
+      /* REMOVE FROM MAP — Observation 1 fix */
+      safeAddListener('spot-panel-remove-btn', 'click', function () {
+        if (!panelCurrentSpot) return;
+        const { spot, cardEl } = panelCurrentSpot;
+        const addBtn    = document.getElementById('spot-panel-add-btn');
+        const removeBtn = document.getElementById('spot-panel-remove-btn');
+
+        giyaAddedSpots = giyaAddedSpots.filter(function (e) {
+          return e.spot.spot_name !== spot.spot_name;
+        });
+
+        logGiya('spot removed', spot.spot_name);
+
+        if (addBtn) { addBtn.textContent = '+ Add to my map'; addBtn.classList.remove('is-added'); addBtn.disabled = false; }
+        if (removeBtn) { removeBtn.style.display = 'none'; }
+        if (cardEl) { cardEl.classList.remove('is-added'); }
+
+        updateSpotsCounter();
       });
 
       /* ============================================
@@ -1230,7 +1530,7 @@
       function renderSpotsList(categories) {
         const container = document.getElementById('results-categories');
         const emptyEl   = document.getElementById('results-empty');
-        if (!container) { logGiya('renderSpotsList: missing #results-categories'); return 0; }
+        if (!container) return 0;
 
         container.innerHTML = '';
         if (emptyEl) emptyEl.hidden = true;
@@ -1245,7 +1545,7 @@
           header.style.borderLeftColor = categoryColor;
           header.innerHTML =
             '<span class="results-category__emoji" aria-hidden="true">' + escapeHtml(category.emoji || '') + '</span>' +
-            '<span class="results-category__name">'                     + escapeHtml(category.name  || 'Category') + '</span>';
+            '<span class="results-category__name">' + escapeHtml(category.name || 'Category') + '</span>';
           section.appendChild(header);
 
           const spotsGrid     = document.createElement('div');
@@ -1258,10 +1558,9 @@
             card.setAttribute('role', 'button');
             card.setAttribute('tabindex', '0');
             card.setAttribute('title', 'Tap to explore this spot');
-
             card.innerHTML =
               '<div class="spot-card__header">' +
-                '<span class="spot-card__name">'  + escapeHtml(spot.spot_name || 'Unnamed spot') + '</span>' +
+                '<span class="spot-card__name">' + escapeHtml(spot.spot_name || 'Unnamed spot') + '</span>' +
                 '<div class="spot-card__season">' +
                   '<span class="season-badge ' + seasonBadgeClass(status) + '" role="img" aria-label="Season: ' + escapeHtml(status) + '"></span>' +
                   '<span class="season-label">' + escapeHtml(getSeasonLabel(status)) + '</span>' +
@@ -1270,17 +1569,9 @@
               '<p class="spot-card__area">' + escapeHtml(spot.area || '') + '</p>' +
               '<p class="spot-card__why">'  + escapeHtml(spot.why  || '') + '</p>';
 
-            /* Click → open detail panel */
-            card.addEventListener('click', function () {
-              openSpotDetail(spot, categoryColor, card);
-            });
-
-            /* Keyboard support */
+            card.addEventListener('click', function () { openSpotDetail(spot, categoryColor, card); });
             card.addEventListener('keydown', function (e) {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openSpotDetail(spot, categoryColor, card);
-              }
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSpotDetail(spot, categoryColor, card); }
             });
 
             spotsGrid.appendChild(card);
@@ -1304,7 +1595,6 @@
         errorEl.textContent = message;
         errorEl.classList.add('is-visible');
         errorEl.removeAttribute('hidden');
-        logGiya('form error shown', message);
       }
 
       function clearFormError() {
@@ -1453,7 +1743,7 @@
       };
 
       /* ============================================
-         LOADING MESSAGES
+         LOADING MESSAGES + MAP
          ============================================ */
       const LOADING_MESSAGES = [
         { emoji: '🗺️', text: 'Plotting your escape...' },
@@ -1470,9 +1760,10 @@
       ];
 
       function getDuration(index) {
-        if (index <= 2) return 8000;
-        if (index <= 5) return 7000;
-        return 6000;
+        if (index <= 1) return 10000;
+        if (index <= 2) return 7000;
+        if (index <= 5) return 6000;
+        return 5000;
       }
 
       let loadingMapInstance    = null;
@@ -1482,20 +1773,18 @@
       function showLoadingMessage(index, skipFade) {
         if (!loadingMessageActive) return;
         const el  = document.getElementById('loading-message');
-        if (!el || !LOADING_MESSAGES.length) return;
+        if (!el) return;
         const msg = LOADING_MESSAGES[index % LOADING_MESSAGES.length];
 
         function applyText() {
           if (!loadingMessageActive) return;
           el.textContent = msg.emoji + ' ' + msg.text;
           el.classList.add('is-visible');
-
-          const nextIndex    = (index + 1) % LOADING_MESSAGES.length;
-          const nextDuration = getDuration(nextIndex);
+          const nextIndex = (index + 1) % LOADING_MESSAGES.length;
           loadingMessageTimeout = setTimeout(function () {
             el.classList.remove('is-visible');
             setTimeout(function () { showLoadingMessage(nextIndex, false); }, 400);
-          }, nextDuration);
+          }, getDuration(nextIndex));
         }
 
         if (skipFade) { applyText(); }
@@ -1527,14 +1816,10 @@
           boxZoom: false, keyboard: false, touchZoom: false,
         });
 
-        L.tileLayer(
-          'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-          {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 19,
-          }
-        ).addTo(loadingMapInstance);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+          subdomains: 'abcd', maxZoom: 19,
+        }).addTo(loadingMapInstance);
 
         const planeIcon = L.divIcon({
           html: '<div class="loading-map-marker" aria-hidden="true">✈️</div>',
@@ -1561,8 +1846,7 @@
         const cityText    = document.getElementById('loading-city-text');
         if (!loadingEl) return;
 
-        const cityKey     = arrivalCity.trim().toLowerCase();
-        const coords      = CITY_COORDINATES[cityKey];
+        const coords      = CITY_COORDINATES[arrivalCity.trim().toLowerCase()];
         const displayCity = arrivalCity.trim();
 
         if (coords) {
@@ -1590,11 +1874,10 @@
       }
 
       /* ============================================
-         FORM SUBMIT → WORKER → GEMINI → RESULTS
+         FORM SUBMIT
          ============================================ */
       async function submitFlightDetails(event) {
         event.preventDefault();
-        logGiya('submitFlightDetails: started');
 
         const arrivalEl   = document.getElementById('arrival-city');
         const departureEl = document.getElementById('departure-city');
@@ -1614,11 +1897,10 @@
 
         const requestBody = {
           arrival: arrivalCity, departure: departureCity,
-          dateFrom: dateFrom,   dateTo: dateTo,
-          duration: duration,
+          dateFrom, dateTo, duration,
         };
 
-        logGiya('trip payload (sent to worker)', requestBody);
+        logGiya('trip payload', requestBody);
 
         const barFlight      = document.getElementById('bar-flight');
         const resultsHeading = document.getElementById('results-heading');
@@ -1626,19 +1908,24 @@
 
         clearFormError();
         resetWarnings();
+
+        /* Reset added spots when starting a new search */
+        giyaAddedSpots  = [];
+        mainMapMarkers  = [];
+        filterState     = {};
+        if (mainMapInstance) { mainMapInstance.remove(); mainMapInstance = null; }
+        updateSpotsCounter();
+
         showLoadingScreen(arrivalCity);
         if (submitBtn) submitBtn.disabled = true;
 
         if (barFlight) {
           barFlight.textContent =
-            '✈️ Arrival: ' + arrivalCity +
-            ' → Departure: ' + departureCity +
+            '✈️ ' + arrivalCity + ' → ' + departureCity +
             ' 📅 ' + dateFrom + ' – ' + dateTo;
         }
 
         try {
-          logGiya('fetch → worker', GIYA_WORKER_URL);
-
           const response = await fetch(GIYA_WORKER_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1646,15 +1933,12 @@
           });
 
           logGiya('worker HTTP status', response.status);
-
           const responseText = await response.text();
-          logGiya('worker raw response (first 500 chars)', responseText.slice(0, 500));
+          logGiya('worker raw (first 300)', responseText.slice(0, 300));
 
           let data;
           try { data = JSON.parse(responseText); }
-          catch (parseErr) { throw new Error('Server returned non-JSON. Check worker deployment.'); }
-
-          logGiya('worker parsed JSON', data);
+          catch { throw new Error('Server returned non-JSON. Check worker deployment.'); }
 
           if (!response.ok) {
             throw new Error(data.error || 'Worker request failed (HTTP ' + response.status + ')');
@@ -1663,9 +1947,7 @@
           giyaData = data;
 
           const spotCount = countSpots(data.categories);
-          if (spotCount === 0) {
-            throw new Error('Giya returned no spots. Try a more specific city name.');
-          }
+          if (spotCount === 0) throw new Error('Giya returned no spots. Try a more specific city name.');
 
           applyWarnings(data.warnings);
 
@@ -1676,17 +1958,15 @@
           renderSpotsList(data.categories);
           showScreen(3);
 
-          logGiya('success — showing screen 3 with spots', spotCount);
+          logGiya('success', spotCount + ' spots');
 
         } catch (err) {
-          console.error('[Giya] submitFlightDetails failed:', err);
-          let message = 'Something went wrong planning your trip. Please try again.';
-          if (err.message) {
-            if (err.message.indexOf('Failed to fetch') !== -1) {
-              message = 'Could not reach the Giya server. Open the site from https://by-vonn.github.io/giya and try again.';
-            } else {
-              message = err.message;
-            }
+          console.error('[Giya] submit failed:', err);
+          let message = 'Something went wrong. Please try again.';
+          if (err.message && err.message.indexOf('Failed to fetch') !== -1) {
+            message = 'Could not reach Giya server. Open https://by-vonn.github.io/giya and try again.';
+          } else if (err.message) {
+            message = err.message;
           }
           showFormError(message);
         } finally {
@@ -1696,9 +1976,7 @@
       }
 
       if (safeAddListener('trip-form', 'submit', submitFlightDetails)) {
-        logGiya('ready', 'Form listener attached to #trip-form');
-      } else {
-        console.error('[Giya] #trip-form not found — submit will not work');
+        logGiya('ready', 'Form listener attached');
       }
 
     }); // end DOMContentLoaded
