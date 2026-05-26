@@ -579,6 +579,14 @@
       margin-bottom: 1rem;
     }
 
+    .spot-panel__season-note {
+       font-size: 0.82rem;
+       color: var(--ink-muted);
+       margin-bottom: 1rem;
+       line-height: 1.5;
+       font-style: italic;
+    }
+
     .spot-panel__season .season-badge {
       width: 10px;
       height: 10px;
@@ -738,6 +746,9 @@
           role="img" aria-label="Season status"></span>
         <span class="season-label" id="spot-panel-season-label">Good time</span>
       </div>
+
+      <p class="spot-panel__season-note" 
+        id="spot-panel-season-note"></p>
 
       <!-- Why backpackers love it -->
       <div class="spot-panel__section" id="spot-panel-why-section">
@@ -1081,6 +1092,11 @@
           badgeEl.setAttribute('aria-label', 'Season: ' + status);
         }
         if (labelEl) labelEl.textContent = getSeasonLabel(status);
+
+        const seasonNoteEl = document.getElementById('spot-panel-season-note');
+        if (seasonNoteEl) {
+          seasonNoteEl.textContent = spot.season_note || '';
+        }
 
         /* Hidden angle — only show if available */
         if (hiddenSection && hiddenEl) {
