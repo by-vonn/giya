@@ -837,15 +837,15 @@
       function unsplashCategoryUrl(cityName, categoryName) {
         const kw  = CAT_KEYWORDS[categoryName] || 'travel,destination';
         const tag = encodeURIComponent(cityName + ',' + kw);
-        return 'https://source.unsplash.com/featured/600x160/?' + tag;
+        return 'https://source.unsplash.com/600x160/?' + tag;
       }
 
       function unsplashSpotUrl(spotName, area) {
         const tag = encodeURIComponent((spotName || 'travel') + ',' + (area || 'travel'));
-        return 'https://source.unsplash.com/featured/640x200/?' + tag;
+        return 'https://source.unsplash.com/640x200/?' + tag;
       }
 
-      const FALLBACK_PHOTO = 'https://source.unsplash.com/featured/640x200/?travel,destination,backpacker';
+      const FALLBACK_PHOTO = 'https://source.unsplash.com/640x200/?travel,destination,backpacker';
 
       /* ── SCREEN NAVIGATION ──────────────────── */
       function showScreen(id) {
@@ -1371,7 +1371,6 @@
 
           /* FEATURE 1a: Set Unsplash background photo on header */
           const photoUrl = unsplashCategoryUrl(currentArrival || 'travel', cat.name);
-          console.log(photoUrl);
           hdr.style.backgroundImage = 'url("' + photoUrl + '")';
 
           /* Keep category colour left-accent visible as subtle border */
