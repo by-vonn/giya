@@ -42,9 +42,6 @@
       line-height: 1.2;
     }
 
-    /* ============================================
-       TOP BAR
-       ============================================ */
     .topbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -86,86 +83,43 @@
       text-overflow: ellipsis;
     }
 
-    .topbar__flight-sep {
-      font-size: 0.7rem;
-      color: var(--border);
-      flex-shrink: 0;
-      display: none;
-    }
+    .topbar__flight-sep { font-size: 0.7rem; color: var(--border); flex-shrink: 0; display: none; }
     .topbar__flight-sep.is-visible { display: inline; }
 
-    .topbar__flight-dates {
-      font-size: 0.72rem;
-      color: var(--ink-muted);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+    .topbar__flight-dates { font-size: 0.72rem; color: var(--ink-muted); white-space: nowrap; flex-shrink: 0; }
+    .topbar__flight-placeholder { font-size: 0.73rem; color: var(--ink-muted); font-style: italic; white-space: nowrap; }
 
-    .topbar__flight-placeholder {
-      font-size: 0.73rem;
-      color: var(--ink-muted);
-      font-style: italic;
-      white-space: nowrap;
-    }
-
-    .topbar__right {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      flex-shrink: 0;
-    }
+    .topbar__right { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
 
     .topbar__map-btn {
-      display: none;
-      align-items: center;
-      gap: 0.2rem;
-      background: var(--ink);
-      color: var(--paper);
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      white-space: nowrap;
-      cursor: pointer;
-      border: none;
-      font-family: inherit;
-      transition: background 0.15s;
+      display: none; align-items: center; gap: 0.2rem;
+      background: var(--ink); color: var(--paper);
+      font-size: 0.68rem; font-weight: 600;
+      padding: 0.2rem 0.55rem; border-radius: 999px;
+      white-space: nowrap; cursor: pointer; border: none;
+      font-family: inherit; transition: background 0.15s;
     }
     .topbar__map-btn.is-visible { display: flex; }
     .topbar__map-btn:hover { background: var(--ember); }
 
     .topbar__spots {
-      display: none;
-      align-items: center;
-      gap: 0.2rem;
-      background: var(--ember);
-      color: #fff;
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      white-space: nowrap;
-      cursor: pointer;
-      border: none;
-      font-family: inherit;
-      transition: transform 0.1s;
+      display: none; align-items: center; gap: 0.2rem;
+      background: var(--ember); color: #fff;
+      font-size: 0.68rem; font-weight: 600;
+      padding: 0.2rem 0.55rem; border-radius: 999px;
+      white-space: nowrap; cursor: pointer; border: none;
+      font-family: inherit; transition: transform 0.1s;
     }
     .topbar__spots.is-visible { display: flex; }
     .topbar__spots:hover { transform: scale(1.05); }
 
-    .topbar__warnings {
-      display: flex;
-      gap: 0.1rem;
-      align-items: center;
-    }
+    .topbar__warnings { display: flex; gap: 0.1rem; align-items: center; }
 
     .warn-icon {
-      position: relative;
-      width: 32px; height: 32px;
-      border: none; background: transparent;
-      cursor: pointer; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      color: #c8c0b8;
+      position: relative; width: 32px; height: 32px;
+      border: none; background: transparent; cursor: pointer;
+      border-radius: 6px; display: flex; align-items: center;
+      justify-content: center; color: #c8c0b8;
       transition: color 0.2s, background 0.2s;
     }
     .warn-icon:hover { background: rgba(26,22,18,0.06); }
@@ -177,42 +131,24 @@
 
     .warn-icon::after {
       content: attr(data-tooltip);
-      position: absolute;
-      top: calc(100% + 6px); right: 0;
-      font-size: 0.67rem;
-      line-height: 1.4;
-      max-width: 160px;
-      background: var(--ink);
-      color: var(--paper);
-      padding: 0.28rem 0.5rem;
-      border-radius: 6px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.15s;
-      z-index: 1000;
-      white-space: normal;
-      text-align: left;
+      position: absolute; top: calc(100% + 6px); right: 0;
+      font-size: 0.67rem; line-height: 1.4; max-width: 160px;
+      background: var(--ink); color: var(--paper);
+      padding: 0.28rem 0.5rem; border-radius: 6px;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s;
+      z-index: 1000; white-space: normal; text-align: left;
     }
     .warn-icon:hover::after { opacity: 1; }
 
-    /* ============================================
-       MAIN LAYOUT
-       ============================================ */
-    main {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 2rem 1.25rem 1rem;
-    }
+    main { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem 1rem; }
 
     .screen { display: none; animation: fadeIn 0.3s ease; }
     .screen.is-visible { display: block; }
 
     #screen-map.is-visible {
-      display: block;
-      position: fixed;
+      display: block; position: fixed;
       top: var(--topbar-h); left: 0; right: 0; bottom: 0;
-      z-index: 50;
-      overflow: hidden;
+      z-index: 50; overflow: hidden;
     }
 
     @keyframes fadeIn {
@@ -220,80 +156,41 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ============================================
-       SCREEN 0 — Landing
-       ============================================ */
+    /* SCREEN 0 */
     .landing { text-align: center; padding: 2rem 0 3rem; }
-
-    .landing h1 {
-      font-size: clamp(1.75rem, 5vw, 2.35rem);
-      margin-bottom: 1rem;
-      max-width: 28ch;
-      margin-left: auto; margin-right: auto;
-    }
-
-    .landing .subheading {
-      color: var(--ink-muted);
-      font-size: 1.05rem;
-      max-width: 36ch;
-      margin: 0 auto 2rem;
-    }
+    .landing h1 { font-size: clamp(1.75rem, 5vw, 2.35rem); margin-bottom: 1rem; max-width: 28ch; margin-left: auto; margin-right: auto; }
+    .landing .subheading { color: var(--ink-muted); font-size: 1.05rem; max-width: 36ch; margin: 0 auto 2rem; }
 
     .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 0.9rem 1.75rem;
-      background: var(--ember);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: var(--shadow);
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.35rem; font-family: inherit; font-size: 1rem; font-weight: 600;
+      padding: 0.9rem 1.75rem; background: var(--ember); color: #fff;
+      border: none; border-radius: 999px; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s; box-shadow: var(--shadow);
     }
     .btn-primary:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .landing__note { margin-top: 1.25rem; font-size: 0.85rem; color: var(--ink-muted); letter-spacing: 0.04em; }
 
-    /* ============================================
-       SCREEN 1 — Flight input
-       ============================================ */
+    /* SCREEN 1 */
     .form-screen h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
     .form-group { margin-bottom: 1.25rem; }
     .form-group label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; }
-    .form-group input {
-      width: 100%; padding: 0.75rem 1rem;
-      font-family: inherit; font-size: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 10px; background: #fff; color: var(--ink);
-    }
+    .form-group input { width: 100%; padding: 0.75rem 1rem; font-family: inherit; font-size: 1rem; border: 1px solid var(--border); border-radius: 10px; background: #fff; color: var(--ink); }
     .form-group input:focus { outline: 2px solid var(--ember); outline-offset: 2px; border-color: transparent; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 400px) { .form-row { grid-template-columns: 1fr; } }
     .form-screen .btn-primary { width: 100%; margin-top: 0.5rem; }
 
-    /* ============================================
-       LOADING SCREEN
-       ============================================ */
+    /* LOADING */
     .loading-state { display: none; }
     .loading-state.is-visible { display: block; }
     .loading-screen { max-width: 480px; margin: 0 auto; padding: 2rem; text-align: center; }
     .loading-map-wrap { margin-bottom: 1.25rem; }
     .loading-map { height: 200px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
     .loading-map-pin { background: transparent; border: none; }
-    .loading-map-marker {
-      display: flex; align-items: center; justify-content: center;
-      width: 48px; height: 48px;
-      background: var(--ember); border: 3px solid #fff;
-      border-radius: 50%; box-shadow: 0 2px 10px rgba(26,22,18,0.3);
-      font-size: 1.75rem; line-height: 1;
-    }
+    .loading-map-marker { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: var(--ember); border: 3px solid #fff; border-radius: 50%; box-shadow: 0 2px 10px rgba(26,22,18,0.3); font-size: 1.75rem; line-height: 1; }
     .loading-globe { font-size: 4rem; display: block; margin-bottom: 0.75rem; }
     .loading-city-text { font-family: "Playfair Display", Georgia, serif; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--ink); }
     .loading-message { min-height: 2.5rem; font-size: 1rem; color: var(--ink-muted); opacity: 0; transition: opacity 0.4s ease; }
@@ -301,66 +198,64 @@
     .form-error { display: none; color: #b91c1c; margin-top: 0.75rem; font-size: 0.9rem; }
     .form-error.is-visible { display: block; }
 
-    /* ============================================
-       SCREEN 3 — Results
-       ============================================ */
+    /* SCREEN 3 — Results */
     .results-screen h2 { font-size: 1.65rem; margin-bottom: 1.25rem; }
     .results-categories { display: flex; flex-direction: column; gap: 2rem; }
 
-    /* ── FEATURE 1a: Category header with Unsplash background ── */
+    /* Category header — photo via <img> tag (not CSS bg, avoids ORB) */
     .results-category__header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.85rem;
-      padding: 1rem 1rem 1rem 1rem;
-      border-radius: 8px;
-      border-left: none;        /* replaced by photo bg */
-      border-bottom: none;      /* replaced by photo bg */
-      min-height: 80px;
-      background-color: #5c5349; /* fallback colour while image loads */
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
       position: relative;
+      display: flex; align-items: flex-end; gap: 0.6rem;
+      margin-bottom: 0.85rem;
+      border-radius: 10px;
+      min-height: 80px;
       overflow: hidden;
+      padding: 0.85rem 1rem;
+      background: #3a3530; /* fallback while image loads */
     }
 
-    /* Dark gradient overlay so text stays readable */
-    .results-category__header::before {
+    .results-category__header-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      display: block;
+    }
+
+    /* Gradient overlay */
+    .results-category__header::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(26,22,18,0.72) 0%,
-        rgba(26,22,18,0.45) 100%
-      );
-      z-index: 0;
-    }
-
-    /* Push emoji + name above the overlay */
-    .results-category__emoji,
-    .results-category__name {
-      position: relative;
+      background: linear-gradient(135deg, rgba(26,22,18,0.72) 0%, rgba(26,22,18,0.4) 100%);
       z-index: 1;
     }
+
+    /* Text above overlay */
+    .results-category__emoji,
+    .results-category__name { position: relative; z-index: 2; }
 
     .results-category__emoji { font-size: 1.5rem; line-height: 1; }
     .results-category__name {
       font-family: "Playfair Display", Georgia, serif;
       font-size: 1.15rem; font-weight: 700;
-      color: #fff !important;   /* always white over photo */
+      color: #fff !important;
+    }
+
+    /* Category colour bar — left inset */
+    .results-category__color-bar {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      z-index: 2;
+      border-radius: 10px 0 0 10px;
     }
 
     .results-spots { display: grid; grid-template-columns: 1fr; gap: 0.85rem; }
     @media (min-width: 520px) { .results-spots { grid-template-columns: repeat(2, 1fr); } }
 
-    .spot-card {
-      background: #fff; border: 1px solid var(--border);
-      border-radius: 12px; padding: 1rem; box-shadow: var(--shadow);
-      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-    }
+    .spot-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
     .spot-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,22,18,0.1); }
     .spot-card.is-added { border-left: 3px solid var(--ember); }
 
@@ -370,137 +265,66 @@
     .spot-card__why    { font-size: 0.9rem; font-style: italic; color: var(--ink); line-height: 1.5; }
     .spot-card__season { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
 
-    .season-badge {
-      flex-shrink: 0; width: 12px; height: 12px;
-      border-radius: 50%; border: 2px solid #fff;
-      box-shadow: 0 0 0 1px var(--border);
-    }
+    .season-badge { flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border); }
     .season-badge--good    { background: #16a34a; }
     .season-badge--caution { background: #d97706; }
     .season-badge--avoid   { background: #dc2626; }
     .season-label { font-size: 0.7rem; font-weight: 500; color: var(--ink-muted); white-space: nowrap; }
 
     .results-note { margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--ink-muted); font-style: italic; }
-    .results-empty {
-      text-align: center; color: var(--ink-muted); padding: 1.5rem;
-      background: rgba(255,255,255,0.6); border-radius: 12px;
-      border: 1px dashed var(--border); margin-bottom: 1rem;
-    }
+    .results-empty { text-align: center; color: var(--ink-muted); padding: 1.5rem; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--border); margin-bottom: 1rem; }
 
-    /* ============================================
-       SPOT DETAIL PANEL
-       ============================================ */
-    .spot-overlay {
-      position: fixed; inset: 0;
-      background: rgba(26,22,18,0.5);
-      z-index: 200; opacity: 0; pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
+    /* SPOT DETAIL PANEL */
+    .spot-overlay { position: fixed; inset: 0; background: rgba(26,22,18,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     .spot-overlay.is-open { opacity: 1; pointer-events: auto; }
 
-    .spot-panel {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      max-height: 76vh; background: #fff;
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 -8px 40px rgba(26,22,18,0.18);
-      z-index: 201; overflow-y: auto;
-      transform: translateY(100%);
-      transition: transform 0.3s ease;
-      border-top: 4px solid var(--ember);
-    }
+    .spot-panel { position: fixed; bottom: 0; left: 0; right: 0; max-height: 76vh; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 40px rgba(26,22,18,0.18); z-index: 201; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; border-top: 4px solid var(--ember); }
     .spot-panel.is-open { transform: translateY(0); }
 
     .spot-panel__handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0.75rem auto 0; }
 
-    /* ── FEATURE 1b: Hero photo in spot panel ── */
+    /* Hero photo in panel — <img> tag, no ORB issue */
     .spot-panel__hero {
-      width: 100%;
-      height: 160px;
+      width: 100%; height: 160px;
       object-fit: cover;
       border-radius: 10px;
       margin-bottom: 1rem;
       display: block;
-      background: var(--paper); /* placeholder colour while loading */
+      background: var(--paper);
     }
 
-    .spot-panel__inner  { padding: 0.75rem 1.5rem 2.5rem; }
+    .spot-panel__inner { padding: 0.75rem 1.5rem 2.5rem; }
 
-    .spot-panel__close {
-      position: absolute; top: 0.75rem; right: 1rem;
-      width: 32px; height: 32px; border: none;
-      background: rgba(26,22,18,0.55); border-radius: 50%;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; color: #fff; transition: background 0.15s;
-      z-index: 2;
-    }
+    .spot-panel__close { position: absolute; top: 0.75rem; right: 1rem; width: 32px; height: 32px; border: none; background: rgba(26,22,18,0.55); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff; transition: background 0.15s; z-index: 2; }
     .spot-panel__close:hover { background: rgba(26,22,18,0.8); }
 
-    .spot-panel__name {
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: 1.5rem; font-weight: 700; color: var(--ink);
-      margin-bottom: 0.2rem; padding-right: 2.5rem;
-    }
+    .spot-panel__name { font-family: "Playfair Display", Georgia, serif; font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; padding-right: 2.5rem; }
     .spot-panel__area { font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 0.75rem; }
 
-    .spot-panel__season {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--paper); padding: 0.3rem 0.75rem;
-      border-radius: 999px; margin-bottom: 0.4rem;
-    }
+    .spot-panel__season { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--paper); padding: 0.3rem 0.75rem; border-radius: 999px; margin-bottom: 0.4rem; }
     .spot-panel__season .season-badge { width: 10px; height: 10px; }
     .spot-panel__season .season-label { font-size: 0.75rem; }
 
-    .spot-panel__season-note {
-      font-size: 0.82rem; color: var(--ink-muted);
-      margin-bottom: 1rem; line-height: 1.55; font-style: italic;
-    }
+    .spot-panel__season-note { font-size: 0.82rem; color: var(--ink-muted); margin-bottom: 1rem; line-height: 1.55; font-style: italic; }
 
     .spot-panel__section { margin-bottom: 1rem; }
-    .spot-panel__section-label {
-      font-size: 0.68rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--ink-muted); margin-bottom: 0.3rem;
-    }
+    .spot-panel__section-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.3rem; }
     .spot-panel__section-text { font-size: 0.95rem; color: var(--ink); line-height: 1.6; }
     .spot-panel__divider { height: 1px; background: var(--border); margin: 1rem 0; }
 
-    .spot-panel__add-btn {
-      width: 100%; padding: 0.9rem;
-      background: var(--ember); color: #fff; border: none;
-      border-radius: 999px; font-family: inherit; font-size: 1rem; font-weight: 600;
-      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
-      box-shadow: var(--shadow); margin-top: 0.5rem;
-    }
+    .spot-panel__add-btn { width: 100%; padding: 0.9rem; background: var(--ember); color: #fff; border: none; border-radius: 999px; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.2s; box-shadow: var(--shadow); margin-top: 0.5rem; }
     .spot-panel__add-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
     .spot-panel__add-btn.is-added { background: #16a34a; cursor: default; transform: none; box-shadow: none; }
 
-    .spot-panel__remove-btn {
-      width: 100%; padding: 0.65rem;
-      background: transparent; color: #b91c1c;
-      border: 1px solid #fecaca; border-radius: 999px;
-      font-family: inherit; font-size: 0.85rem; font-weight: 500;
-      cursor: pointer; margin-top: 0.5rem; transition: background 0.15s;
-    }
+    .spot-panel__remove-btn { width: 100%; padding: 0.65rem; background: transparent; color: #b91c1c; border: 1px solid #fecaca; border-radius: 999px; font-family: inherit; font-size: 0.85rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
     .spot-panel__remove-btn:hover { background: #fef2f2; }
 
-    /* ============================================
-       SCREEN 4 — MAP
-       ============================================ */
+    /* SCREEN 4 — MAP */
     .map-wrap { position: relative; width: 100%; height: 100%; display: flex; }
     #main-map { flex: 1; height: 100%; z-index: 1; }
 
-    .map-panel {
-      width: 260px; background: #fff;
-      border-left: 1px solid var(--border);
-      display: flex; flex-direction: column;
-      z-index: 10; overflow: hidden;
-    }
-
-    .map-panel__header {
-      padding: 0.85rem 1rem 0.75rem;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    .map-panel { width: 260px; background: #fff; border-left: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; overflow: hidden; }
+    .map-panel__header { padding: 0.85rem 1rem 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .map-panel__title { font-family: "Playfair Display", Georgia, serif; font-size: 0.95rem; font-weight: 700; }
     .map-panel__show-all { font-size: 0.7rem; color: var(--ember); background: none; border: none; cursor: pointer; font-family: inherit; font-weight: 600; padding: 0.2rem 0; }
     .map-panel__show-all:hover { text-decoration: underline; }
@@ -540,87 +364,20 @@
 
     .leaflet-pin-dot { width: 32px; height: 32px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(26,22,18,0.28); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; color: #fff; font-family: "DM Sans", sans-serif; }
 
-    /* ── FEATURE 2: Custom Leaflet popup styles ── */
-    .giya-popup .leaflet-popup-content-wrapper {
-      border-radius: 12px;
-      padding: 0;
-      box-shadow: 0 8px 32px rgba(26,22,18,0.18);
-      border: none;
-      font-family: "DM Sans", system-ui, sans-serif;
-    }
-    .giya-popup .leaflet-popup-content {
-      margin: 0;
-      min-width: 190px;
-    }
-    .giya-popup .leaflet-popup-tip-container {
-      display: none; /* hide default triangle tip */
-    }
-    .giya-popup .leaflet-popup-close-button {
-      color: var(--ink-muted) !important;
-      font-size: 1.1rem !important;
-      top: 6px !important;
-      right: 8px !important;
-    }
+    /* Custom Leaflet popup */
+    .giya-popup .leaflet-popup-content-wrapper { border-radius: 12px; padding: 0; box-shadow: 0 8px 32px rgba(26,22,18,0.18); border: none; font-family: "DM Sans", system-ui, sans-serif; }
+    .giya-popup .leaflet-popup-content { margin: 0; min-width: 190px; }
+    .giya-popup .leaflet-popup-tip-container { display: none; }
+    .giya-popup .leaflet-popup-close-button { color: var(--ink-muted) !important; font-size: 1.1rem !important; top: 6px !important; right: 8px !important; }
 
-    .giya-pin-popup {
-      padding: 0.9rem 1rem 0.75rem;
-    }
-
-    .giya-pin-popup__emoji {
-      font-size: 1.6rem;
-      line-height: 1;
-      margin-bottom: 0.35rem;
-      display: block;
-    }
-
-    .giya-pin-popup__name {
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--ink);
-      margin-bottom: 0.15rem;
-      line-height: 1.3;
-    }
-
-    .giya-pin-popup__area {
-      font-size: 0.73rem;
-      color: var(--ink-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .giya-pin-popup__season {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      margin-bottom: 0.65rem;
-    }
-
-    .giya-pin-popup__season-dot {
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .giya-pin-popup__season-label {
-      font-size: 0.68rem;
-      color: var(--ink-muted);
-      font-weight: 500;
-    }
-
-    .giya-pin-popup__btn {
-      display: block;
-      width: 100%;
-      padding: 0.45rem 0.75rem;
-      background: var(--ember);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      font-family: "DM Sans", system-ui, sans-serif;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      transition: background 0.15s;
-    }
+    .giya-pin-popup { padding: 0.9rem 1rem 0.75rem; }
+    .giya-pin-popup__emoji { font-size: 1.6rem; line-height: 1; margin-bottom: 0.35rem; display: block; }
+    .giya-pin-popup__name { font-weight: 700; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.15rem; line-height: 1.3; }
+    .giya-pin-popup__area { font-size: 0.73rem; color: var(--ink-muted); margin-bottom: 0.5rem; }
+    .giya-pin-popup__season { display: inline-flex; align-items: center; gap: 0.3rem; margin-bottom: 0.65rem; }
+    .giya-pin-popup__season-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .giya-pin-popup__season-label { font-size: 0.68rem; color: var(--ink-muted); font-weight: 500; }
+    .giya-pin-popup__btn { display: block; width: 100%; padding: 0.45rem 0.75rem; background: var(--ember); color: #fff; border: none; border-radius: 999px; font-family: "DM Sans", system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.15s; }
     .giya-pin-popup__btn:hover { background: #a04e20; }
 
     @media (max-width: 600px) {
@@ -629,9 +386,6 @@
       .map-panel { width: 100%; max-height: 42vh; border-left: none; border-top: 1px solid var(--border); }
     }
 
-    /* ============================================
-       FOOTER
-       ============================================ */
     .site-footer { max-width: 640px; margin: 2.5rem auto 0; padding: 0 1.25rem; text-align: center; font-size: 0.75rem; color: var(--ink-muted); line-height: 1.7; }
     .site-footer p + p { margin-top: 0.5rem; }
     .site-footer .credit { margin-top: 0.75rem; font-weight: 600; color: var(--ink); }
@@ -639,20 +393,17 @@
 </head>
 <body>
 
-  <!-- ===== TOP BAR ===== -->
   <header class="topbar" role="banner">
     <span class="topbar__brand">Giya</span>
-
     <div class="topbar__flight" id="topbar-flight" aria-live="polite">
       <span class="topbar__flight-placeholder" id="flight-placeholder">Enter your flight details below</span>
-      <span class="topbar__flight-route" id="flight-route"  hidden></span>
-      <span class="topbar__flight-sep"   id="flight-sep"    hidden>·</span>
-      <span class="topbar__flight-dates" id="flight-dates"  hidden></span>
+      <span class="topbar__flight-route" id="flight-route" hidden></span>
+      <span class="topbar__flight-sep"   id="flight-sep"   hidden>·</span>
+      <span class="topbar__flight-dates" id="flight-dates" hidden></span>
     </div>
-
     <div class="topbar__right">
       <button type="button" class="topbar__map-btn" id="btn-view-map" aria-label="View my map">🗺️ Map</button>
-      <button type="button" class="topbar__spots"   id="btn-spots-badge" aria-label="Back to results" title="Tap to go back to results">
+      <button type="button" class="topbar__spots" id="btn-spots-badge" aria-label="Back to results">
         📍 <span id="spots-count">0</span> spots
       </button>
       <div class="topbar__warnings" aria-label="Travel warnings">
@@ -672,24 +423,17 @@
     </div>
   </header>
 
-  <!-- ===== SPOT DETAIL PANEL ===== -->
   <div class="spot-overlay" id="spot-overlay" aria-hidden="true"></div>
 
   <div class="spot-panel" id="spot-panel" role="dialog" aria-modal="true" aria-labelledby="spot-panel-name" hidden>
     <div class="spot-panel__handle" aria-hidden="true"></div>
     <button type="button" class="spot-panel__close" id="spot-panel-close" aria-label="Close">×</button>
     <div class="spot-panel__inner">
-      <!-- FEATURE 1b: Hero photo — src set dynamically by openPanel() -->
-      <img
-        class="spot-panel__hero"
-        id="spot-panel-hero"
-        src=""
-        alt="Spot photo"
-        loading="lazy"
-      />
+      <!-- Hero photo — src set by JS, uses picsum.photos (no ORB) -->
+      <img class="spot-panel__hero" id="spot-panel-hero" src="" alt="" loading="lazy"/>
       <h3 class="spot-panel__name" id="spot-panel-name">Spot Name</h3>
       <p  class="spot-panel__area" id="spot-panel-area"></p>
-      <div class="spot-panel__season" id="spot-panel-season">
+      <div class="spot-panel__season">
         <span class="season-badge season-badge--good" id="spot-panel-season-badge" role="img" aria-label="Season status"></span>
         <span class="season-label" id="spot-panel-season-label">Good time</span>
       </div>
@@ -712,9 +456,7 @@
     </div>
   </div>
 
-  <!-- ===== MAIN ===== -->
   <main>
-    <!-- SCREEN 0 -->
     <section id="screen-0" class="screen landing is-visible" data-screen-index="0" aria-label="Welcome">
       <h1>Found a cheap flight.<br>Don't know what to do with it?</h1>
       <p class="subheading">Tell us where you're flying in and out of. We'll handle the rest — destinations, hidden gems, local food, transport, and budget.</p>
@@ -722,7 +464,6 @@
       <p class="landing__note">No sign-up · No credit card · Free</p>
     </section>
 
-    <!-- SCREEN 1 -->
     <section id="screen-1" class="screen form-screen" data-screen-index="1" aria-label="Trip details" hidden>
       <h2>Let's build your trip.</h2>
       <form id="trip-form">
@@ -763,7 +504,6 @@
       </form>
     </section>
 
-    <!-- SCREEN 3 — Results -->
     <section id="screen-results" class="screen results-screen" data-screen-index="3" aria-label="Suggested spots" hidden>
       <h2 id="results-heading">Here's what's near</h2>
       <p id="results-empty" class="results-empty" hidden>Giya did not return any spots. Please try again.</p>
@@ -771,7 +511,6 @@
       <p class="results-note">Tap any spot to explore and add to your map</p>
     </section>
 
-    <!-- SCREEN 4 — Map -->
     <section id="screen-map" class="screen" data-screen-index="4" aria-label="Trip map" hidden>
       <div class="map-wrap">
         <div id="main-map"></div>
@@ -792,11 +531,9 @@
     </section>
   </main>
 
-  <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
     <p>AI-generated content is for planning purposes only. Always verify before booking.</p>
-    <p>🕐 50 image requests/hour (Unsplash free tier — resets automatically)</p>
-    <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · Photos: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></p>
+    <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · Photos: <a href="https://picsum.photos" target="_blank" rel="noopener">Picsum</a></p>
     <p class="credit">Built by wyivonn</p>
   </footer>
 
@@ -809,7 +546,6 @@
       const WORKER_URL = 'https://giya-ai-worker.calleylearn.workers.dev';
       const DEBUG      = true;
 
-      /* State */
       let giyaData         = null;
       let giyaAddedSpots   = [];
       let panelCurrentSpot = null;
@@ -821,39 +557,49 @@
 
       function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
 
-      /* ── UNSPLASH HELPER ──────────────────────
-         Builds a source.unsplash.com URL.
-         Falls back to a generic travel photo on error.
+      /* ── PICSUM PHOTO HELPERS ───────────────────
+         picsum.photos returns actual images — no
+         redirect, no ORB blocking. Works perfectly
+         as both CSS background and <img> src.
+
+         Seed-based: same seed = same photo always.
+         This gives consistent, intentional results.
          ────────────────────────────────────────── */
-      const CAT_KEYWORDS = {
-        'Urban and Culture':    'city,urban,street',
-        'Beach and Islands':    'beach,tropical,island',
-        'Nature and Adventure': 'nature,mountain,forest',
-        'Food and Night Life':  'food,market,street',
-        'Family Friendly':      'family,park,travel',
-        'Ultra Budget':         'backpacker,hostel,travel',
+
+      /* Fixed seeds per category — chosen to match the vibe */
+      const CAT_PICSUM_SEEDS = {
+        'Urban and Culture':    'urban-culture-giya',
+        'Beach and Islands':    'beach-islands-giya',
+        'Nature and Adventure': 'nature-adventure-giya',
+        'Food and Night Life':  'food-nightlife-giya',
+        'Family Friendly':      'family-friendly-giya',
+        'Ultra Budget':         'ultra-budget-giya',
       };
 
-      function unsplashCategoryUrl(cityName, categoryName) {
-        const kw  = CAT_KEYWORDS[categoryName] || 'travel,destination';
-        const tag = encodeURIComponent(cityName + ',' + kw);
-        return 'https://source.unsplash.com/600x160/?' + tag;
+      /* Category header photo: 600×160 */
+      function picsumCategoryUrl(categoryName) {
+        const seed = CAT_PICSUM_SEEDS[categoryName] || 'travel-giya';
+        return 'https://picsum.photos/seed/' + encodeURIComponent(seed) + '/600/160';
       }
 
-      function unsplashSpotUrl(spotName, area) {
-        const tag = encodeURIComponent((spotName || 'travel') + ',' + (area || 'travel'));
-        return 'https://source.unsplash.com/640x200/?' + tag;
+      /* Spot hero photo: 640×200, seeded by spot name for consistency */
+      function picsumSpotUrl(spotName) {
+        /* Slug the spot name: lowercase, spaces→hyphens, alphanumeric only */
+        const slug = (spotName || 'spot')
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-')
+          .slice(0, 40);
+        return 'https://picsum.photos/seed/' + slug + '/640/200';
       }
-
-      const FALLBACK_PHOTO = 'https://source.unsplash.com/640x200/?travel,destination,backpacker';
 
       /* ── SCREEN NAVIGATION ──────────────────── */
       function showScreen(id) {
         document.querySelectorAll('.screen').forEach(function (s) {
-          const idx   = Number(s.getAttribute('data-screen-index'));
-          const match = idx === id;
-          if (match) { s.classList.add('is-visible'); s.removeAttribute('hidden'); }
-          else        { s.classList.remove('is-visible'); s.setAttribute('hidden', ''); }
+          const idx = Number(s.getAttribute('data-screen-index'));
+          if (idx === id) { s.classList.add('is-visible'); s.removeAttribute('hidden'); }
+          else            { s.classList.remove('is-visible'); s.setAttribute('hidden', ''); }
         });
         document.body.style.overflow = id === 4 ? 'hidden' : '';
         if (id !== 4) window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -871,32 +617,31 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      /* ── TOP BAR FLIGHT UPDATE ──────────────── */
+      /* ── TOP BAR ────────────────────────────── */
       function updateTopBarFlight(arrival, departure, dateFrom, dateTo) {
         const ph    = document.getElementById('flight-placeholder');
         const route = document.getElementById('flight-route');
         const sep   = document.getElementById('flight-sep');
         const dates = document.getElementById('flight-dates');
         if (ph) ph.hidden = true;
-        const routeText = (arrival.toLowerCase() === departure.toLowerCase()) ? arrival : arrival + '  →  ' + departure;
+        const routeText = arrival.toLowerCase() === departure.toLowerCase() ? arrival : arrival + '  →  ' + departure;
         if (route) { route.textContent = routeText; route.hidden = false; }
         if (sep)   { sep.classList.add('is-visible'); sep.hidden = false; }
         const fmt = function (d) {
           if (!d) return '';
           const p = d.split('-');
           if (p.length < 3) return d;
-          const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          return p[2] + ' ' + m[parseInt(p[1], 10) - 1];
+          return p[2] + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(p[1],10)-1];
         };
         if (dates) { dates.textContent = fmt(dateFrom) + ' – ' + fmt(dateTo); dates.hidden = false; }
       }
 
-      /* ── WARNING ICONS ──────────────────────── */
+      /* ── WARNINGS ───────────────────────────── */
       function resetWarnings() {
-        const defaults = { typhoon: 'No typhoon warnings', temp: 'No temperature data', general: 'No advisories' };
-        ['typhoon', 'temp', 'general'].forEach(function (n) {
+        const def = { typhoon: 'No typhoon warnings', temp: 'No temperature data', general: 'No advisories' };
+        ['typhoon','temp','general'].forEach(function (n) {
           const icon = document.getElementById('warn-' + n);
-          if (icon) { icon.classList.remove('active'); icon.setAttribute('data-tooltip', defaults[n]); }
+          if (icon) { icon.classList.remove('active'); icon.setAttribute('data-tooltip', def[n]); }
         });
       }
 
@@ -916,24 +661,24 @@
         }
       }
 
-      function shorten(text) {
-        if (!text) return '';
-        const s = text.split(/[.!?]/)[0].trim();
-        return s.length <= 70 ? s : s.slice(0, 67) + '…';
+      function shorten(t) {
+        if (!t) return '';
+        const s = t.split(/[.!?]/)[0].trim();
+        return s.length <= 70 ? s : s.slice(0,67) + '…';
       }
 
       /* ── COUNTERS ───────────────────────────── */
       function updateCounters() {
-        const n    = giyaAddedSpots.length;
-        const cEl  = document.getElementById('spots-count');
+        const n = giyaAddedSpots.length;
+        const cEl = document.getElementById('spots-count');
         const mBtn = document.getElementById('btn-view-map');
         const sBtn = document.getElementById('btn-spots-badge');
         if (cEl)  cEl.textContent = n;
-        if (mBtn) { n > 0 ? mBtn.classList.add('is-visible')  : mBtn.classList.remove('is-visible'); }
-        if (sBtn) { n > 0 ? sBtn.classList.add('is-visible')  : sBtn.classList.remove('is-visible'); }
+        if (mBtn) { n > 0 ? mBtn.classList.add('is-visible') : mBtn.classList.remove('is-visible'); }
+        if (sBtn) { n > 0 ? sBtn.classList.add('is-visible') : sBtn.classList.remove('is-visible'); }
       }
 
-      document.getElementById('btn-view-map').addEventListener('click',   function () { showScreen(4); });
+      document.getElementById('btn-view-map').addEventListener('click', function () { showScreen(4); });
       document.getElementById('btn-spots-badge').addEventListener('click', function () { showResultsScreen(); });
 
       /* ── DATE RULES ─────────────────────────── */
@@ -949,7 +694,7 @@
       }
 
       function calcDur(f, t) {
-        const d = Math.floor((new Date(t + 'T00:00:00') - new Date(f + 'T00:00:00')) / 86400000) + 1;
+        const d = Math.floor((new Date(t+'T00:00:00') - new Date(f+'T00:00:00')) / 86400000) + 1;
         return d >= 1 ? d : 1;
       }
 
@@ -976,9 +721,9 @@
         return CAT_COLORS[cat.name] || '#E8892B';
       }
 
-      function seasonCls(s) { return s === 'good' ? 'season-badge--good' : s === 'avoid' ? 'season-badge--avoid' : 'season-badge--caution'; }
-      function seasonLbl(s) { return s === 'good' ? 'Good time' : s === 'avoid' ? 'Avoid this period' : 'Check conditions'; }
-      function seasonDotColor(s) { return s === 'good' ? '#16a34a' : s === 'avoid' ? '#dc2626' : '#d97706'; }
+      function seasonCls(s) { return s==='good'?'season-badge--good':s==='avoid'?'season-badge--avoid':'season-badge--caution'; }
+      function seasonLbl(s) { return s==='good'?'Good time':s==='avoid'?'Avoid this period':'Check conditions'; }
+      function seasonDotColor(s) { return s==='good'?'#16a34a':s==='avoid'?'#dc2626':'#d97706'; }
       function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
       /* ── SPOT DETAIL PANEL ──────────────────── */
@@ -990,16 +735,11 @@
         panelCurrentSpot = { spot, cardEl };
         panel.style.borderTopColor = catColor || 'var(--ember)';
 
-        /* FEATURE 1b: Set hero photo */
+        /* Hero photo via picsum — consistent seed per spot name */
         const heroImg = document.getElementById('spot-panel-hero');
         if (heroImg) {
-          const photoUrl = unsplashSpotUrl(spot.spot_name, spot.area);
-          heroImg.src = photoUrl;
+          heroImg.src = picsumSpotUrl(spot.spot_name);
           heroImg.alt = (spot.spot_name || 'Spot') + ' photo';
-          heroImg.onerror = function () {
-            this.onerror = null;
-            this.src = FALLBACK_PHOTO;
-          };
         }
 
         set('spot-panel-name', spot.spot_name || 'Unnamed spot');
@@ -1010,7 +750,7 @@
         const badgeEl = document.getElementById('spot-panel-season-badge');
         const labelEl = document.getElementById('spot-panel-season-label');
         const noteEl  = document.getElementById('spot-panel-season-note');
-        if (badgeEl) { badgeEl.className = 'season-badge ' + seasonCls(status); badgeEl.setAttribute('aria-label', 'Season: ' + status); }
+        if (badgeEl) { badgeEl.className = 'season-badge ' + seasonCls(status); badgeEl.setAttribute('aria-label', 'Season: '+status); }
         if (labelEl) labelEl.textContent = seasonLbl(status);
         if (noteEl)  noteEl.textContent  = spot.season_note || '';
 
@@ -1065,9 +805,7 @@
         if (giyaData && giyaData.categories) {
           giyaData.categories.forEach(function (c) {
             if (c.spots && c.spots.some(function (s) { return s.spot_name === spot.spot_name; })) {
-              catName  = c.name;
-              catColor = getCatColor(c);
-              catEmoji = CAT_EMOJIS[c.name] || '📍';
+              catName = c.name; catColor = getCatColor(c); catEmoji = CAT_EMOJIS[c.name] || '📍';
             }
           });
         }
@@ -1100,9 +838,7 @@
           delete mapMarkers[name];
         }
         if (cardEl) cardEl.classList.remove('is-added');
-        updateCounters();
-        refreshMapPanel();
-        renumberMarkers();
+        updateCounters(); refreshMapPanel(); renumberMarkers();
         log('removed', name);
       }
 
@@ -1155,26 +891,20 @@
         'christchurch':[-43.5321,172.6362],
       };
 
-      /* ── FEATURE 2: Build custom Giya popup HTML ── */
       function buildPopupHtml(entry) {
         const spot   = entry.spot;
         const emoji  = entry.categoryEmoji || '📍';
         const status = spot.season_status || 'caution';
-        const dotClr = seasonDotColor(status);
-        const label  = seasonLbl(status);
-
         return (
           '<div class="giya-pin-popup">' +
             '<span class="giya-pin-popup__emoji">' + esc(emoji) + '</span>' +
             '<div class="giya-pin-popup__name">'  + esc(spot.spot_name || 'Unnamed') + '</div>' +
             '<div class="giya-pin-popup__area">'  + esc(spot.area || '') + '</div>' +
             '<div class="giya-pin-popup__season">' +
-              '<span class="giya-pin-popup__season-dot" style="background:' + dotClr + '"></span>' +
-              '<span class="giya-pin-popup__season-label">' + esc(label) + '</span>' +
+              '<span class="giya-pin-popup__season-dot" style="background:' + seasonDotColor(status) + '"></span>' +
+              '<span class="giya-pin-popup__season-label">' + esc(seasonLbl(status)) + '</span>' +
             '</div>' +
-            '<button class="giya-pin-popup__btn" data-spot="' + esc(spot.spot_name) + '">' +
-              'View full details →' +
-            '</button>' +
+            '<button class="giya-pin-popup__btn" data-spot="' + esc(spot.spot_name) + '">View full details →</button>' +
           '</div>'
         );
       }
@@ -1182,85 +912,55 @@
       function initOrRefreshMap() {
         const mapEl = document.getElementById('main-map');
         if (!mapEl || typeof L === 'undefined') return;
-
         if (mainMap) { mainMap.remove(); mainMap = null; mapMarkers = {}; terminalMarkers = []; }
 
         mainMap = L.map(mapEl, { zoomControl: true, scrollWheelZoom: true });
-
-        L.tileLayer(
-          'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
           { attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> © <a href="https://carto.com/" target="_blank">CARTO</a>', subdomains: 'abcd', maxZoom: 19 }
         ).addTo(mainMap);
 
         const allBounds = [];
-
-        /* Terminal pins */
         const arrCoords = CITIES[currentArrival.toLowerCase()];
         const depCoords = CITIES[currentDeparture.toLowerCase()];
         const sameCity  = currentArrival.toLowerCase() === currentDeparture.toLowerCase();
 
         if (arrCoords) {
-          const icon = L.divIcon({ html: '<div class="terminal-pin terminal-pin--in">🛬</div>', className: '', iconSize: [36,36], iconAnchor: [18,18] });
-          const m = L.marker(arrCoords, { icon }).addTo(mainMap);
+          const m = L.marker(arrCoords, { icon: L.divIcon({ html: '<div class="terminal-pin terminal-pin--in">🛬</div>', className: '', iconSize: [36,36], iconAnchor: [18,18] }) }).addTo(mainMap);
           m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛬 Flying into</strong><br>' + esc(currentArrival) + '</div>', { maxWidth: 180 });
-          terminalMarkers.push(m);
-          allBounds.push(arrCoords);
+          terminalMarkers.push(m); allBounds.push(arrCoords);
         }
 
         if (depCoords && !sameCity) {
-          const icon = L.divIcon({ html: '<div class="terminal-pin terminal-pin--out">🛫</div>', className: '', iconSize: [36,36], iconAnchor: [18,18] });
-          const m = L.marker(depCoords, { icon }).addTo(mainMap);
+          const m = L.marker(depCoords, { icon: L.divIcon({ html: '<div class="terminal-pin terminal-pin--out">🛫</div>', className: '', iconSize: [36,36], iconAnchor: [18,18] }) }).addTo(mainMap);
           m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛫 Flying out from</strong><br>' + esc(currentDeparture) + '</div>', { maxWidth: 180 });
-          terminalMarkers.push(m);
-          allBounds.push(depCoords);
+          terminalMarkers.push(m); allBounds.push(depCoords);
         }
 
-        /* Spot pins — FEATURE 2: custom styled popup */
         giyaAddedSpots.forEach(function (entry, idx) {
           const spot  = entry.spot;
           const color = entry.categoryColor;
           const lat   = spot.coordinates && spot.coordinates.lat;
           const lng   = spot.coordinates && spot.coordinates.lng;
           if (!lat || !lng) return;
-
           allBounds.push([lat, lng]);
 
-          const icon = L.divIcon({
-            html: '<div class="leaflet-pin-dot" style="background:' + color + '">' + (idx + 1) + '</div>',
-            className: '', iconSize: [32,32], iconAnchor: [16,16],
-          });
-
+          const icon = L.divIcon({ html: '<div class="leaflet-pin-dot" style="background:' + color + '">' + (idx+1) + '</div>', className: '', iconSize: [32,32], iconAnchor: [16,16] });
           const m = L.marker([lat, lng], { icon }).addTo(mainMap);
-
-          /* Custom popup with giya-popup class to override Leaflet defaults */
-          m.bindPopup(buildPopupHtml(entry), {
-            maxWidth: 220,
-            className: 'giya-popup',
-          });
-
-          /* Wire "View full details" button inside popup when it opens */
+          m.bindPopup(buildPopupHtml(entry), { maxWidth: 220, className: 'giya-popup' });
           m.on('popupopen', function () {
             const btn = m.getPopup().getElement().querySelector('.giya-pin-popup__btn');
             if (!btn) return;
             btn.addEventListener('click', function () {
               m.closePopup();
-              /* Find full entry from giyaAddedSpots */
-              const found = giyaAddedSpots.find(function (e) {
-                return e.spot.spot_name === spot.spot_name;
-              });
+              const found = giyaAddedSpots.find(function (e) { return e.spot.spot_name === spot.spot_name; });
               if (found) openPanel(found.spot, found.categoryColor, found.cardEl);
             });
           });
-
           mapMarkers[spot.spot_name] = { marker: m, visible: true };
         });
 
-        if (allBounds.length > 0) {
-          mainMap.fitBounds(allBounds, { padding: [48, 48], maxZoom: 13 });
-        } else {
-          mainMap.setView([20, 0], 2);
-        }
-
+        if (allBounds.length > 0) { mainMap.fitBounds(allBounds, { padding: [48,48], maxZoom: 13 }); }
+        else { mainMap.setView([20, 0], 2); }
         setTimeout(function () { if (mainMap) mainMap.invalidateSize(); }, 100);
         refreshMapPanel();
       }
@@ -1272,8 +972,7 @@
         const sameCity    = currentArrival.toLowerCase() === currentDeparture.toLowerCase();
 
         if (termSection && termList && currentArrival) {
-          termSection.hidden = false;
-          termList.innerHTML = '';
+          termSection.hidden = false; termList.innerHTML = '';
           const arrRow = document.createElement('div');
           arrRow.className = 'map-terminal-row';
           arrRow.innerHTML = '<div class="map-terminal-icon map-terminal-icon--in">🛬</div><div><div class="map-terminal-name">' + esc(currentArrival) + '</div><div class="map-terminal-type">Flying into</div></div>';
@@ -1288,12 +987,7 @@
 
         const list = document.getElementById('map-spot-list');
         if (!list) return;
-
-        if (giyaAddedSpots.length === 0) {
-          list.innerHTML = '<p class="map-panel__empty">No spots added yet. Browse results and tap "+ Add to my map".</p>';
-          return;
-        }
-
+        if (giyaAddedSpots.length === 0) { list.innerHTML = '<p class="map-panel__empty">No spots added yet. Browse results and tap "+ Add to my map".</p>'; return; }
         list.innerHTML = '';
 
         giyaAddedSpots.forEach(function (entry, idx) {
@@ -1305,35 +999,26 @@
           const row = document.createElement('div');
           row.className = 'map-spot-row' + (isVisible ? '' : ' is-hidden-pin');
           row.innerHTML =
-            '<div class="map-spot-num" style="background:' + esc(color) + '">' + (idx + 1) + '</div>' +
+            '<div class="map-spot-num" style="background:' + esc(color) + '">' + (idx+1) + '</div>' +
             '<span class="map-spot-emoji">' + emoji + '</span>' +
-            '<div class="map-spot-info">' +
-              '<div class="map-spot-name">' + esc(spot.spot_name) + '</div>' +
-              '<div class="map-spot-area">' + esc(spot.area || entry.categoryName) + '</div>' +
-            '</div>' +
-            '<button class="map-spot-toggle" data-active="' + isVisible + '" aria-label="' + (isVisible ? 'Hide' : 'Show') + ' pin" title="' + (isVisible ? 'Hide pin' : 'Show pin') + '">' + (isVisible ? '👁' : '🚫') + '</button>' +
+            '<div class="map-spot-info"><div class="map-spot-name">' + esc(spot.spot_name) + '</div><div class="map-spot-area">' + esc(spot.area || entry.categoryName) + '</div></div>' +
+            '<button class="map-spot-toggle" data-active="' + isVisible + '" aria-label="' + (isVisible?'Hide':'Show') + ' pin" title="' + (isVisible?'Hide pin':'Show pin') + '">' + (isVisible?'👁':'🚫') + '</button>' +
             '<button class="map-spot-remove" aria-label="Remove" title="Remove from map">🗑</button>';
 
           row.querySelector('.map-spot-toggle').addEventListener('click', function () {
             const mk = mapMarkers[spot.spot_name];
             if (!mk || !mainMap) return;
             if (mk.visible) { mainMap.removeLayer(mk.marker); mk.visible = false; }
-            else            { mk.marker.addTo(mainMap);        mk.visible = true;  }
+            else            { mk.marker.addTo(mainMap); mk.visible = true; }
             refreshMapPanel();
           });
-
-          row.querySelector('.map-spot-remove').addEventListener('click', function () {
-            removeSpotByName(spot.spot_name, entry.cardEl);
-          });
-
+          row.querySelector('.map-spot-remove').addEventListener('click', function () { removeSpotByName(spot.spot_name, entry.cardEl); });
           list.appendChild(row);
         });
       }
 
       document.getElementById('btn-show-all-pins').addEventListener('click', function () {
-        Object.values(mapMarkers).forEach(function (m) {
-          if (!m.visible && mainMap) { m.marker.addTo(mainMap); m.visible = true; }
-        });
+        Object.values(mapMarkers).forEach(function (m) { if (!m.visible && mainMap) { m.marker.addTo(mainMap); m.visible = true; } });
         refreshMapPanel();
       });
 
@@ -1341,17 +1026,14 @@
         giyaAddedSpots.forEach(function (entry, idx) {
           const mk = mapMarkers[entry.spot.spot_name];
           if (!mk) return;
-          mk.marker.setIcon(L.divIcon({
-            html: '<div class="leaflet-pin-dot" style="background:' + entry.categoryColor + '">' + (idx + 1) + '</div>',
-            className: '', iconSize: [32,32], iconAnchor: [16,16],
-          }));
+          mk.marker.setIcon(L.divIcon({ html: '<div class="leaflet-pin-dot" style="background:' + entry.categoryColor + '">' + (idx+1) + '</div>', className: '', iconSize: [32,32], iconAnchor: [16,16] }));
         });
       }
 
       /* ── RESULTS RENDERING ──────────────────── */
       function countAll(cats) {
         if (!Array.isArray(cats)) return 0;
-        return cats.reduce(function (t, c) { return t + (Array.isArray(c.spots) ? c.spots.length : 0); }, 0);
+        return cats.reduce(function (t,c) { return t + (Array.isArray(c.spots) ? c.spots.length : 0); }, 0);
       }
 
       function renderSpots(cats) {
@@ -1366,19 +1048,37 @@
           sec.className = 'results-category';
           const color = getCatColor(cat);
 
+          /* Category header with picsum photo as <img> tag */
           const hdr = document.createElement('div');
           hdr.className = 'results-category__header';
 
-          /* FEATURE 1a: Set Unsplash background photo on header */
-          const photoUrl = unsplashCategoryUrl(currentArrival || 'travel', cat.name);
-          hdr.style.backgroundImage = 'url("' + photoUrl + '")';
+          /* Background image via <img> element (avoids CSS bg ORB issue) */
+          const bgImg = document.createElement('img');
+          bgImg.className = 'results-category__header-img';
+          bgImg.src = picsumCategoryUrl(cat.name);
+          bgImg.alt = '';
+          bgImg.setAttribute('aria-hidden', 'true');
+          bgImg.loading = 'lazy';
+          hdr.appendChild(bgImg);
 
-          /* Keep category colour left-accent visible as subtle border */
-          hdr.style.boxShadow = 'inset 4px 0 0 ' + color;
+          /* Category colour bar */
+          const bar = document.createElement('span');
+          bar.className = 'results-category__color-bar';
+          bar.style.background = color;
+          hdr.appendChild(bar);
 
-          hdr.innerHTML =
-            '<span class="results-category__emoji" aria-hidden="true">' + esc(cat.emoji || '') + '</span>' +
-            '<span class="results-category__name">' + esc(cat.name || 'Category') + '</span>';
+          /* Emoji + name */
+          const emojiEl = document.createElement('span');
+          emojiEl.className = 'results-category__emoji';
+          emojiEl.setAttribute('aria-hidden', 'true');
+          emojiEl.textContent = cat.emoji || '';
+          hdr.appendChild(emojiEl);
+
+          const nameEl = document.createElement('span');
+          nameEl.className = 'results-category__name';
+          nameEl.textContent = cat.name || 'Category';
+          hdr.appendChild(nameEl);
+
           sec.appendChild(hdr);
 
           const grid = document.createElement('div');
@@ -1401,26 +1101,22 @@
               '</div>' +
               '<p class="spot-card__area">' + esc(spot.area || '') + '</p>' +
               '<p class="spot-card__why">'  + esc(spot.why  || '') + '</p>';
-
             card.addEventListener('click', function () { openPanel(spot, color, card); });
-            card.addEventListener('keydown', function (e) {
-              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(spot, color, card); }
-            });
+            card.addEventListener('keydown', function (e) { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); openPanel(spot,color,card); } });
             grid.appendChild(card);
           });
 
           sec.appendChild(grid);
           container.appendChild(sec);
         });
-
         return countAll(cats);
       }
 
       /* ── FORM ERRORS ────────────────────────── */
       function showErr(m) { const e = document.getElementById('form-error'); if (!e) return; e.textContent = m; e.classList.add('is-visible'); e.removeAttribute('hidden'); }
-      function clearErr()  { const e = document.getElementById('form-error'); if (!e) return; e.textContent = ''; e.classList.remove('is-visible'); e.setAttribute('hidden', ''); }
+      function clearErr()  { const e = document.getElementById('form-error'); if (!e) return; e.textContent = ''; e.classList.remove('is-visible'); e.setAttribute('hidden',''); }
 
-      /* ── LOADING SCREEN ─────────────────────── */
+      /* ── LOADING ────────────────────────────── */
       const MSGS = [
         {e:'🗺️',t:'Plotting your escape...'},{e:'💎',t:'Scanning for hidden gems...'},
         {e:'🌀',t:"Checking if it's typhoon season..."},{e:'🍜',t:'Finding the best street food nearby...'},
@@ -1429,9 +1125,9 @@
         {e:'🌅',t:'Finding the best sunrise spots...'},{e:'🤫',t:'Finding spots the guidebooks left out...'},
         {e:'✈️',t:'Almost there...'},
       ];
-      function msgDur(i) { return i <= 1 ? 9000 : i <= 2 ? 7000 : i <= 5 ? 5000 : 4000; }
+      function msgDur(i) { return i<=1?9000:i<=2?7000:i<=5?5000:4000; }
 
-      let loadMap = null, msgTO = null, msgOn = false;
+      let loadMap=null, msgTO=null, msgOn=false;
 
       function showMsg(idx, skip) {
         if (!msgOn) return;
@@ -1440,138 +1136,82 @@
         const m = MSGS[idx % MSGS.length];
         function apply() {
           if (!msgOn) return;
-          el.textContent = m.e + ' ' + m.t;
-          el.classList.add('is-visible');
-          const ni = (idx + 1) % MSGS.length;
-          msgTO = setTimeout(function () {
-            el.classList.remove('is-visible');
-            setTimeout(function () { showMsg(ni, false); }, 400);
-          }, msgDur(ni));
+          el.textContent = m.e + ' ' + m.t; el.classList.add('is-visible');
+          const ni = (idx+1) % MSGS.length;
+          msgTO = setTimeout(function () { el.classList.remove('is-visible'); setTimeout(function () { showMsg(ni,false); }, 400); }, msgDur(ni));
         }
         if (skip) apply(); else { el.classList.remove('is-visible'); setTimeout(apply, 400); }
       }
 
-      function startMsgs() { stopMsgs(); msgOn = true; showMsg(0, true); }
-      function stopMsgs() {
-        msgOn = false;
-        if (msgTO) { clearTimeout(msgTO); msgTO = null; }
-        const el = document.getElementById('loading-message');
-        if (el) el.classList.remove('is-visible');
-      }
+      function startMsgs() { stopMsgs(); msgOn=true; showMsg(0,true); }
+      function stopMsgs()  { msgOn=false; if(msgTO){clearTimeout(msgTO);msgTO=null;} const el=document.getElementById('loading-message'); if(el)el.classList.remove('is-visible'); }
 
       function initLoadMap(coords, city) {
         destroyLoadMap();
         const el = document.getElementById('loading-map');
         if (!el || typeof L === 'undefined') return;
-        loadMap = L.map(el, { center: coords, zoom: 5, dragging: false, zoomControl: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, touchZoom: false });
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19 }).addTo(loadMap);
-        const icon = L.divIcon({ html: '<div class="loading-map-marker">✈️</div>', className: 'loading-map-pin', iconSize: [48,48], iconAnchor: [24,24] });
+        loadMap = L.map(el, { center:coords, zoom:5, dragging:false, zoomControl:false, scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false, touchZoom:false });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:19 }).addTo(loadMap);
+        const icon = L.divIcon({ html:'<div class="loading-map-marker">✈️</div>', className:'loading-map-pin', iconSize:[48,48], iconAnchor:[24,24] });
         L.marker(coords, { icon }).addTo(loadMap).bindPopup(city || 'Your destination').openPopup();
-        setTimeout(function () { if (loadMap) loadMap.invalidateSize(); }, 150);
+        setTimeout(function () { if(loadMap) loadMap.invalidateSize(); }, 150);
       }
-      function destroyLoadMap() { if (loadMap) { loadMap.remove(); loadMap = null; } }
+      function destroyLoadMap() { if(loadMap) { loadMap.remove(); loadMap=null; } }
 
       function showLoading(city) {
-        const el      = document.getElementById('loading-state');
-        const mapWrap = document.getElementById('loading-map-wrap');
-        const globe   = document.getElementById('loading-globe');
-        const cityTxt = document.getElementById('loading-city-text');
+        const el=document.getElementById('loading-state'), mapWrap=document.getElementById('loading-map-wrap'), globe=document.getElementById('loading-globe'), cityTxt=document.getElementById('loading-city-text');
         if (!el) return;
         const coords = CITIES[city.trim().toLowerCase()];
-        if (coords) {
-          if (mapWrap) mapWrap.hidden = false;
-          if (globe)   globe.hidden   = true;
-          if (cityTxt) cityTxt.textContent = "You're heading to " + city.trim();
-          setTimeout(function () { initLoadMap(coords, city.trim()); }, 100);
-        } else {
-          if (mapWrap) mapWrap.hidden = true;
-          if (globe)   globe.hidden   = false;
-          if (cityTxt) cityTxt.textContent = 'Mapping your route to ' + city.trim() + '...';
-          destroyLoadMap();
-        }
-        el.classList.add('is-visible'); el.removeAttribute('hidden');
-        startMsgs();
+        if (coords) { if(mapWrap)mapWrap.hidden=false; if(globe)globe.hidden=true; if(cityTxt)cityTxt.textContent="You're heading to "+city.trim(); setTimeout(function(){initLoadMap(coords,city.trim());},100); }
+        else         { if(mapWrap)mapWrap.hidden=true;  if(globe)globe.hidden=false; if(cityTxt)cityTxt.textContent='Mapping your route to '+city.trim()+'...'; destroyLoadMap(); }
+        el.classList.add('is-visible'); el.removeAttribute('hidden'); startMsgs();
       }
-
-      function hideLoading() {
-        stopMsgs(); destroyLoadMap();
-        const el = document.getElementById('loading-state');
-        if (el) { el.classList.remove('is-visible'); el.setAttribute('hidden', ''); }
-      }
+      function hideLoading() { stopMsgs(); destroyLoadMap(); const el=document.getElementById('loading-state'); if(el){el.classList.remove('is-visible');el.setAttribute('hidden','');} }
 
       /* ── FORM SUBMIT ────────────────────────── */
       document.getElementById('btn-start').addEventListener('click', function () { showScreen(1); });
 
       document.getElementById('trip-form').addEventListener('submit', async function (e) {
         e.preventDefault();
+        const arrEl=document.getElementById('arrival-city'), depEl=document.getElementById('departure-city'), frEl=document.getElementById('date-from'), toEl=document.getElementById('date-to');
+        const arrival=arrEl.value.trim(), departure=depEl.value.trim(), dateFrom=frEl.value, dateTo=toEl.value;
+        if (!arrival||!dateFrom||!dateTo) { showErr('Please fill in all fields.'); return; }
 
-        const arrEl = document.getElementById('arrival-city');
-        const depEl = document.getElementById('departure-city');
-        const frEl  = document.getElementById('date-from');
-        const toEl  = document.getElementById('date-to');
-
-        const arrival   = arrEl.value.trim();
-        const departure = depEl.value.trim();
-        const dateFrom  = frEl.value;
-        const dateTo    = toEl.value;
-
-        if (!arrival || !dateFrom || !dateTo) { showErr('Please fill in all fields.'); return; }
-
-        currentArrival   = arrival;
-        currentDeparture = departure || arrival;
-
+        currentArrival=arrival; currentDeparture=departure||arrival;
         clearErr(); resetWarnings();
-        giyaAddedSpots = []; mapMarkers = {}; terminalMarkers = [];
-        if (mainMap) { mainMap.remove(); mainMap = null; }
-        updateCounters();
-
-        showLoading(arrival);
-        const submitBtn = document.getElementById('btn-submit-trip');
-        if (submitBtn) submitBtn.disabled = true;
-
-        updateTopBarFlight(arrival, currentDeparture, dateFrom, dateTo);
+        giyaAddedSpots=[]; mapMarkers={}; terminalMarkers=[];
+        if(mainMap){mainMap.remove();mainMap=null;}
+        updateCounters(); showLoading(arrival);
+        const submitBtn=document.getElementById('btn-submit-trip');
+        if(submitBtn) submitBtn.disabled=true;
+        updateTopBarFlight(arrival,currentDeparture,dateFrom,dateTo);
 
         try {
-          const res  = await fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ arrival, departure: currentDeparture, dateFrom, dateTo, duration: calcDur(dateFrom, dateTo) }),
-          });
+          const res  = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({arrival,departure:currentDeparture,dateFrom,dateTo,duration:calcDur(dateFrom,dateTo)}) });
           const text = await res.text();
           log('status', res.status);
-
           let data;
-          try { data = JSON.parse(text); }
-          catch { throw new Error('Server returned non-JSON. Check worker.'); }
-
-          if (!res.ok) throw new Error(data.error || 'Worker error HTTP ' + res.status);
-
-          giyaData = data;
-          const total = countAll(data.categories);
-          if (total === 0) throw new Error('No spots returned. Try a more specific city.');
-
+          try { data=JSON.parse(text); } catch { throw new Error('Server returned non-JSON.'); }
+          if (!res.ok) throw new Error(data.error||'Worker error HTTP '+res.status);
+          giyaData=data;
+          const total=countAll(data.categories);
+          if(total===0) throw new Error('No spots returned. Try a more specific city.');
           applyWarnings(data.warnings);
-
-          const hd = document.getElementById('results-heading');
-          if (hd) hd.textContent = "Here's what's near " + arrival;
-          document.title = "Here's what's near " + arrival + ' — Giya';
-
+          const hd=document.getElementById('results-heading');
+          if(hd) hd.textContent="Here's what's near "+arrival;
+          document.title="Here's what's near "+arrival+' — Giya';
           renderSpots(data.categories);
           showResultsScreen();
-          log('success', total + ' spots');
-
-        } catch (err) {
+          log('success', total+' spots');
+        } catch(err) {
           console.error('[Giya]', err);
-          let msg = 'Something went wrong. Please try again.';
-          if (err.message && err.message.includes('Failed to fetch')) {
-            msg = 'Could not reach Giya. Try again in a moment.';
-          } else if (err.message) {
-            msg = err.message;
-          }
+          let msg='Something went wrong. Please try again.';
+          if(err.message&&err.message.includes('Failed to fetch')) msg='Could not reach Giya. Try again in a moment.';
+          else if(err.message) msg=err.message;
           showErr(msg);
         } finally {
           hideLoading();
-          if (submitBtn) submitBtn.disabled = false;
+          if(submitBtn) submitBtn.disabled=false;
         }
       });
 
