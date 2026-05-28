@@ -1371,6 +1371,7 @@
 
           /* FEATURE 1a: Set Unsplash background photo on header */
           const photoUrl = unsplashCategoryUrl(currentArrival || 'travel', cat.name);
+          console.log(photoUrl);
           hdr.style.backgroundImage = 'url("' + photoUrl + '")';
 
           /* Keep category colour left-accent visible as subtle border */
