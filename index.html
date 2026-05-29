@@ -42,50 +42,36 @@
       line-height: 1.2;
     }
 
+    /* ── TOP BAR ── */
     .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
+      position: fixed; top: 0; left: 0; right: 0;
       height: var(--topbar-h);
       background: var(--paper);
       border-bottom: 1px solid var(--border);
       display: grid;
       grid-template-columns: auto 1fr auto;
       align-items: center;
-      padding: 0 1rem;
-      gap: 0.75rem;
-      z-index: 100;
+      padding: 0 1rem; gap: 0.75rem; z-index: 100;
     }
 
     .topbar__brand {
       font-family: "Playfair Display", Georgia, serif;
-      font-weight: 700;
-      font-size: 1.25rem;
-      color: var(--ember);
-      letter-spacing: 0.02em;
-      white-space: nowrap;
+      font-weight: 700; font-size: 1.25rem;
+      color: var(--ember); letter-spacing: 0.02em; white-space: nowrap;
     }
 
     .topbar__flight {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      overflow: hidden;
-      min-width: 0;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.4rem; overflow: hidden; min-width: 0;
     }
 
     .topbar__flight-route {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--ink);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 0.78rem; font-weight: 600; color: var(--ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
     .topbar__flight-sep { font-size: 0.7rem; color: var(--border); flex-shrink: 0; display: none; }
     .topbar__flight-sep.is-visible { display: inline; }
-
     .topbar__flight-dates { font-size: 0.72rem; color: var(--ink-muted); white-space: nowrap; flex-shrink: 0; }
     .topbar__flight-placeholder { font-size: 0.73rem; color: var(--ink-muted); font-style: italic; white-space: nowrap; }
 
@@ -94,10 +80,9 @@
     .topbar__map-btn {
       display: none; align-items: center; gap: 0.2rem;
       background: var(--ink); color: var(--paper);
-      font-size: 0.68rem; font-weight: 600;
-      padding: 0.2rem 0.55rem; border-radius: 999px;
-      white-space: nowrap; cursor: pointer; border: none;
-      font-family: inherit; transition: background 0.15s;
+      font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem;
+      border-radius: 999px; white-space: nowrap; cursor: pointer;
+      border: none; font-family: inherit; transition: background 0.15s;
     }
     .topbar__map-btn.is-visible { display: flex; }
     .topbar__map-btn:hover { background: var(--ember); }
@@ -105,10 +90,9 @@
     .topbar__spots {
       display: none; align-items: center; gap: 0.2rem;
       background: var(--ember); color: #fff;
-      font-size: 0.68rem; font-weight: 600;
-      padding: 0.2rem 0.55rem; border-radius: 999px;
-      white-space: nowrap; cursor: pointer; border: none;
-      font-family: inherit; transition: transform 0.1s;
+      font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem;
+      border-radius: 999px; white-space: nowrap; cursor: pointer;
+      border: none; font-family: inherit; transition: transform 0.1s;
     }
     .topbar__spots.is-visible { display: flex; }
     .topbar__spots:hover { transform: scale(1.05); }
@@ -140,8 +124,8 @@
     }
     .warn-icon:hover::after { opacity: 1; }
 
+    /* ── MAIN LAYOUT ── */
     main { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem 1rem; }
-
     .screen { display: none; animation: fadeIn 0.3s ease; }
     .screen.is-visible { display: block; }
 
@@ -156,9 +140,9 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* SCREEN 0 */
+    /* ── SCREEN 0 ── */
     .landing { text-align: center; padding: 2rem 0 3rem; }
-    .landing h1 { font-size: clamp(1.75rem, 5vw, 2.35rem); margin-bottom: 1rem; max-width: 28ch; margin-left: auto; margin-right: auto; }
+    .landing h1 { font-size: clamp(1.75rem,5vw,2.35rem); margin-bottom: 1rem; max-width: 28ch; margin-left: auto; margin-right: auto; }
     .landing .subheading { color: var(--ink-muted); font-size: 1.05rem; max-width: 36ch; margin: 0 auto 2rem; }
 
     .btn-primary {
@@ -173,7 +157,7 @@
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .landing__note { margin-top: 1.25rem; font-size: 0.85rem; color: var(--ink-muted); letter-spacing: 0.04em; }
 
-    /* SCREEN 1 */
+    /* ── SCREEN 1 ── */
     .form-screen h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
     .form-group { margin-bottom: 1.25rem; }
     .form-group label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; }
@@ -183,7 +167,7 @@
     @media (max-width: 400px) { .form-row { grid-template-columns: 1fr; } }
     .form-screen .btn-primary { width: 100%; margin-top: 0.5rem; }
 
-    /* LOADING */
+    /* ── LOADING ── */
     .loading-state { display: none; }
     .loading-state.is-visible { display: block; }
     .loading-screen { max-width: 480px; margin: 0 auto; padding: 2rem; text-align: center; }
@@ -198,67 +182,55 @@
     .form-error { display: none; color: #b91c1c; margin-top: 0.75rem; font-size: 0.9rem; }
     .form-error.is-visible { display: block; }
 
-    /* SCREEN 3 — Results */
+    /* ── SCREEN 3 — Results ── */
     .results-screen h2 { font-size: 1.65rem; margin-bottom: 1.25rem; }
     .results-categories { display: flex; flex-direction: column; gap: 2rem; }
 
-    /* Category header — photo via <img> tag (not CSS bg, avoids ORB) */
+    /* Category header with photo */
     .results-category__header {
-      position: relative;
-      display: flex; align-items: flex-end; gap: 0.6rem;
-      margin-bottom: 0.85rem;
-      border-radius: 10px;
-      min-height: 80px;
-      overflow: hidden;
-      padding: 0.85rem 1rem;
-      background: #3a3530; /* fallback while image loads */
+      position: relative; display: flex; align-items: flex-end;
+      gap: 0.6rem; margin-bottom: 0.85rem; border-radius: 10px;
+      min-height: 80px; overflow: hidden; padding: 0.85rem 1rem;
+      background: #3a3530;
     }
-
     .results-category__header-img {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      display: block;
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0; display: block;
     }
-
-    /* Gradient overlay */
     .results-category__header::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(26,22,18,0.72) 0%, rgba(26,22,18,0.4) 100%);
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg,rgba(26,22,18,0.72) 0%,rgba(26,22,18,0.4) 100%);
       z-index: 1;
     }
-
-    /* Text above overlay */
     .results-category__emoji,
     .results-category__name { position: relative; z-index: 2; }
-
     .results-category__emoji { font-size: 1.5rem; line-height: 1; }
     .results-category__name {
       font-family: "Playfair Display", Georgia, serif;
-      font-size: 1.15rem; font-weight: 700;
-      color: #fff !important;
+      font-size: 1.15rem; font-weight: 700; color: #fff !important;
+    }
+    .results-category__color-bar {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; z-index: 2; border-radius: 10px 0 0 10px;
     }
 
-    /* Category colour bar — left inset */
-    .results-category__color-bar {
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 4px;
-      z-index: 2;
-      border-radius: 10px 0 0 10px;
+    /* Shimmer placeholder while photo loads */
+    .results-category__header.is-loading {
+      background: linear-gradient(90deg, #3a3530 25%, #4a4540 50%, #3a3530 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     .results-spots { display: grid; grid-template-columns: 1fr; gap: 0.85rem; }
-    @media (min-width: 520px) { .results-spots { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 520px) { .results-spots { grid-template-columns: repeat(2,1fr); } }
 
     .spot-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
     .spot-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,22,18,0.1); }
     .spot-card.is-added { border-left: 3px solid var(--ember); }
-
     .spot-card__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.25rem; }
     .spot-card__name   { font-weight: 700; font-size: 1rem; color: var(--ink); }
     .spot-card__area   { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 0.5rem; }
@@ -274,29 +246,57 @@
     .results-note { margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--ink-muted); font-style: italic; }
     .results-empty { text-align: center; color: var(--ink-muted); padding: 1.5rem; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--border); margin-bottom: 1rem; }
 
-    /* SPOT DETAIL PANEL */
+    /* ── SPOT DETAIL PANEL ── */
     .spot-overlay { position: fixed; inset: 0; background: rgba(26,22,18,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     .spot-overlay.is-open { opacity: 1; pointer-events: auto; }
 
-    .spot-panel { position: fixed; bottom: 0; left: 0; right: 0; max-height: 76vh; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 40px rgba(26,22,18,0.18); z-index: 201; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; border-top: 4px solid var(--ember); }
+    .spot-panel { position: fixed; bottom: 0; left: 0; right: 0; max-height: 80vh; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 40px rgba(26,22,18,0.18); z-index: 201; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; border-top: 4px solid var(--ember); }
     .spot-panel.is-open { transform: translateY(0); }
 
     .spot-panel__handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0.75rem auto 0; }
-
-    /* Hero photo in panel — <img> tag, no ORB issue */
-    .spot-panel__hero {
-      width: 100%; height: 160px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-      display: block;
-      background: var(--paper);
-    }
-
-    .spot-panel__inner { padding: 0.75rem 1.5rem 2.5rem; }
+    .spot-panel__inner  { padding: 0.75rem 1.5rem 2.5rem; }
 
     .spot-panel__close { position: absolute; top: 0.75rem; right: 1rem; width: 32px; height: 32px; border: none; background: rgba(26,22,18,0.55); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff; transition: background 0.15s; z-index: 2; }
     .spot-panel__close:hover { background: rgba(26,22,18,0.8); }
+
+    /* 3-photo gallery at top of panel */
+    .spot-panel__gallery {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 110px 110px;
+      gap: 6px;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .spot-panel__gallery-img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      background: #e8e0d8; /* placeholder colour */
+      transition: opacity 0.3s ease;
+    }
+
+    /* First photo spans both rows on the left */
+    .spot-panel__gallery-img:first-child {
+      grid-row: 1 / 3;
+    }
+
+    /* Gallery shimmer while loading */
+    .spot-panel__gallery.is-loading .spot-panel__gallery-img {
+      background: linear-gradient(90deg, #e8e0d8 25%, #f0e8e0 50%, #e8e0d8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    /* Photo credit line */
+    .spot-panel__photo-credit {
+      font-size: 0.62rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.75rem;
+      text-align: right;
+    }
+    .spot-panel__photo-credit a { color: var(--ink-muted); text-decoration: underline; }
 
     .spot-panel__name { font-family: "Playfair Display", Georgia, serif; font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; padding-right: 2.5rem; }
     .spot-panel__area { font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 0.75rem; }
@@ -319,7 +319,7 @@
     .spot-panel__remove-btn { width: 100%; padding: 0.65rem; background: transparent; color: #b91c1c; border: 1px solid #fecaca; border-radius: 999px; font-family: inherit; font-size: 0.85rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
     .spot-panel__remove-btn:hover { background: #fef2f2; }
 
-    /* SCREEN 4 — MAP */
+    /* ── SCREEN 4 — MAP ── */
     .map-wrap { position: relative; width: 100%; height: 100%; display: flex; }
     #main-map { flex: 1; height: 100%; z-index: 1; }
 
@@ -343,33 +343,27 @@
     .map-spot-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-bottom: 1px solid rgba(26,22,18,0.05); transition: background 0.1s; }
     .map-spot-row:hover { background: rgba(26,22,18,0.03); }
     .map-spot-row.is-hidden-pin { opacity: 0.38; }
-
     .map-spot-num { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(26,22,18,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: #fff; flex-shrink: 0; }
     .map-spot-emoji { font-size: 1rem; flex-shrink: 0; line-height: 1; }
     .map-spot-info { flex: 1; overflow: hidden; }
     .map-spot-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .map-spot-area { font-size: 0.65rem; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
     .map-spot-toggle { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 6px; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; color: var(--ink-muted); transition: background 0.15s; flex-shrink: 0; }
     .map-spot-toggle:hover { background: rgba(26,22,18,0.06); }
     .map-spot-toggle[data-active="true"]  { color: var(--ember); border-color: var(--ember); }
     .map-spot-toggle[data-active="false"] { color: #a39e96; }
-
     .map-spot-remove { width: 26px; height: 26px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #c0b8b0; transition: color 0.15s; flex-shrink: 0; }
     .map-spot-remove:hover { color: #b91c1c; }
 
     .terminal-pin { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(26,22,18,0.3); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .terminal-pin--in  { background: #1a1612; }
     .terminal-pin--out { background: var(--ember); }
-
     .leaflet-pin-dot { width: 32px; height: 32px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(26,22,18,0.28); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; color: #fff; font-family: "DM Sans", sans-serif; }
 
-    /* Custom Leaflet popup */
     .giya-popup .leaflet-popup-content-wrapper { border-radius: 12px; padding: 0; box-shadow: 0 8px 32px rgba(26,22,18,0.18); border: none; font-family: "DM Sans", system-ui, sans-serif; }
     .giya-popup .leaflet-popup-content { margin: 0; min-width: 190px; }
     .giya-popup .leaflet-popup-tip-container { display: none; }
     .giya-popup .leaflet-popup-close-button { color: var(--ink-muted) !important; font-size: 1.1rem !important; top: 6px !important; right: 8px !important; }
-
     .giya-pin-popup { padding: 0.9rem 1rem 0.75rem; }
     .giya-pin-popup__emoji { font-size: 1.6rem; line-height: 1; margin-bottom: 0.35rem; display: block; }
     .giya-pin-popup__name { font-weight: 700; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.15rem; line-height: 1.3; }
@@ -386,6 +380,7 @@
       .map-panel { width: 100%; max-height: 42vh; border-left: none; border-top: 1px solid var(--border); }
     }
 
+    /* ── FOOTER ── */
     .site-footer { max-width: 640px; margin: 2.5rem auto 0; padding: 0 1.25rem; text-align: center; font-size: 0.75rem; color: var(--ink-muted); line-height: 1.7; }
     .site-footer p + p { margin-top: 0.5rem; }
     .site-footer .credit { margin-top: 0.75rem; font-weight: 600; color: var(--ink); }
@@ -393,6 +388,7 @@
 </head>
 <body>
 
+  <!-- TOP BAR -->
   <header class="topbar" role="banner">
     <span class="topbar__brand">Giya</span>
     <div class="topbar__flight" id="topbar-flight" aria-live="polite">
@@ -423,14 +419,22 @@
     </div>
   </header>
 
+  <!-- SPOT DETAIL PANEL -->
   <div class="spot-overlay" id="spot-overlay" aria-hidden="true"></div>
 
   <div class="spot-panel" id="spot-panel" role="dialog" aria-modal="true" aria-labelledby="spot-panel-name" hidden>
     <div class="spot-panel__handle" aria-hidden="true"></div>
     <button type="button" class="spot-panel__close" id="spot-panel-close" aria-label="Close">×</button>
     <div class="spot-panel__inner">
-      <!-- Hero photo — src set by JS, uses picsum.photos (no ORB) -->
-      <img class="spot-panel__hero" id="spot-panel-hero" src="" alt="" loading="lazy"/>
+
+      <!-- 3-photo gallery — populated by JS from Pexels via Worker -->
+      <div class="spot-panel__gallery is-loading" id="spot-panel-gallery" aria-hidden="true">
+        <img class="spot-panel__gallery-img" id="spot-gallery-0" src="" alt="">
+        <img class="spot-panel__gallery-img" id="spot-gallery-1" src="" alt="">
+        <img class="spot-panel__gallery-img" id="spot-gallery-2" src="" alt="">
+      </div>
+      <p class="spot-panel__photo-credit" id="spot-photo-credit"></p>
+
       <h3 class="spot-panel__name" id="spot-panel-name">Spot Name</h3>
       <p  class="spot-panel__area" id="spot-panel-area"></p>
       <div class="spot-panel__season">
@@ -456,7 +460,9 @@
     </div>
   </div>
 
+  <!-- MAIN -->
   <main>
+    <!-- Screen 0 -->
     <section id="screen-0" class="screen landing is-visible" data-screen-index="0" aria-label="Welcome">
       <h1>Found a cheap flight.<br>Don't know what to do with it?</h1>
       <p class="subheading">Tell us where you're flying in and out of. We'll handle the rest — destinations, hidden gems, local food, transport, and budget.</p>
@@ -464,6 +470,7 @@
       <p class="landing__note">No sign-up · No credit card · Free</p>
     </section>
 
+    <!-- Screen 1 -->
     <section id="screen-1" class="screen form-screen" data-screen-index="1" aria-label="Trip details" hidden>
       <h2>Let's build your trip.</h2>
       <form id="trip-form">
@@ -485,7 +492,6 @@
             <input type="date" id="date-to" name="dateTo" required>
           </div>
         </div>
-
         <div id="loading-state" class="loading-state" aria-live="polite" hidden>
           <div class="loading-screen">
             <div id="loading-phase1">
@@ -498,12 +504,12 @@
             <p id="loading-message" class="loading-message"></p>
           </div>
         </div>
-
         <p id="form-error" class="form-error" role="alert" hidden></p>
         <button type="submit" class="btn-primary" id="btn-submit-trip">Show me what's possible →</button>
       </form>
     </section>
 
+    <!-- Screen 3 — Results -->
     <section id="screen-results" class="screen results-screen" data-screen-index="3" aria-label="Suggested spots" hidden>
       <h2 id="results-heading">Here's what's near</h2>
       <p id="results-empty" class="results-empty" hidden>Giya did not return any spots. Please try again.</p>
@@ -511,6 +517,7 @@
       <p class="results-note">Tap any spot to explore and add to your map</p>
     </section>
 
+    <!-- Screen 4 — Map -->
     <section id="screen-map" class="screen" data-screen-index="4" aria-label="Trip map" hidden>
       <div class="map-wrap">
         <div id="main-map"></div>
@@ -531,9 +538,10 @@
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="site-footer">
     <p>AI-generated content is for planning purposes only. Always verify before booking.</p>
-    <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · Photos: <a href="https://picsum.photos" target="_blank" rel="noopener">Picsum</a></p>
+    <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · Photos: <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a></p>
     <p class="credit">Built by wyivonn</p>
   </footer>
 
@@ -557,42 +565,37 @@
 
       function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
 
-      /* ── PICSUM PHOTO HELPERS ───────────────────
-         picsum.photos returns actual images — no
-         redirect, no ORB blocking. Works perfectly
-         as both CSS background and <img> src.
-
-         Seed-based: same seed = same photo always.
-         This gives consistent, intentional results.
+      /* ── PEXELS PHOTO FETCH (via Worker) ────────
+         All photo requests go through the Worker so
+         the Pexels API key stays secret.
+         Returns up to `count` direct image URLs.
          ────────────────────────────────────────── */
+      async function fetchPhotos(query, count) {
+        count = count || 3;
+        try {
+          const res  = await fetch(WORKER_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ photoQuery: query, count: count }),
+          });
+          if (!res.ok) return [];
+          const data = await res.json();
+          return data.photos || [];
+        } catch (err) {
+          log('fetchPhotos error', err.message);
+          return [];
+        }
+      }
 
-      /* Fixed seeds per category — chosen to match the vibe */
-      const CAT_PICSUM_SEEDS = {
-        'Urban and Culture':    'urban-culture-giya',
-        'Beach and Islands':    'beach-islands-giya',
-        'Nature and Adventure': 'nature-adventure-giya',
-        'Food and Night Life':  'food-nightlife-giya',
-        'Family Friendly':      'family-friendly-giya',
-        'Ultra Budget':         'ultra-budget-giya',
+      /* Category keyword map for Pexels queries */
+      const CAT_PHOTO_KEYWORDS = {
+        'Urban and Culture':    'city street culture',
+        'Beach and Islands':    'beach tropical island',
+        'Nature and Adventure': 'nature mountain adventure',
+        'Food and Night Life':  'street food night market',
+        'Family Friendly':      'family travel park',
+        'Ultra Budget':         'backpacker travel hostel',
       };
-
-      /* Category header photo: 600×160 */
-      function picsumCategoryUrl(categoryName) {
-        const seed = CAT_PICSUM_SEEDS[categoryName] || 'travel-giya';
-        return 'https://picsum.photos/seed/' + encodeURIComponent(seed) + '/600/160';
-      }
-
-      /* Spot hero photo: 640×200, seeded by spot name for consistency */
-      function picsumSpotUrl(spotName) {
-        /* Slug the spot name: lowercase, spaces→hyphens, alphanumeric only */
-        const slug = (spotName || 'spot')
-          .toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, '')
-          .trim()
-          .replace(/\s+/g, '-')
-          .slice(0, 40);
-        return 'https://picsum.photos/seed/' + slug + '/640/200';
-      }
 
       /* ── SCREEN NAVIGATION ──────────────────── */
       function showScreen(id) {
@@ -735,13 +738,19 @@
         panelCurrentSpot = { spot, cardEl };
         panel.style.borderTopColor = catColor || 'var(--ember)';
 
-        /* Hero photo via picsum — consistent seed per spot name */
-        const heroImg = document.getElementById('spot-panel-hero');
-        if (heroImg) {
-          heroImg.src = picsumSpotUrl(spot.spot_name);
-          heroImg.alt = (spot.spot_name || 'Spot') + ' photo';
+        /* Reset gallery to loading state */
+        const gallery = document.getElementById('spot-panel-gallery');
+        const credit  = document.getElementById('spot-photo-credit');
+        if (gallery) {
+          gallery.classList.add('is-loading');
+          ['spot-gallery-0','spot-gallery-1','spot-gallery-2'].forEach(function (id) {
+            const img = document.getElementById(id);
+            if (img) { img.src = ''; img.alt = ''; }
+          });
         }
+        if (credit) credit.innerHTML = '';
 
+        /* Populate text content immediately */
         set('spot-panel-name', spot.spot_name || 'Unnamed spot');
         set('spot-panel-area', spot.area      || '');
         set('spot-panel-why',  spot.why       || '');
@@ -763,12 +772,38 @@
         if (addBtn) { addBtn.textContent = isAdded ? '✅ Added to map' : '+ Add to my map'; addBtn.classList.toggle('is-added', isAdded); addBtn.disabled = isAdded; }
         if (remBtn) remBtn.style.display = isAdded ? 'block' : 'none';
 
+        /* Open panel first so user sees it immediately */
         panel.hidden = false;
         overlay.setAttribute('aria-hidden', 'false');
         panel.getBoundingClientRect();
         panel.classList.add('is-open');
         overlay.classList.add('is-open');
         document.body.style.overflow = 'hidden';
+
+        /* Fetch 3 relevant photos from Pexels (async — does not block panel open) */
+        const photoQuery = (spot.spot_name || '') + ' ' + (spot.area || '') + ' ' + currentArrival;
+        fetchPhotos(photoQuery.trim(), 3).then(function (photos) {
+          if (!gallery) return;
+          gallery.classList.remove('is-loading');
+
+          const ids = ['spot-gallery-0','spot-gallery-1','spot-gallery-2'];
+          photos.forEach(function (photo, i) {
+            if (i > 2) return;
+            const img = document.getElementById(ids[i]);
+            if (!img) return;
+            img.src = photo.url_small || photo.url;
+            img.alt = photo.alt || spot.spot_name;
+          });
+
+          /* Photo credit for first photographer */
+          if (photos.length > 0 && credit) {
+            credit.innerHTML =
+              'Photos by <a href="' + esc(photos[0].pexels_page) + '" target="_blank" rel="noopener">' +
+              esc(photos[0].photographer) + '</a> on Pexels';
+          }
+        });
+
+        log('openPanel', spot.spot_name);
       }
 
       function closePanel() {
@@ -842,6 +877,95 @@
         log('removed', name);
       }
 
+      /* ── RESULTS RENDERING ──────────────────── */
+      function countAll(cats) {
+        if (!Array.isArray(cats)) return 0;
+        return cats.reduce(function (t,c) { return t + (Array.isArray(c.spots) ? c.spots.length : 0); }, 0);
+      }
+
+      function renderSpots(cats) {
+        const container = document.getElementById('results-categories');
+        const emptyEl   = document.getElementById('results-empty');
+        if (!container) return 0;
+        container.innerHTML = '';
+        if (emptyEl) emptyEl.hidden = true;
+
+        (cats || []).forEach(function (cat) {
+          const sec   = document.createElement('section');
+          sec.className = 'results-category';
+          const color = getCatColor(cat);
+
+          /* Header with shimmer + async Pexels photo */
+          const hdr = document.createElement('div');
+          hdr.className = 'results-category__header is-loading';
+
+          const bgImg = document.createElement('img');
+          bgImg.className = 'results-category__header-img';
+          bgImg.alt = '';
+          bgImg.setAttribute('aria-hidden', 'true');
+          bgImg.loading = 'lazy';
+          hdr.appendChild(bgImg);
+
+          const bar = document.createElement('span');
+          bar.className = 'results-category__color-bar';
+          bar.style.background = color;
+          hdr.appendChild(bar);
+
+          const emojiEl = document.createElement('span');
+          emojiEl.className = 'results-category__emoji';
+          emojiEl.setAttribute('aria-hidden', 'true');
+          emojiEl.textContent = cat.emoji || '';
+          hdr.appendChild(emojiEl);
+
+          const nameEl = document.createElement('span');
+          nameEl.className = 'results-category__name';
+          nameEl.textContent = cat.name || 'Category';
+          hdr.appendChild(nameEl);
+
+          sec.appendChild(hdr);
+
+          /* Fetch 1 photo for category header (async — does not block render) */
+          const catKw   = CAT_PHOTO_KEYWORDS[cat.name] || 'travel';
+          const catQuery = currentArrival + ' ' + catKw;
+          fetchPhotos(catQuery, 1).then(function (photos) {
+            hdr.classList.remove('is-loading');
+            if (photos.length > 0) {
+              bgImg.src = photos[0].url_small || photos[0].url;
+            }
+          });
+
+          const grid = document.createElement('div');
+          grid.className = 'results-spots';
+
+          (cat.spots || []).forEach(function (spot) {
+            const status = spot.season_status || 'caution';
+            const card   = document.createElement('article');
+            card.className = 'spot-card';
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('title', 'Tap to explore');
+            card.innerHTML =
+              '<div class="spot-card__header">' +
+                '<span class="spot-card__name">' + esc(spot.spot_name || 'Unnamed') + '</span>' +
+                '<div class="spot-card__season">' +
+                  '<span class="season-badge ' + seasonCls(status) + '" role="img" aria-label="Season: ' + esc(status) + '"></span>' +
+                  '<span class="season-label">' + esc(seasonLbl(status)) + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<p class="spot-card__area">' + esc(spot.area || '') + '</p>' +
+              '<p class="spot-card__why">'  + esc(spot.why  || '') + '</p>';
+            card.addEventListener('click', function () { openPanel(spot, color, card); });
+            card.addEventListener('keydown', function (e) { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); openPanel(spot,color,card); } });
+            grid.appendChild(card);
+          });
+
+          sec.appendChild(grid);
+          container.appendChild(sec);
+        });
+
+        return countAll(cats);
+      }
+
       /* ── MAIN MAP ────────────────────────────── */
       const CITIES = {
         'osaka':[34.6937,135.5023],'tokyo':[35.6762,139.6503],'kyoto':[35.0116,135.7681],
@@ -904,7 +1028,7 @@
               '<span class="giya-pin-popup__season-dot" style="background:' + seasonDotColor(status) + '"></span>' +
               '<span class="giya-pin-popup__season-label">' + esc(seasonLbl(status)) + '</span>' +
             '</div>' +
-            '<button class="giya-pin-popup__btn" data-spot="' + esc(spot.spot_name) + '">View full details →</button>' +
+            '<button class="giya-pin-popup__btn">View full details →</button>' +
           '</div>'
         );
       }
@@ -1030,88 +1154,6 @@
         });
       }
 
-      /* ── RESULTS RENDERING ──────────────────── */
-      function countAll(cats) {
-        if (!Array.isArray(cats)) return 0;
-        return cats.reduce(function (t,c) { return t + (Array.isArray(c.spots) ? c.spots.length : 0); }, 0);
-      }
-
-      function renderSpots(cats) {
-        const container = document.getElementById('results-categories');
-        const emptyEl   = document.getElementById('results-empty');
-        if (!container) return 0;
-        container.innerHTML = '';
-        if (emptyEl) emptyEl.hidden = true;
-
-        (cats || []).forEach(function (cat) {
-          const sec   = document.createElement('section');
-          sec.className = 'results-category';
-          const color = getCatColor(cat);
-
-          /* Category header with picsum photo as <img> tag */
-          const hdr = document.createElement('div');
-          hdr.className = 'results-category__header';
-
-          /* Background image via <img> element (avoids CSS bg ORB issue) */
-          const bgImg = document.createElement('img');
-          bgImg.className = 'results-category__header-img';
-          bgImg.src = picsumCategoryUrl(cat.name);
-          bgImg.alt = '';
-          bgImg.setAttribute('aria-hidden', 'true');
-          bgImg.loading = 'lazy';
-          hdr.appendChild(bgImg);
-
-          /* Category colour bar */
-          const bar = document.createElement('span');
-          bar.className = 'results-category__color-bar';
-          bar.style.background = color;
-          hdr.appendChild(bar);
-
-          /* Emoji + name */
-          const emojiEl = document.createElement('span');
-          emojiEl.className = 'results-category__emoji';
-          emojiEl.setAttribute('aria-hidden', 'true');
-          emojiEl.textContent = cat.emoji || '';
-          hdr.appendChild(emojiEl);
-
-          const nameEl = document.createElement('span');
-          nameEl.className = 'results-category__name';
-          nameEl.textContent = cat.name || 'Category';
-          hdr.appendChild(nameEl);
-
-          sec.appendChild(hdr);
-
-          const grid = document.createElement('div');
-          grid.className = 'results-spots';
-
-          (cat.spots || []).forEach(function (spot) {
-            const status = spot.season_status || 'caution';
-            const card   = document.createElement('article');
-            card.className = 'spot-card';
-            card.setAttribute('role', 'button');
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('title', 'Tap to explore');
-            card.innerHTML =
-              '<div class="spot-card__header">' +
-                '<span class="spot-card__name">' + esc(spot.spot_name || 'Unnamed') + '</span>' +
-                '<div class="spot-card__season">' +
-                  '<span class="season-badge ' + seasonCls(status) + '" role="img" aria-label="Season: ' + esc(status) + '"></span>' +
-                  '<span class="season-label">' + esc(seasonLbl(status)) + '</span>' +
-                '</div>' +
-              '</div>' +
-              '<p class="spot-card__area">' + esc(spot.area || '') + '</p>' +
-              '<p class="spot-card__why">'  + esc(spot.why  || '') + '</p>';
-            card.addEventListener('click', function () { openPanel(spot, color, card); });
-            card.addEventListener('keydown', function (e) { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); openPanel(spot,color,card); } });
-            grid.appendChild(card);
-          });
-
-          sec.appendChild(grid);
-          container.appendChild(sec);
-        });
-        return countAll(cats);
-      }
-
       /* ── FORM ERRORS ────────────────────────── */
       function showErr(m) { const e = document.getElementById('form-error'); if (!e) return; e.textContent = m; e.classList.add('is-visible'); e.removeAttribute('hidden'); }
       function clearErr()  { const e = document.getElementById('form-error'); if (!e) return; e.textContent = ''; e.classList.remove('is-visible'); e.setAttribute('hidden',''); }
@@ -1129,53 +1171,53 @@
 
       let loadMap=null, msgTO=null, msgOn=false;
 
-      function showMsg(idx, skip) {
+      function showMsg(idx,skip) {
         if (!msgOn) return;
-        const el = document.getElementById('loading-message');
+        const el=document.getElementById('loading-message');
         if (!el) return;
-        const m = MSGS[idx % MSGS.length];
+        const m=MSGS[idx%MSGS.length];
         function apply() {
           if (!msgOn) return;
-          el.textContent = m.e + ' ' + m.t; el.classList.add('is-visible');
-          const ni = (idx+1) % MSGS.length;
-          msgTO = setTimeout(function () { el.classList.remove('is-visible'); setTimeout(function () { showMsg(ni,false); }, 400); }, msgDur(ni));
+          el.textContent=m.e+' '+m.t; el.classList.add('is-visible');
+          const ni=(idx+1)%MSGS.length;
+          msgTO=setTimeout(function(){el.classList.remove('is-visible');setTimeout(function(){showMsg(ni,false);},400);},msgDur(ni));
         }
-        if (skip) apply(); else { el.classList.remove('is-visible'); setTimeout(apply, 400); }
+        if(skip)apply();else{el.classList.remove('is-visible');setTimeout(apply,400);}
       }
 
-      function startMsgs() { stopMsgs(); msgOn=true; showMsg(0,true); }
-      function stopMsgs()  { msgOn=false; if(msgTO){clearTimeout(msgTO);msgTO=null;} const el=document.getElementById('loading-message'); if(el)el.classList.remove('is-visible'); }
+      function startMsgs(){stopMsgs();msgOn=true;showMsg(0,true);}
+      function stopMsgs(){msgOn=false;if(msgTO){clearTimeout(msgTO);msgTO=null;}const el=document.getElementById('loading-message');if(el)el.classList.remove('is-visible');}
 
-      function initLoadMap(coords, city) {
+      function initLoadMap(coords,city){
         destroyLoadMap();
-        const el = document.getElementById('loading-map');
-        if (!el || typeof L === 'undefined') return;
-        loadMap = L.map(el, { center:coords, zoom:5, dragging:false, zoomControl:false, scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false, touchZoom:false });
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:19 }).addTo(loadMap);
-        const icon = L.divIcon({ html:'<div class="loading-map-marker">✈️</div>', className:'loading-map-pin', iconSize:[48,48], iconAnchor:[24,24] });
-        L.marker(coords, { icon }).addTo(loadMap).bindPopup(city || 'Your destination').openPopup();
-        setTimeout(function () { if(loadMap) loadMap.invalidateSize(); }, 150);
+        const el=document.getElementById('loading-map');
+        if(!el||typeof L==='undefined')return;
+        loadMap=L.map(el,{center:coords,zoom:5,dragging:false,zoomControl:false,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false,touchZoom:false});
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(loadMap);
+        const icon=L.divIcon({html:'<div class="loading-map-marker">✈️</div>',className:'loading-map-pin',iconSize:[48,48],iconAnchor:[24,24]});
+        L.marker(coords,{icon}).addTo(loadMap).bindPopup(city||'Your destination').openPopup();
+        setTimeout(function(){if(loadMap)loadMap.invalidateSize();},150);
       }
-      function destroyLoadMap() { if(loadMap) { loadMap.remove(); loadMap=null; } }
+      function destroyLoadMap(){if(loadMap){loadMap.remove();loadMap=null;}}
 
-      function showLoading(city) {
-        const el=document.getElementById('loading-state'), mapWrap=document.getElementById('loading-map-wrap'), globe=document.getElementById('loading-globe'), cityTxt=document.getElementById('loading-city-text');
-        if (!el) return;
-        const coords = CITIES[city.trim().toLowerCase()];
-        if (coords) { if(mapWrap)mapWrap.hidden=false; if(globe)globe.hidden=true; if(cityTxt)cityTxt.textContent="You're heading to "+city.trim(); setTimeout(function(){initLoadMap(coords,city.trim());},100); }
-        else         { if(mapWrap)mapWrap.hidden=true;  if(globe)globe.hidden=false; if(cityTxt)cityTxt.textContent='Mapping your route to '+city.trim()+'...'; destroyLoadMap(); }
-        el.classList.add('is-visible'); el.removeAttribute('hidden'); startMsgs();
+      function showLoading(city){
+        const el=document.getElementById('loading-state'),mapWrap=document.getElementById('loading-map-wrap'),globe=document.getElementById('loading-globe'),cityTxt=document.getElementById('loading-city-text');
+        if(!el)return;
+        const coords=CITIES[city.trim().toLowerCase()];
+        if(coords){if(mapWrap)mapWrap.hidden=false;if(globe)globe.hidden=true;if(cityTxt)cityTxt.textContent="You're heading to "+city.trim();setTimeout(function(){initLoadMap(coords,city.trim());},100);}
+        else{if(mapWrap)mapWrap.hidden=true;if(globe)globe.hidden=false;if(cityTxt)cityTxt.textContent='Mapping your route to '+city.trim()+'...';destroyLoadMap();}
+        el.classList.add('is-visible');el.removeAttribute('hidden');startMsgs();
       }
-      function hideLoading() { stopMsgs(); destroyLoadMap(); const el=document.getElementById('loading-state'); if(el){el.classList.remove('is-visible');el.setAttribute('hidden','');} }
+      function hideLoading(){stopMsgs();destroyLoadMap();const el=document.getElementById('loading-state');if(el){el.classList.remove('is-visible');el.setAttribute('hidden','');}}
 
       /* ── FORM SUBMIT ────────────────────────── */
       document.getElementById('btn-start').addEventListener('click', function () { showScreen(1); });
 
       document.getElementById('trip-form').addEventListener('submit', async function (e) {
         e.preventDefault();
-        const arrEl=document.getElementById('arrival-city'), depEl=document.getElementById('departure-city'), frEl=document.getElementById('date-from'), toEl=document.getElementById('date-to');
-        const arrival=arrEl.value.trim(), departure=depEl.value.trim(), dateFrom=frEl.value, dateTo=toEl.value;
-        if (!arrival||!dateFrom||!dateTo) { showErr('Please fill in all fields.'); return; }
+        const arrEl=document.getElementById('arrival-city'),depEl=document.getElementById('departure-city'),frEl=document.getElementById('date-from'),toEl=document.getElementById('date-to');
+        const arrival=arrEl.value.trim(),departure=depEl.value.trim(),dateFrom=frEl.value,dateTo=toEl.value;
+        if(!arrival||!dateFrom||!dateTo){showErr('Please fill in all fields.');return;}
 
         currentArrival=arrival; currentDeparture=departure||arrival;
         clearErr(); resetWarnings();
@@ -1183,39 +1225,39 @@
         if(mainMap){mainMap.remove();mainMap=null;}
         updateCounters(); showLoading(arrival);
         const submitBtn=document.getElementById('btn-submit-trip');
-        if(submitBtn) submitBtn.disabled=true;
+        if(submitBtn)submitBtn.disabled=true;
         updateTopBarFlight(arrival,currentDeparture,dateFrom,dateTo);
 
         try {
-          const res  = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({arrival,departure:currentDeparture,dateFrom,dateTo,duration:calcDur(dateFrom,dateTo)}) });
-          const text = await res.text();
-          log('status', res.status);
+          const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({arrival,departure:currentDeparture,dateFrom,dateTo,duration:calcDur(dateFrom,dateTo)})});
+          const text=await res.text();
+          log('status',res.status);
           let data;
-          try { data=JSON.parse(text); } catch { throw new Error('Server returned non-JSON.'); }
-          if (!res.ok) throw new Error(data.error||'Worker error HTTP '+res.status);
+          try{data=JSON.parse(text);}catch{throw new Error('Server returned non-JSON.');}
+          if(!res.ok)throw new Error(data.error||'Worker error HTTP '+res.status);
           giyaData=data;
           const total=countAll(data.categories);
-          if(total===0) throw new Error('No spots returned. Try a more specific city.');
+          if(total===0)throw new Error('No spots returned. Try a more specific city.');
           applyWarnings(data.warnings);
           const hd=document.getElementById('results-heading');
-          if(hd) hd.textContent="Here's what's near "+arrival;
+          if(hd)hd.textContent="Here's what's near "+arrival;
           document.title="Here's what's near "+arrival+' — Giya';
           renderSpots(data.categories);
           showResultsScreen();
-          log('success', total+' spots');
+          log('success',total+' spots');
         } catch(err) {
-          console.error('[Giya]', err);
+          console.error('[Giya]',err);
           let msg='Something went wrong. Please try again.';
-          if(err.message&&err.message.includes('Failed to fetch')) msg='Could not reach Giya. Try again in a moment.';
-          else if(err.message) msg=err.message;
+          if(err.message&&err.message.includes('Failed to fetch'))msg='Could not reach Giya. Try again in a moment.';
+          else if(err.message)msg=err.message;
           showErr(msg);
         } finally {
           hideLoading();
-          if(submitBtn) submitBtn.disabled=false;
+          if(submitBtn)submitBtn.disabled=false;
         }
       });
 
-      log('ready', 'all listeners attached');
+      log('ready','all listeners attached');
     });
   </script>
 </body>
