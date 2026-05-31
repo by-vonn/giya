@@ -182,19 +182,6 @@
     .form-error { display: none; color: #b91c1c; margin-top: 0.75rem; font-size: 0.9rem; }
     .form-error.is-visible { display: block; }
 
-    <!-- SCREEN 2 — Photo Discovery Grid -->
-    <section id="screen-2" class="screen discovery-screen" data-screen-index="2" aria-label="Explore experiences" hidden>
-      <div class="discovery-header">
-        <p class="discovery-welcome" id="discovery-welcome">
-          Welcome. Tap anything that catches your eye.
-        </p>
-        <button type="button" class="discovery-browse-link" id="btn-browse-all">
-          Browse by type →
-        </button>
-      </div>
-      <div class="discovery-grid" id="discovery-grid"></div>
-    </section>
-
     /* ============================================
        SCREEN 2 — Photo Discovery Grid
        ============================================ */
@@ -653,6 +640,19 @@
         <p id="form-error" class="form-error" role="alert" hidden></p>
         <button type="submit" class="btn-primary" id="btn-submit-trip">Show me what's possible →</button>
       </form>
+    </section>
+
+    <!-- Screen 2 — Photo Discovery Grid -->
+    <section id="screen-2" class="screen discovery-screen" data-screen-index="2" aria-label="Explore experiences" hidden>
+      <div class="discovery-header">
+        <p class="discovery-welcome" id="discovery-welcome">
+          Welcome. Tap anything that catches your eye.
+        </p>
+        <button type="button" class="discovery-browse-link" id="btn-browse-all">
+          Browse by type →
+        </button>
+      </div>
+      <div class="discovery-grid" id="discovery-grid"></div>
     </section>
 
     <!-- Screen 3 — Results -->
@@ -1519,7 +1519,7 @@
           try{data=JSON.parse(text);}catch{throw new Error('Server returned non-JSON.');}
           if(!res.ok)throw new Error(data.error||'Worker error HTTP '+res.status);
           giyaData=data;
-          const total=countAll(data.categories);
+          const total=countAll(data.experiences);
           if(total===0)throw new Error('No spots returned. Try a more specific city.');
           applyWarnings(data.warnings);
           const hd=document.getElementById('results-heading');
