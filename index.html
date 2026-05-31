@@ -182,6 +182,152 @@
     .form-error { display: none; color: #b91c1c; margin-top: 0.75rem; font-size: 0.9rem; }
     .form-error.is-visible { display: block; }
 
+    <!-- SCREEN 2 — Photo Discovery Grid -->
+    <section id="screen-2" class="screen discovery-screen" data-screen-index="2" aria-label="Explore experiences" hidden>
+      <div class="discovery-header">
+        <p class="discovery-welcome" id="discovery-welcome">
+          Welcome. Tap anything that catches your eye.
+        </p>
+        <button type="button" class="discovery-browse-link" id="btn-browse-all">
+          Browse by type →
+        </button>
+      </div>
+      <div class="discovery-grid" id="discovery-grid"></div>
+    </section>
+
+    /* ============================================
+       SCREEN 2 — Photo Discovery Grid
+       ============================================ */
+       .discovery-screen {
+      padding: 0;
+    }
+
+    .discovery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem 0.75rem;
+      gap: 1rem;
+    }
+
+    .discovery-welcome {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .discovery-browse-link {
+      font-size: 0.75rem;
+      color: var(--ember);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 0.2rem 0;
+    }
+    .discovery-browse-link:hover { text-decoration: underline; }
+
+    /* Photo card grid — 2 cols mobile, 3 cols wide */
+    .discovery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      padding: 0 1.25rem 2rem;
+    }
+
+    @media (min-width: 520px) {
+      .discovery-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* Each photo card */
+    .discovery-card {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 3 / 4;
+      background: #2a2520;  /* dark placeholder */
+      transition: transform 0.15s;
+    }
+
+    .discovery-card:hover { transform: scale(1.02); }
+    .discovery-card:active { transform: scale(0.98); }
+
+    /* The photo fills the card */
+    .discovery-card__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .discovery-card__img.is-loaded { opacity: 1; }
+
+    /* Shimmer while photo loads */
+    .discovery-card.is-loading {
+      background: linear-gradient(
+        135deg,
+        #2a2520 25%, #3a3028 50%, #2a2520 75%
+      );
+      background-size: 200% 200%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    /* Dark gradient at bottom so name is readable */
+    .discovery-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 55%;
+      background: linear-gradient(
+        to top,
+        rgba(26,22,18,0.88) 0%,
+        rgba(26,22,18,0) 100%
+      );
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Type dot — top right corner */
+    .discovery-card__type-dot {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.8);
+      z-index: 2;
+    }
+
+    /* Spot name at bottom */
+    .discovery-card__name {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.6rem 0.65rem;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #fff;
+      z-index: 2;
+      line-height: 1.3;
+    }
+
+    /* Type emoji — small, above name */
+    .discovery-card__type-emoji {
+      font-size: 0.7rem;
+      display: block;
+      margin-bottom: 0.15rem;
+      opacity: 0.85;
+    }
+
     /* ── SCREEN 3 — Results ── */
     .results-screen h2 { font-size: 1.65rem; margin-bottom: 1.25rem; }
     .results-categories { display: flex; flex-direction: column; gap: 2rem; }
@@ -394,7 +540,7 @@
     <div class="topbar__flight" id="topbar-flight" aria-live="polite">
       <span class="topbar__flight-placeholder" id="flight-placeholder">Enter your flight details below</span>
       <span class="topbar__flight-route" id="flight-route" hidden></span>
-      <span class="topbar__flight-sep"   id="flight-sep"   hidden>·</span>
+      <span class="topbar__flight-sep"   id="flight-sep"   hidden>•</span>
       <span class="topbar__flight-dates" id="flight-dates" hidden></span>
     </div>
     <div class="topbar__right">
@@ -467,7 +613,7 @@
       <h1>Found a cheap flight.<br>Don't know what to do with it?</h1>
       <p class="subheading">Tell us where you're flying in and out of. We'll handle the rest — destinations, hidden gems, local food, transport, and budget.</p>
       <button type="button" class="btn-primary" id="btn-start">Start Planning →</button>
-      <p class="landing__note">No sign-up · No credit card · Free</p>
+      <p class="landing__note">No sign-up • No credit card • Free</p>
     </section>
 
     <!-- Screen 1 -->
@@ -541,7 +687,7 @@
   <!-- FOOTER -->
   <footer class="site-footer">
     <p>AI-generated content is for planning purposes only. Always verify before booking.</p>
-    <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · Photos: <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a></p>
+    <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors • Photos: <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a></p>
     <p class="credit">Built by wyivonn</p>
   </footer>
 
@@ -683,6 +829,7 @@
 
       document.getElementById('btn-view-map').addEventListener('click', function () { showScreen(4); });
       document.getElementById('btn-spots-badge').addEventListener('click', function () { showResultsScreen(); });
+      document.getElementById('btn-browse-all').addEventListener('click', function () { showResultsScreen(); });
 
       /* ── DATE RULES ─────────────────────────── */
       const frEl = document.getElementById('date-from');
@@ -702,27 +849,45 @@
       }
 
       /* ── CATEGORY DATA ──────────────────────── */
-      const CAT_COLORS = {
-        'Urban and Culture':    '#E8892B',
-        'Beach and Islands':    '#2B9BE8',
-        'Nature and Adventure': '#2BE87A',
-        'Food and Night Life':  '#E82B6B',
-        'Family Friendly':      '#9B2BE8',
-        'Ultra Budget':         '#E8E82B',
-      };
-      const CAT_EMOJIS = {
-        'Urban and Culture':    '🏙️',
-        'Beach and Islands':    '🏖️',
-        'Nature and Adventure': '🏔️',
-        'Food and Night Life':  '🍜',
-        'Family Friendly':      '👨‍👩‍👧',
-        'Ultra Budget':         '💸',
+      /* Experience type → colour + emoji */
+      const TYPE_COLORS = {
+        'sight':     '#E8892B',
+        'food':      '#E82B6B',
+        'activity':  '#2BE87A',
+        'festival':  '#9B2BE8',
+        'sport':     '#2B9BE8',
+        'nature':    '#2BE87A',
+        'nightlife': '#E82B6B',
+        'market':    '#E8892B',
+        'day-trip':  '#2B9BE8',
+        'seasonal':  '#9B2BE8',
       };
 
-      function getCatColor(cat) {
-        if (cat.color && /^#[0-9A-Fa-f]{6}$/.test(cat.color)) return cat.color;
-        return CAT_COLORS[cat.name] || '#E8892B';
+      const TYPE_EMOJIS = {
+        'sight':     '🏛️',
+        'food':      '🍜',
+        'activity':  '🎯',
+        'festival':  '🎉',
+        'sport':     '🏟️',
+        'nature':    '🌿',
+        'nightlife': '🌙',
+        'market':    '🛍️',
+        'day-trip':  '🚌',
+        'seasonal':  '🌸',
+      };
+
+      function getTypeColor(type) {
+        return TYPE_COLORS[type] || '#E8892B';
       }
+
+      function getTypeEmoji(type) {
+        return TYPE_EMOJIS[type] || '📍';
+      }
+
+      /* Keep for map panel backwards compat */
+      const CAT_COLORS = TYPE_COLORS;
+      const CAT_EMOJIS = TYPE_EMOJIS;
+      function getCatColor(cat) { return getTypeColor(cat.type || cat.name); }
 
       function seasonCls(s) { return s==='good'?'season-badge--good':s==='avoid'?'season-badge--avoid':'season-badge--caution'; }
       function seasonLbl(s) { return s==='good'?'Good time':s==='avoid'?'Avoid this period':'Check conditions'; }
@@ -837,12 +1002,15 @@
         if (giyaAddedSpots.some(function (e) { return e.spot.spot_name === spot.spot_name; })) return;
 
         let catName = 'Unknown', catColor = '#E8892B', catEmoji = '📍';
-        if (giyaData && giyaData.categories) {
-          giyaData.categories.forEach(function (c) {
-            if (c.spots && c.spots.some(function (s) { return s.spot_name === spot.spot_name; })) {
-              catName = c.name; catColor = getCatColor(c); catEmoji = CAT_EMOJIS[c.name] || '📍';
-            }
+        if (giyaData && giyaData.experiences) {
+          const found = giyaData.experiences.find(function (e) {
+            return e.spot_name === spot.spot_name;
           });
+          if (found) {
+            catName  = found.type  || 'sight';
+            catColor = getTypeColor(found.type);
+            catEmoji = getTypeEmoji(found.type);
+          }
         }
 
         giyaAddedSpots.push({ spot, categoryName: catName, categoryColor: catColor, categoryEmoji: catEmoji, cardEl });
@@ -878,24 +1046,136 @@
       }
 
       /* ── RESULTS RENDERING ──────────────────── */
-      function countAll(cats) {
-        if (!Array.isArray(cats)) return 0;
-        return cats.reduce(function (t,c) { return t + (Array.isArray(c.spots) ? c.spots.length : 0); }, 0);
+      function countAll(experiences) {
+        if (!Array.isArray(experiences)) return 0;
+        return experiences.length;
       }
 
-      function renderSpots(cats) {
+/* ============================================
+         SCREEN 2 — Discovery grid renderer
+         ============================================ */
+         function renderDiscovery(experiences) {
+        const grid      = document.getElementById('discovery-grid');
+        const welcome   = document.getElementById('discovery-welcome');
+        if (!grid) return;
+
+        /* Update welcome message with city name */
+        if (welcome && currentArrival) {
+          welcome.textContent =
+            'Welcome to ' + currentArrival + '. Tap anything that catches your eye.';
+        }
+
+        grid.innerHTML = '';
+
+        (experiences || []).forEach(function (exp) {
+          const color = getTypeColor(exp.type);
+          const emoji = getTypeEmoji(exp.type);
+
+          const card = document.createElement('article');
+          card.className = 'discovery-card is-loading';
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('aria-label', exp.spot_name);
+
+          /* Type colour dot */
+          const dot = document.createElement('span');
+          dot.className = 'discovery-card__type-dot';
+          dot.style.background = color;
+          card.appendChild(dot);
+
+          /* Photo — lazy loaded via IntersectionObserver */
+          const img = document.createElement('img');
+          img.className = 'discovery-card__img';
+          img.alt = exp.spot_name || '';
+          img.setAttribute('data-query',
+            encodeURIComponent((exp.spot_name || '') + ' ' + (exp.area || '') + ' ' + currentArrival)
+          );
+          card.appendChild(img);
+
+          /* Name overlay */
+          const nameEl = document.createElement('div');
+          nameEl.className = 'discovery-card__name';
+          nameEl.innerHTML =
+            '<span class="discovery-card__type-emoji">' + emoji + '</span>' +
+            esc(exp.spot_name || 'Unnamed');
+          card.appendChild(nameEl);
+
+          /* Tap → open spot panel */
+          function openFromCard() {
+            /* Map experience to the spot panel's expected format */
+            const spot = {
+              spot_name:    exp.spot_name,
+              area:         exp.area,
+              why:          exp.why,
+              hidden_angle: exp.hidden_angle,
+              food_nearby:  exp.food_nearby,
+              season_status:exp.season_status,
+              season_note:  exp.season_note,
+              coordinates:  exp.coordinates,
+            };
+            openPanel(spot, color, null);
+          }
+
+          card.addEventListener('click', openFromCard);
+          card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFromCard(); }
+          });
+
+          grid.appendChild(card);
+        });
+
+        /* IntersectionObserver for lazy photo loading */
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            const card  = entry.target;
+            const img   = card.querySelector('.discovery-card__img');
+            if (!img || img.src) { observer.unobserve(card); return; }
+
+            const query = decodeURIComponent(img.getAttribute('data-query') || 'travel');
+            fetchPhotos(query, 1).then(function (photos) {
+              card.classList.remove('is-loading');
+              if (photos.length > 0) {
+                img.src = photos[0].url_small || photos[0].url;
+                img.onload = function () { img.classList.add('is-loaded'); };
+              }
+            });
+            observer.unobserve(card);
+          });
+        }, { rootMargin: '200px' }); /* start loading 200px before visible */
+
+        grid.querySelectorAll('.discovery-card').forEach(function (card) {
+          observer.observe(card);
+        });
+
+        log('renderDiscovery', (experiences || []).length + ' cards');
+      }
+
+      function renderSpots(experiences) {
         const container = document.getElementById('results-categories');
         const emptyEl   = document.getElementById('results-empty');
         if (!container) return 0;
         container.innerHTML = '';
         if (emptyEl) emptyEl.hidden = true;
 
-        (cats || []).forEach(function (cat) {
-          const sec   = document.createElement('section');
-          sec.className = 'results-category';
-          const color = getCatColor(cat);
+        /* Group experiences by type */
+        const groups = {};
+        (experiences || []).forEach(function (exp) {
+          const type = exp.type || 'sight';
+          if (!groups[type]) groups[type] = [];
+          groups[type].push(exp);
+        });
 
-          /* Header with shimmer + async Pexels photo */
+        /* Render each type group as a section */
+        Object.keys(groups).forEach(function (type) {
+          const color = getTypeColor(type);
+          const emoji = getTypeEmoji(type);
+          const spots = groups[type];
+
+          const sec = document.createElement('section');
+          sec.className = 'results-category';
+
+          /* Header with Pexels photo */
           const hdr = document.createElement('div');
           hdr.className = 'results-category__header is-loading';
 
@@ -914,31 +1194,29 @@
           const emojiEl = document.createElement('span');
           emojiEl.className = 'results-category__emoji';
           emojiEl.setAttribute('aria-hidden', 'true');
-          emojiEl.textContent = cat.emoji || '';
+          emojiEl.textContent = emoji;
           hdr.appendChild(emojiEl);
 
           const nameEl = document.createElement('span');
           nameEl.className = 'results-category__name';
-          nameEl.textContent = cat.name || 'Category';
+          /* Capitalise type for display */
+          nameEl.textContent = type.charAt(0).toUpperCase() + type.slice(1).replace('-', ' ');
           hdr.appendChild(nameEl);
 
           sec.appendChild(hdr);
 
-          /* Fetch 1 photo for category header (async — does not block render) */
-          const catKw   = CAT_PHOTO_KEYWORDS[cat.name] || 'travel';
-          const catQuery = currentArrival + ' ' + catKw;
-          fetchPhotos(catQuery, 1).then(function (photos) {
+          /* Fetch header photo */
+          fetchPhotos(currentArrival + ' ' + type + ' travel', 1).then(function (photos) {
             hdr.classList.remove('is-loading');
-            if (photos.length > 0) {
-              bgImg.src = photos[0].url_small || photos[0].url;
-            }
+            if (photos.length > 0) bgImg.src = photos[0].url_small || photos[0].url;
           });
 
+          /* Spot cards */
           const grid = document.createElement('div');
           grid.className = 'results-spots';
 
-          (cat.spots || []).forEach(function (spot) {
-            const status = spot.season_status || 'caution';
+          spots.forEach(function (exp) {
+            const status = exp.season_status || 'caution';
             const card   = document.createElement('article');
             card.className = 'spot-card';
             card.setAttribute('role', 'button');
@@ -946,16 +1224,21 @@
             card.setAttribute('title', 'Tap to explore');
             card.innerHTML =
               '<div class="spot-card__header">' +
-                '<span class="spot-card__name">' + esc(spot.spot_name || 'Unnamed') + '</span>' +
+                '<span class="spot-card__name">' + esc(exp.spot_name || 'Unnamed') + '</span>' +
                 '<div class="spot-card__season">' +
                   '<span class="season-badge ' + seasonCls(status) + '" role="img" aria-label="Season: ' + esc(status) + '"></span>' +
                   '<span class="season-label">' + esc(seasonLbl(status)) + '</span>' +
                 '</div>' +
               '</div>' +
-              '<p class="spot-card__area">' + esc(spot.area || '') + '</p>' +
-              '<p class="spot-card__why">'  + esc(spot.why  || '') + '</p>';
-            card.addEventListener('click', function () { openPanel(spot, color, card); });
-            card.addEventListener('keydown', function (e) { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); openPanel(spot,color,card); } });
+              '<p class="spot-card__area">' + esc(exp.area || '') + '</p>' +
+              '<p class="spot-card__why">'  + esc(exp.why  || '') + '</p>';
+
+            card.addEventListener('click', function () {
+              openPanel(exp, color, card);
+            });
+            card.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(exp, color, card); }
+            });
             grid.appendChild(card);
           });
 
@@ -963,7 +1246,7 @@
           container.appendChild(sec);
         });
 
-        return countAll(cats);
+        return (experiences || []).length;
       }
 
       /* ── MAIN MAP ────────────────────────────── */
@@ -1242,8 +1525,17 @@
           const hd=document.getElementById('results-heading');
           if(hd)hd.textContent="Here's what's near "+arrival;
           document.title="Here's what's near "+arrival+' — Giya';
-          renderSpots(data.categories);
-          showResultsScreen();
+          /* Render both screens from experiences array */
+          const experiences = data.experiences || [];
+
+          /* Screen 2 — discovery photo grid */
+          renderDiscovery(experiences);
+
+          /* Screen 3 — grouped by type (fallback browse view) */
+          renderSpots(experiences);
+
+          /* Show discovery screen first */
+          showScreen(2);
           log('success',total+' spots');
         } catch(err) {
           console.error('[Giya]',err);
