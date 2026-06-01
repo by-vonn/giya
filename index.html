@@ -315,6 +315,86 @@
       opacity: 0.85;
     }
 
+    /* ── DISCOVERY SEARCH + CHIPS ── */
+    .discovery-search-wrap {
+      padding: 0 1.25rem 0.5rem;
+    }
+
+    .discovery-search {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+    }
+    .discovery-search:focus {
+      border-color: var(--ember);
+      box-shadow: 0 0 0 2px rgba(200,98,42,0.15);
+    }
+
+    /* Chips scrollable row */
+    .discovery-chips {
+      display: flex;
+      gap: 6px;
+      padding: 0 1.25rem 0.75rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .discovery-chips::-webkit-scrollbar { display: none; }
+
+    .discovery-chip {
+      flex-shrink: 0;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .discovery-chip.is-active {
+      background: var(--ember);
+      color: #fff;
+      border-color: var(--ember);
+    }
+
+    .discovery-chip:hover:not(.is-active) {
+      border-color: var(--ember);
+      color: var(--ember);
+    }
+
+    .discovery-no-results {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 0.9rem;
+      padding: 2rem 1.25rem;
+      font-style: italic;
+    }
+
+    /* Desktop: wider grid, chips look natural */
+    @media (min-width: 900px) {
+      .discovery-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .discovery-screen {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+    }
+
+    /* Remove the type dot — emoji communicates type already */
+    .discovery-card__type-dot { display: none; }
+
     /* ── SCREEN 3 — Results ── */
     .results-screen h2 { font-size: 1.65rem; margin-bottom: 1.25rem; }
     .results-categories { display: flex; flex-direction: column; gap: 2rem; }
@@ -392,27 +472,31 @@
     .spot-panel__close { position: absolute; top: 0.75rem; right: 1rem; width: 32px; height: 32px; border: none; background: rgba(26,22,18,0.55); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff; transition: background 0.15s; z-index: 2; }
     .spot-panel__close:hover { background: rgba(26,22,18,0.8); }
 
-    /* 3-photo gallery at top of panel */
+    /* 3-photo horizontal scroll strip */
     .spot-panel__gallery {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      grid-template-rows: 110px 110px;
+      display: flex;
       gap: 6px;
       margin-bottom: 1rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
       border-radius: 10px;
-      overflow: hidden;
     }
+    .spot-panel__gallery::-webkit-scrollbar { display: none; }
 
     .spot-panel__gallery-img {
-      width: 100%; height: 100%;
-      object-fit: cover; display: block;
-      background: #e8e0d8; /* placeholder colour */
+      flex-shrink: 0;
+      width: 75vw;
+      max-width: 320px;
+      height: 200px;
+      object-fit: contain;   /* show full image, no crop */
+      object-position: center;
+      display: block;
+      background: #1a1612;   /* dark bg for letterboxing */
+      border-radius: 8px;
+      scroll-snap-align: start;
       transition: opacity 0.3s ease;
-    }
-
-    /* First photo spans both rows on the left */
-    .spot-panel__gallery-img:first-child {
-      grid-row: 1 / 3;
     }
 
     /* Gallery shimmer while loading */
@@ -451,6 +535,16 @@
 
     .spot-panel__remove-btn { width: 100%; padding: 0.65rem; background: transparent; color: #b91c1c; border: 1px solid #fecaca; border-radius: 999px; font-family: inherit; font-size: 0.85rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
     .spot-panel__remove-btn:hover { background: #fef2f2; }
+    .spot-panel__disclaimer {
+      font-size: 0.78rem;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      margin-top: 0.75rem;
+      line-height: 1.5;
+    }
 
     /* ── SCREEN 4 — MAP ── */
     .map-wrap { position: relative; width: 100%; height: 100%; display: flex; }
@@ -588,6 +682,10 @@
         <p class="spot-panel__section-label">🍜 What to eat nearby</p>
         <p class="spot-panel__section-text" id="spot-panel-food"></p>
       </div>
+      <!-- Event date disclaimer — shown only for festival/sport types -->
+      <p class="spot-panel__disclaimer" id="spot-panel-disclaimer" hidden>
+        ⚠️ Verify event dates and ticket availability independently before booking.
+      </p>
       <button type="button" class="spot-panel__add-btn" id="spot-panel-add-btn">+ Add to my map</button>
       <button type="button" class="spot-panel__remove-btn" id="spot-panel-remove-btn" style="display:none">Remove from map</button>
     </div>
@@ -648,11 +746,35 @@
         <p class="discovery-welcome" id="discovery-welcome">
           Welcome. Tap anything that catches your eye.
         </p>
-        <button type="button" class="discovery-browse-link" id="btn-browse-all">
-          Browse by type →
-        </button>
+        <!-- Search bar -->
+        <div class="discovery-search-wrap">
+          <input
+            type="search"
+            class="discovery-search"
+            id="discovery-search"
+            placeholder="🔍 Filter spots..."
+            aria-label="Filter experiences"
+          >
+        </div>
+      </div>
+      <!-- Filter chips -->
+      <div class="discovery-chips" id="discovery-chips" aria-label="Filter by type">
+        <button type="button" class="discovery-chip is-active" data-filter="all">All</button>
+        <button type="button" class="discovery-chip" data-filter="sight">🏛️ Sights</button>
+        <button type="button" class="discovery-chip" data-filter="food">🍜 Food</button>
+        <button type="button" class="discovery-chip" data-filter="festival">🎉 Festivals</button>
+        <button type="button" class="discovery-chip" data-filter="sport">🏟️ Sport</button>
+        <button type="button" class="discovery-chip" data-filter="nature">🌿 Nature</button>
+        <button type="button" class="discovery-chip" data-filter="nightlife">🌙 Nightlife</button>
+        <button type="button" class="discovery-chip" data-filter="market">🛍️ Markets</button>
+        <button type="button" class="discovery-chip" data-filter="activity">🎯 Activities</button>
+        <button type="button" class="discovery-chip" data-filter="day-trip">🚌 Day trips</button>
+        <button type="button" class="discovery-chip" data-filter="seasonal">🌸 Seasonal</button>
       </div>
       <div class="discovery-grid" id="discovery-grid"></div>
+      <p class="discovery-no-results" id="discovery-no-results" hidden>
+        No experiences match that filter. Try another.
+      </p>
     </section>
 
     <!-- Screen 3 — Results -->
@@ -828,7 +950,14 @@
       }
 
       document.getElementById('btn-view-map').addEventListener('click', function () { showScreen(4); });
-      document.getElementById('btn-spots-badge').addEventListener('click', function () { showResultsScreen(); });
+      document.getElementById('btn-spots-badge').addEventListener('click', function () {
+        /* Return to screen 2 if it has content, otherwise screen 3 */
+        if (allExperiences.length > 0) {
+          showScreen(2);
+        } else {
+          showResultsScreen();
+        }
+      });
       document.getElementById('btn-browse-all').addEventListener('click', function () { showResultsScreen(); });
 
       /* ── DATE RULES ─────────────────────────── */
@@ -930,6 +1059,13 @@
 
         showSec('spot-panel-hidden-section', 'spot-panel-hidden', spot.hidden_angle);
         showSec('spot-panel-food-section',   'spot-panel-food',   spot.food_nearby);
+
+        /* Festival/sport disclaimer */
+        const disclaimerEl = document.getElementById('spot-panel-disclaimer');
+        if (disclaimerEl) {
+          const isEventType = spot.type === 'festival' || spot.type === 'sport';
+          disclaimerEl.hidden = !isEventType;
+        }
 
         const isAdded = giyaAddedSpots.some(function (e) { return e.spot.spot_name === spot.spot_name; });
         const addBtn  = document.getElementById('spot-panel-add-btn');
@@ -1054,10 +1190,144 @@
 /* ============================================
          SCREEN 2 — Discovery grid renderer
          ============================================ */
-         function renderDiscovery(experiences) {
+         /* All experiences stored for client-side filtering */
+      let allExperiences = [];
+      let activeFilter   = 'all';
+      let searchQuery    = '';
+
+      function applyDiscoveryFilter() {
         const grid      = document.getElementById('discovery-grid');
-        const welcome   = document.getElementById('discovery-welcome');
+        const noResults = document.getElementById('discovery-no-results');
         if (!grid) return;
+
+        const filtered = allExperiences.filter(function (exp) {
+          const matchesChip   = activeFilter === 'all' || exp.type === activeFilter;
+          const matchesSearch = searchQuery === '' ||
+            (exp.spot_name || '').toLowerCase().includes(searchQuery) ||
+            (exp.area      || '').toLowerCase().includes(searchQuery) ||
+            (exp.type      || '').toLowerCase().includes(searchQuery) ||
+            (exp.why       || '').toLowerCase().includes(searchQuery);
+          return matchesChip && matchesSearch;
+        });
+
+        /* Re-render only visible cards */
+        grid.innerHTML = '';
+        if (noResults) noResults.hidden = filtered.length > 0;
+
+        filtered.forEach(function (exp) {
+          const color = getTypeColor(exp.type);
+          const emoji = getTypeEmoji(exp.type);
+
+          const card = document.createElement('article');
+          card.className = 'discovery-card is-loading';
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('aria-label', exp.spot_name);
+
+          /* Photo */
+          const img = document.createElement('img');
+          img.className = 'discovery-card__img';
+          img.alt = exp.spot_name || '';
+          img.setAttribute('data-query',
+            encodeURIComponent((exp.spot_name || '') + ' ' + (exp.area || '') + ' ' + currentArrival)
+          );
+          card.appendChild(img);
+
+          /* Name + emoji overlay — NO dot */
+          const nameEl = document.createElement('div');
+          nameEl.className = 'discovery-card__name';
+          nameEl.innerHTML =
+            '<span class="discovery-card__type-emoji">' + emoji + '</span>' +
+            esc(exp.spot_name || 'Unnamed');
+          card.appendChild(nameEl);
+
+          /* Tap → open spot panel */
+          card.addEventListener('click', function () {
+            openPanel({
+              spot_name:    exp.spot_name,
+              area:         exp.area,
+              why:          exp.why,
+              hidden_angle: exp.hidden_angle,
+              food_nearby:  exp.food_nearby,
+              season_status:exp.season_status,
+              season_note:  exp.season_note,
+              coordinates:  exp.coordinates,
+              type:         exp.type,
+            }, color, null);
+          });
+          card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+          });
+
+          grid.appendChild(card);
+        });
+
+        /* Lazy load photos for newly rendered cards */
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            const c   = entry.target;
+            const im  = c.querySelector('.discovery-card__img');
+            if (!im || im.src) { observer.unobserve(c); return; }
+            const q = decodeURIComponent(im.getAttribute('data-query') || 'travel');
+            fetchPhotos(q, 1).then(function (photos) {
+              c.classList.remove('is-loading');
+              if (photos.length > 0) {
+                im.src = photos[0].url_small || photos[0].url;
+                im.onload = function () { im.classList.add('is-loaded'); };
+              }
+            });
+            observer.unobserve(c);
+          });
+        }, { rootMargin: '200px' });
+
+        grid.querySelectorAll('.discovery-card').forEach(function (c) { observer.observe(c); });
+      }
+
+      function renderDiscovery(experiences) {
+        allExperiences = experiences || [];
+
+        /* Update welcome message */
+        const welcome = document.getElementById('discovery-welcome');
+        if (welcome && currentArrival) {
+          welcome.textContent = 'Welcome to ' + currentArrival + '. Tap anything that catches your eye.';
+        }
+
+        /* Wire chip filters */
+        document.querySelectorAll('.discovery-chip').forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            document.querySelectorAll('.discovery-chip').forEach(function (c) {
+              c.classList.remove('is-active');
+            });
+            chip.classList.add('is-active');
+            activeFilter = chip.getAttribute('data-filter') || 'all';
+            applyDiscoveryFilter();
+          });
+        });
+
+        /* Wire search input */
+        const searchEl = document.getElementById('discovery-search');
+        if (searchEl) {
+          searchEl.addEventListener('input', function () {
+            searchQuery = searchEl.value.toLowerCase().trim();
+            applyDiscoveryFilter();
+          });
+        }
+
+        /* Reset filters on new search */
+        activeFilter = 'all';
+        searchQuery  = '';
+        const allChip = document.querySelector('.discovery-chip[data-filter="all"]');
+        if (allChip) {
+          document.querySelectorAll('.discovery-chip').forEach(function (c) { c.classList.remove('is-active'); });
+          allChip.classList.add('is-active');
+        }
+        const searchInput = document.getElementById('discovery-search');
+        if (searchInput) searchInput.value = '';
+
+        applyDiscoveryFilter();
+        log('renderDiscovery', allExperiences.length + ' experiences loaded');
+      }
 
         /* Update welcome message with city name */
         if (welcome && currentArrival) {
