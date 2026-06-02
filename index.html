@@ -1087,12 +1087,18 @@
           gallery.classList.remove('is-loading');
 
           const ids = ['spot-gallery-0','spot-gallery-1','spot-gallery-2'];
-          photos.forEach(function (photo, i) {
-            if (i > 2) return;
-            const img = document.getElementById(ids[i]);
+          const usedUrls = new Set();
+          let slotIndex = 0;
+          photos.forEach(function (photo) {
+            if (slotIndex > 2) return;
+            const url = photo.url_small || photo.url;
+            if (usedUrls.has(url)) return; /* skip duplicate */
+            usedUrls.add(url);
+            const img = document.getElementById(ids[slotIndex]);
             if (!img) return;
-            img.src = photo.url_small || photo.url;
+            img.src = url;
             img.alt = photo.alt || spot.spot_name;
+            slotIndex++;
           });
 
           /* Photo credit for first photographer */
@@ -1193,12 +1199,13 @@
       let allExperiences = [];
       let activeFilter   = 'all';
       let searchQuery    = '';
+      let usedPhotoUrls  = new Set();
 
       function applyDiscoveryFilter() {
         const grid      = document.getElementById('discovery-grid');
         const noResults = document.getElementById('discovery-no-results');
         if (!grid) return;
-        const usedPhotoIds = new Set(); /* track across all cards */
+        usedPhotoUrls = new Set(); /* reset on each filter/render */
 
         const filtered = allExperiences.filter(function (exp) {
           const matchesChip   = activeFilter === 'all' || exp.type === activeFilter;
@@ -1274,13 +1281,15 @@
             const q = decodeURIComponent(im.getAttribute('data-query') || 'travel');
             fetchPhotos(q, 3).then(function (photos) {
               c.classList.remove('is-loading');
-              /* Pick first photo not already used on another card */
-              const fresh = photos.find(function (p) {
-                return p.id && !usedPhotoIds.has(p.id);
-              }) || photos[0];
-              if (fresh) {
-                if (fresh.id) usedPhotoIds.add(fresh.id);
-                im.src = fresh.url_small || fresh.url;
+            /* Filter out already-used URLs across the grid */
+              const available = photos.filter(function (p) {
+                return !usedPhotoUrls.has(p.url_small || p.url);
+              });
+              const photo = available[0] || photos[0];
+              if (photo) {
+                const url = photo.url_small || photo.url;
+                usedPhotoUrls.add(url);
+                im.src = url;
                 im.onload = function () { im.classList.add('is-loaded'); };
               }
             });
