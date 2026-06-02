@@ -1201,11 +1201,13 @@
 
         const filtered = allExperiences.filter(function (exp) {
           const matchesChip   = activeFilter === 'all' || exp.type === activeFilter;
+          const tagString = (exp.tags || []).join(' ').toLowerCase();
           const matchesSearch = searchQuery === '' ||
             (exp.spot_name || '').toLowerCase().includes(searchQuery) ||
             (exp.area      || '').toLowerCase().includes(searchQuery) ||
             (exp.type      || '').toLowerCase().includes(searchQuery) ||
-            (exp.why       || '').toLowerCase().includes(searchQuery);
+            (exp.why       || '').toLowerCase().includes(searchQuery) ||
+            tagString.includes(searchQuery);
           return matchesChip && matchesSearch;
         });
 
@@ -1228,7 +1230,7 @@
           img.className = 'discovery-card__img';
           img.alt = exp.spot_name || '';
           img.setAttribute('data-query',
-            encodeURIComponent((exp.spot_name || '') + ' ' + (exp.area || '') + ' ' + currentArrival)
+            encodeURIComponent((exp.spot_name || '') + ' ' + (exp.type || '') + ' ' + currentArrival)
           );
           card.appendChild(img);
 
