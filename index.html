@@ -1198,6 +1198,7 @@
         const grid      = document.getElementById('discovery-grid');
         const noResults = document.getElementById('discovery-no-results');
         if (!grid) return;
+        const usedPhotoIds = new Set(); /* track across all cards */
 
         const filtered = allExperiences.filter(function (exp) {
           const matchesChip   = activeFilter === 'all' || exp.type === activeFilter;
@@ -1271,10 +1272,15 @@
             const im  = c.querySelector('.discovery-card__img');
             if (!im || im.src) { observer.unobserve(c); return; }
             const q = decodeURIComponent(im.getAttribute('data-query') || 'travel');
-            fetchPhotos(q, 1).then(function (photos) {
+            fetchPhotos(q, 3).then(function (photos) {
               c.classList.remove('is-loading');
-              if (photos.length > 0) {
-                im.src = photos[0].url_small || photos[0].url;
+              /* Pick first photo not already used on another card */
+              const fresh = photos.find(function (p) {
+                return p.id && !usedPhotoIds.has(p.id);
+              }) || photos[0];
+              if (fresh) {
+                if (fresh.id) usedPhotoIds.add(fresh.id);
+                im.src = fresh.url_small || fresh.url;
                 im.onload = function () { im.classList.add('is-loaded'); };
               }
             });
