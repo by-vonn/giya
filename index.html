@@ -53,75 +53,142 @@
       align-items: center;
       padding: 0 1rem; gap: 0.75rem; z-index: 100;
     }
-    .topbar__brand { font-family: "Playfair Display", Georgia, serif; font-weight: 700; font-size: 1.25rem; color: var(--ember); letter-spacing: 0.02em; white-space: nowrap; }
-    .topbar__flight { display: flex; align-items: center; justify-content: center; gap: 0.4rem; overflow: hidden; min-width: 0; }
-    .topbar__flight-route { font-size: 0.78rem; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .topbar__brand {
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 700; font-size: 1.25rem;
+      color: var(--ember); letter-spacing: 0.02em; white-space: nowrap;
+    }
+
+    .topbar__flight {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.4rem; overflow: hidden; min-width: 0;
+    }
+
+    .topbar__flight-route {
+      font-size: 0.78rem; font-weight: 600; color: var(--ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
     .topbar__flight-sep { font-size: 0.7rem; color: var(--border); flex-shrink: 0; display: none; }
     .topbar__flight-sep.is-visible { display: inline; }
     .topbar__flight-dates { font-size: 0.72rem; color: var(--ink-muted); white-space: nowrap; flex-shrink: 0; }
     .topbar__flight-placeholder { font-size: 0.73rem; color: var(--ink-muted); font-style: italic; white-space: nowrap; }
+
     .topbar__right { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
-    .topbar__map-btn { display: none; align-items: center; gap: 0.2rem; background: var(--ink); color: var(--paper); font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 999px; white-space: nowrap; cursor: pointer; border: none; font-family: inherit; transition: background 0.15s; }
+
+    .topbar__map-btn {
+      display: none; align-items: center; gap: 0.2rem;
+      background: var(--ink); color: var(--paper);
+      font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem;
+      border-radius: 999px; white-space: nowrap; cursor: pointer;
+      border: none; font-family: inherit; transition: background 0.15s;
+    }
     .topbar__map-btn.is-visible { display: flex; }
     .topbar__map-btn:hover { background: var(--ember); }
-    .topbar__spots { display: none; align-items: center; gap: 0.2rem; background: var(--ember); color: #fff; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 999px; white-space: nowrap; cursor: pointer; border: none; font-family: inherit; transition: transform 0.1s; }
+
+    .topbar__spots {
+      display: none; align-items: center; gap: 0.2rem;
+      background: var(--ember); color: #fff;
+      font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem;
+      border-radius: 999px; white-space: nowrap; cursor: pointer;
+      border: none; font-family: inherit; transition: transform 0.1s;
+    }
     .topbar__spots.is-visible { display: flex; }
     .topbar__spots:hover { transform: scale(1.05); }
+
     .topbar__warnings { display: flex; gap: 0.1rem; align-items: center; }
-    .warn-icon { position: relative; width: 32px; height: 32px; border: none; background: transparent; cursor: pointer; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #c8c0b8; transition: color 0.2s, background 0.2s; }
+
+    .warn-icon {
+      position: relative; width: 32px; height: 32px;
+      border: none; background: transparent; cursor: pointer;
+      border-radius: 6px; display: flex; align-items: center;
+      justify-content: center; color: #c8c0b8;
+      transition: color 0.2s, background 0.2s;
+    }
     .warn-icon:hover { background: rgba(26,22,18,0.06); }
     .warn-icon svg { width: 17px; height: 17px; fill: currentColor; }
     .warn-icon.active.typhoon  { color: #2563eb; }
     .warn-icon.active.temp     { color: #dc2626; }
     .warn-icon.active.general  { color: #ca8a04; }
     .warn-icon__text { display: none; }
-    .warn-icon::after { content: attr(data-tooltip); position: absolute; top: calc(100% + 6px); right: 0; font-size: 0.67rem; line-height: 1.4; max-width: 160px; background: var(--ink); color: var(--paper); padding: 0.28rem 0.5rem; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 1000; white-space: normal; text-align: left; }
+
+    .warn-icon::after {
+      content: attr(data-tooltip);
+      position: absolute; top: calc(100% + 6px); right: 0;
+      font-size: 0.67rem; line-height: 1.4; max-width: 160px;
+      background: var(--ink); color: var(--paper);
+      padding: 0.28rem 0.5rem; border-radius: 6px;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s;
+      z-index: 1000; white-space: normal; text-align: left;
+    }
     .warn-icon:hover::after { opacity: 1; }
 
     /* ── MAIN LAYOUT ── */
     main { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem 1rem; }
     .screen { display: none; animation: fadeIn 0.3s ease; }
     .screen.is-visible { display: block; }
-    #screen-map.is-visible { display: block; position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0; z-index: 50; overflow: hidden; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    #screen-map.is-visible {
+      display: block; position: fixed;
+      top: var(--topbar-h); left: 0; right: 0; bottom: 0;
+      z-index: 50; overflow: hidden;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
     /* ── SCREEN 0 ── */
     .landing { text-align: center; padding: 2rem 0 3rem; }
     .landing h1 { font-size: clamp(1.75rem,5vw,2.35rem); margin-bottom: 1rem; max-width: 28ch; margin-left: auto; margin-right: auto; }
     .landing .subheading { color: var(--ink-muted); font-size: 1.05rem; max-width: 36ch; margin: 0 auto 2rem; }
-    .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; font-family: inherit; font-size: 1rem; font-weight: 600; padding: 0.9rem 1.75rem; background: var(--ember); color: #fff; border: none; border-radius: 999px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: var(--shadow); }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.35rem; font-family: inherit; font-size: 1rem; font-weight: 600;
+      padding: 0.9rem 1.75rem; background: var(--ember); color: #fff;
+      border: none; border-radius: 999px; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s; box-shadow: var(--shadow);
+    }
     .btn-primary:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .landing__note { margin-top: 1.25rem; font-size: 0.85rem; color: var(--ink-muted); letter-spacing: 0.04em; }
 
-    /* ── SCREEN 1 — FORM ── */
-    .form-screen h2 { font-size: 1.75rem; margin-bottom: 1.25rem; }
-
-    /* Trip type toggle */
-    .trip-type-toggle { display: flex; background: rgba(26,22,18,0.06); border-radius: 999px; padding: 3px; gap: 3px; margin-bottom: 1.25rem; }
-    .trip-type-btn { flex: 1; font-family: inherit; font-size: 0.85rem; font-weight: 500; padding: 0.45rem 0; border: none; border-radius: 999px; background: transparent; color: var(--ink-muted); cursor: pointer; transition: background 0.15s, color 0.15s; text-align: center; }
-    .trip-type-btn.is-active { background: #fff; color: var(--ink); font-weight: 600; box-shadow: 0 1px 4px rgba(26,22,18,0.12); }
-
-    /* Airport autocomplete */
-    .airport-wrap { position: relative; }
-    .airport-dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(26,22,18,0.12); z-index: 200; overflow: hidden; display: none; }
-    .airport-dropdown.is-open { display: block; }
-    .airport-option { padding: 0.65rem 1rem; cursor: pointer; border-bottom: 1px solid rgba(26,22,18,0.06); transition: background 0.1s; display: flex; align-items: center; gap: 0.6rem; }
-    .airport-option:last-child { border-bottom: none; }
-    .airport-option:hover { background: var(--paper); }
-    .airport-option__iata { font-size: 0.8rem; font-weight: 700; color: var(--ember); flex-shrink: 0; width: 32px; }
-    .airport-option__info { min-width: 0; }
-    .airport-option__name { font-size: 0.82rem; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .airport-option__city { font-size: 0.72rem; color: var(--ink-muted); }
-
+    /* ── SCREEN 1 ── */
+    .form-screen h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
     .form-group { margin-bottom: 1.25rem; }
     .form-group label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; }
     .form-group input { width: 100%; padding: 0.75rem 1rem; font-family: inherit; font-size: 1rem; border: 1px solid var(--border); border-radius: 10px; background: #fff; color: var(--ink); }
     .form-group input:focus { outline: 2px solid var(--ember); outline-offset: 2px; border-color: transparent; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 400px) { .form-row { grid-template-columns: 1fr; } }
+    .trip-type-toggle { display: flex; background: rgba(26,22,18,0.07); border-radius: 999px; padding: 3px; gap: 3px; margin-bottom: 1.25rem; }
+    .trip-type-btn { flex: 1; font-family: inherit; font-size: 0.85rem; font-weight: 500; padding: 0.45rem 0; border: none; border-radius: 999px; background: transparent; color: var(--ink-muted); cursor: pointer; text-align: center; }
+    .trip-type-btn.is-active { background: #fff; color: var(--ink); font-weight: 600; box-shadow: 0 1px 4px rgba(26,22,18,0.12); }
     .form-screen .btn-primary { width: 100%; margin-top: 0.5rem; }
+    .pref-bar { margin: 0 -1.25rem; background: #fff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .pref-bar__top { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem; cursor: pointer; user-select: none; }
+    .pref-bar__label { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600; color: var(--ink-muted); }
+    .pref-active-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); }
+    .pref-bar__warnings { display: flex; gap: 5px; flex: 1; justify-content: flex-end; flex-wrap: wrap; }
+    .pref-warn-pill { position: relative; display: inline-flex; align-items: center; gap: 3px; font-family: inherit; font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 999px; background: #fff8ed; border: 1px solid #e8d5a8; color: #9a6820; white-space: nowrap; }
+    .pref-warn-pill::after { content: attr(data-tip); position: absolute; top: calc(100% + 6px); right: 0; font-size: 0.67rem; line-height: 1.4; max-width: 200px; background: var(--ink); color: var(--paper); padding: 0.3rem 0.55rem; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 500; white-space: normal; text-align: left; font-weight: 400; }
+    .pref-warn-pill:hover::after { opacity: 1; }
+    .pref-bar__chevron { font-size: 0.8rem; color: var(--ink-muted); flex-shrink: 0; transition: transform 0.2s; }
+    .pref-bar__chevron.is-open { transform: rotate(180deg); }
+    .pref-bar__body { padding: 0.6rem 1.25rem 0.85rem; border-top: 1px solid rgba(26,22,18,0.07); background: #faf8f4; }
+    .pref-row { margin-bottom: 0.55rem; }
+    .pref-row:last-child { margin-bottom: 0; }
+    .pref-row__label { font-size: 0.65rem; font-weight: 600; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.3rem; }
+    .pref-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pref-chip { font-family: inherit; font-size: 0.72rem; font-weight: 500; padding: 0.25rem 0.7rem; border-radius: 999px; border: 1.5px solid var(--border); background: #fff; color: var(--ink-muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .pref-chip:hover { border-color: var(--ember); color: var(--ember); }
+    .pref-chip.is-hard-active { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .pref-chip.is-boost-active { background: #fdf3e0; color: #7a5020; border-color: #d4b060; }
+
 
     /* ── LOADING ── */
     .loading-state { display: none; }
@@ -139,193 +206,194 @@
     .form-error.is-visible { display: block; }
 
     /* ============================================
-       SCREEN 2 — Photo Discovery Grid (Polaroid)
+       SCREEN 2 — Photo Discovery Grid
        ============================================ */
-    .discovery-screen { padding: 0; }
-
-    .discovery-header { padding: 1rem 1.25rem 0.5rem; }
-    .discovery-welcome { font-family: "Playfair Display", Georgia, serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
-
-    /* ── PREFERENCE / STATIC BAR ── */
-    .pref-bar {
-      margin: 0 -1.25rem;
-      background: #fff;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+       .discovery-screen {
+      padding: 0;
     }
 
-    .pref-bar__top {
-      display: flex; align-items: center; gap: 0.5rem;
-      padding: 0.5rem 1.25rem;
-      cursor: pointer; user-select: none;
+    .discovery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem 0.75rem;
+      gap: 1rem;
     }
 
-    .pref-bar__label {
-      display: flex; align-items: center; gap: 0.35rem;
-      font-size: 0.78rem; font-weight: 600; color: var(--ink-muted);
+    .discovery-welcome {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .discovery-browse-link {
+      font-size: 0.75rem;
+      color: var(--ember);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      white-space: nowrap;
       flex-shrink: 0;
+      padding: 0.2rem 0;
     }
-    .pref-bar__label svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+    .discovery-browse-link:hover { text-decoration: underline; }
 
-    .pref-active-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--ember); flex-shrink: 0;
-    }
-
-    .pref-bar__warnings {
-      display: flex; gap: 5px; flex: 1; justify-content: flex-end; flex-wrap: wrap;
-    }
-
-    .pref-warn-pill {
-      position: relative;
-      display: inline-flex; align-items: center; gap: 3px;
-      font-family: inherit; font-size: 0.65rem; font-weight: 600;
-      padding: 0.2rem 0.55rem; border-radius: 999px;
-      background: #fff8ed; border: 1px solid #e8d5a8; color: #9a6820;
-      cursor: pointer; white-space: nowrap; transition: background 0.15s;
-    }
-    .pref-warn-pill:hover { background: #fef0d0; }
-    .pref-warn-pill::after {
-      content: attr(data-tip);
-      position: absolute; top: calc(100% + 6px); right: 0;
-      font-size: 0.67rem; line-height: 1.4; max-width: 200px;
-      background: var(--ink); color: var(--paper);
-      padding: 0.3rem 0.55rem; border-radius: 6px;
-      opacity: 0; pointer-events: none; transition: opacity 0.15s;
-      z-index: 500; white-space: normal; text-align: left;
-      font-weight: 400;
-    }
-    .pref-warn-pill:hover::after { opacity: 1; }
-
-    .pref-bar__chevron {
-      font-size: 0.8rem; color: var(--ink-muted); flex-shrink: 0;
-      transition: transform 0.2s;
-    }
-    .pref-bar__chevron.is-open { transform: rotate(180deg); }
-
-    .pref-bar__body {
-      padding: 0.6rem 1.25rem 0.85rem;
-      border-top: 1px solid rgba(26,22,18,0.07);
-      background: #faf8f4;
-    }
-
-    .pref-row { margin-bottom: 0.55rem; }
-    .pref-row:last-child { margin-bottom: 0; }
-    .pref-row__label {
-      font-size: 0.65rem; font-weight: 600; color: var(--ink-muted);
-      text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.3rem;
-    }
-    .pref-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-
-    .pref-chip {
-      font-family: inherit; font-size: 0.72rem; font-weight: 500;
-      padding: 0.25rem 0.7rem; border-radius: 999px;
-      border: 1.5px solid var(--border); background: #fff; color: var(--ink-muted);
-      cursor: pointer; transition: all 0.15s; white-space: nowrap;
-    }
-    .pref-chip:hover { border-color: var(--ember); color: var(--ember); }
-    .pref-chip.is-hard-active { background: var(--ink); color: #fff; border-color: var(--ink); }
-    .pref-chip.is-boost-active { background: #fdf3e0; color: #7a5020; border-color: #d4b060; }
-
-    /* ── SEARCH BAR ── */
-    .discovery-search-wrap { padding: 0.6rem 1.25rem 0.4rem; }
-    .discovery-search { width: 100%; padding: 0.6rem 1rem; font-family: inherit; font-size: 0.9rem; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--ink); outline: none; }
-    .discovery-search:focus { border-color: var(--ember); box-shadow: 0 0 0 2px rgba(200,98,42,0.15); }
-
-    /* ── TYPE FILTER CHIPS ── */
-    .discovery-chips { display: flex; gap: 6px; padding: 0 1.25rem 0.75rem; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-    .discovery-chips::-webkit-scrollbar { display: none; }
-    .discovery-chip { flex-shrink: 0; font-family: inherit; font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1.5px solid var(--border); background: #fff; color: var(--ink-muted); cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; white-space: nowrap; }
-    .discovery-chip.is-active { background: var(--ember); color: #fff; border-color: var(--ember); }
-    .discovery-chip:hover:not(.is-active) { border-color: var(--ember); color: var(--ember); }
-
-    /* ── POLAROID GRID ── */
+    /* Photo card grid — 2 cols mobile, 3 cols wide */
     .discovery-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
       padding: 0 1.25rem 2rem;
     }
-    @media (min-width: 520px) { .discovery-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 900px) {
-      .discovery-grid { grid-template-columns: repeat(4, 1fr); }
-      .discovery-screen { max-width: 1100px; margin: 0 auto; }
+
+    @media (min-width: 520px) {
+      .discovery-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     /* Polaroid card */
-    .discovery-card {
-      background: #fff;
-      border-radius: 4px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 1px 5px rgba(26,22,18,0.10);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
+    .discovery-card { background: #fff; border-radius: 4px; overflow: hidden; cursor: pointer; box-shadow: 0 1px 5px rgba(26,22,18,0.10); transition: transform 0.15s, box-shadow 0.15s; }
     .discovery-card:hover  { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(26,22,18,0.14); }
     .discovery-card:active { transform: scale(0.98); }
-
-    /* Square image area */
-    .discovery-card__img-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      background: #2a2520;
-      overflow: hidden;
-    }
-
-    .discovery-card.is-loading .discovery-card__img-wrap {
-      background: linear-gradient(135deg, #2a2520 25%, #3a3028 50%, #2a2520 75%);
-      background-size: 200% 200%;
-      animation: shimmer 1.5s infinite;
-    }
-
-    .discovery-card__img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover; display: block;
-      opacity: 0; transition: opacity 0.4s ease;
-    }
+    .discovery-card__img-wrap { position: relative; width: 100%; aspect-ratio: 1 / 1; background: #2a2520; overflow: hidden; }
+    .discovery-card.is-loading .discovery-card__img-wrap { background: linear-gradient(135deg, #2a2520 25%, #3a3028 50%, #2a2520 75%); background-size: 200% 200%; animation: shimmer 1.5s infinite; }
+    .discovery-card__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.4s ease; }
     .discovery-card__img.is-loaded { opacity: 1; }
-
-    /* White frame footer */
-    .discovery-card__foot {
-      padding: 7px 9px 9px;
-      background: #fff;
-    }
-    .discovery-card__type-row {
-      display: flex; align-items: center; gap: 3px;
-      margin-bottom: 2px;
-    }
+    .discovery-card__foot { padding: 7px 9px 9px; background: #fff; }
+    .discovery-card__type-row { display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
     .discovery-card__type-emoji { font-size: 0.65rem; line-height: 1; }
-    .discovery-card__type-label {
-      font-size: 0.62rem; color: #aaa;
-      text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
-    }
-    .discovery-card__name {
-      font-size: 0.8rem; font-weight: 600; color: var(--ink);
-      line-height: 1.3;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .discovery-card__km {
-      font-size: 0.62rem; color: #b0a898; margin-top: 1px;
+    .discovery-card__type-label { font-size: 0.62rem; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .discovery-card__name { font-size: 0.8rem; font-weight: 600; color: var(--ink); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── DISCOVERY SEARCH + CHIPS ── */
+    .discovery-search-wrap {
+      padding: 0 1.25rem 0.5rem;
     }
 
-    .discovery-no-results { text-align: center; color: var(--ink-muted); font-size: 0.9rem; padding: 2rem 1.25rem; font-style: italic; }
+    .discovery-search {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+    }
+    .discovery-search:focus {
+      border-color: var(--ember);
+      box-shadow: 0 0 0 2px rgba(200,98,42,0.15);
+    }
+
+    /* Chips scrollable row */
+    .discovery-chips {
+      display: flex;
+      gap: 6px;
+      padding: 0 1.25rem 0.75rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .discovery-chips::-webkit-scrollbar { display: none; }
+
+    .discovery-chip {
+      flex-shrink: 0;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .discovery-chip.is-active {
+      background: var(--ember);
+      color: #fff;
+      border-color: var(--ember);
+    }
+
+    .discovery-chip:hover:not(.is-active) {
+      border-color: var(--ember);
+      color: var(--ember);
+    }
+
+    .discovery-no-results {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 0.9rem;
+      padding: 2rem 1.25rem;
+      font-style: italic;
+    }
+
+    /* Desktop: wider grid, chips look natural */
+    @media (min-width: 900px) {
+      .discovery-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .discovery-screen {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+    }
+
+    /* Remove the type dot — emoji communicates type already */
+    .discovery-card__type-dot { display: none; }
 
     /* ── SCREEN 3 — Results ── */
     .results-screen h2 { font-size: 1.65rem; margin-bottom: 1.25rem; }
     .results-categories { display: flex; flex-direction: column; gap: 2rem; }
-    .results-category__header { position: relative; display: flex; align-items: flex-end; gap: 0.6rem; margin-bottom: 0.85rem; border-radius: 10px; min-height: 80px; overflow: hidden; padding: 0.85rem 1rem; background: #3a3530; }
-    .results-category__header-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; display: block; }
-    .results-category__header::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg,rgba(26,22,18,0.72) 0%,rgba(26,22,18,0.4) 100%); z-index: 1; }
-    .results-category__emoji, .results-category__name { position: relative; z-index: 2; }
+
+    /* Category header with photo */
+    .results-category__header {
+      position: relative; display: flex; align-items: flex-end;
+      gap: 0.6rem; margin-bottom: 0.85rem; border-radius: 10px;
+      min-height: 80px; overflow: hidden; padding: 0.85rem 1rem;
+      background: #3a3530;
+    }
+    .results-category__header-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0; display: block;
+    }
+    .results-category__header::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg,rgba(26,22,18,0.72) 0%,rgba(26,22,18,0.4) 100%);
+      z-index: 1;
+    }
+    .results-category__emoji,
+    .results-category__name { position: relative; z-index: 2; }
     .results-category__emoji { font-size: 1.5rem; line-height: 1; }
-    .results-category__name { font-family: "Playfair Display", Georgia, serif; font-size: 1.15rem; font-weight: 700; color: #fff !important; }
-    .results-category__color-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; z-index: 2; border-radius: 10px 0 0 10px; }
-    .results-category__header.is-loading { background: linear-gradient(90deg, #3a3530 25%, #4a4540 50%, #3a3530 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .results-category__name {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.15rem; font-weight: 700; color: #fff !important;
+    }
+    .results-category__color-bar {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; z-index: 2; border-radius: 10px 0 0 10px;
+    }
+
+    /* Shimmer placeholder while photo loads */
+    .results-category__header.is-loading {
+      background: linear-gradient(90deg, #3a3530 25%, #4a4540 50%, #3a3530 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
     .results-spots { display: grid; grid-template-columns: 1fr; gap: 0.85rem; }
     @media (min-width: 520px) { .results-spots { grid-template-columns: repeat(2,1fr); } }
+
     .spot-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
     .spot-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,22,18,0.1); }
     .spot-card.is-added { border-left: 3px solid var(--ember); }
@@ -334,52 +402,107 @@
     .spot-card__area   { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 0.5rem; }
     .spot-card__why    { font-size: 0.9rem; font-style: italic; color: var(--ink); line-height: 1.5; }
     .spot-card__season { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
+
     .season-badge { flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border); }
     .season-badge--good    { background: #16a34a; }
     .season-badge--caution { background: #d97706; }
     .season-badge--avoid   { background: #dc2626; }
     .season-label { font-size: 0.7rem; font-weight: 500; color: var(--ink-muted); white-space: nowrap; }
-    .results-note  { margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--ink-muted); font-style: italic; }
+
+    .results-note { margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--ink-muted); font-style: italic; }
     .results-empty { text-align: center; color: var(--ink-muted); padding: 1.5rem; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--border); margin-bottom: 1rem; }
 
     /* ── SPOT DETAIL PANEL ── */
     .spot-overlay { position: fixed; inset: 0; background: rgba(26,22,18,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     .spot-overlay.is-open { opacity: 1; pointer-events: auto; }
+
     .spot-panel { position: fixed; bottom: 0; left: 0; right: 0; max-height: 80vh; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 40px rgba(26,22,18,0.18); z-index: 201; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; border-top: 4px solid var(--ember); }
     .spot-panel.is-open { transform: translateY(0); }
+
     .spot-panel__handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0.75rem auto 0; }
     .spot-panel__inner  { padding: 0.75rem 1.5rem 2.5rem; }
+
     .spot-panel__close { position: absolute; top: 0.75rem; right: 1rem; width: 32px; height: 32px; border: none; background: rgba(26,22,18,0.55); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff; transition: background 0.15s; z-index: 2; }
     .spot-panel__close:hover { background: rgba(26,22,18,0.8); }
-    .spot-panel__gallery { display: flex; gap: 6px; margin-bottom: 1rem; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; border-radius: 10px; }
+
+    /* 3-photo horizontal scroll strip */
+    .spot-panel__gallery {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      border-radius: 10px;
+    }
     .spot-panel__gallery::-webkit-scrollbar { display: none; }
-    .spot-panel__gallery-img { flex-shrink: 0; width: 75vw; max-width: 320px; height: 200px; object-fit: contain; object-position: center; display: block; background: #1a1612; border-radius: 8px; scroll-snap-align: start; transition: opacity 0.3s ease; }
-    .spot-panel__gallery.is-loading .spot-panel__gallery-img { background: linear-gradient(90deg, #e8e0d8 25%, #f0e8e0 50%, #e8e0d8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-    .spot-panel__photo-credit { font-size: 0.62rem; color: var(--ink-muted); margin-bottom: 0.75rem; text-align: right; }
+
+    .spot-panel__gallery-img {
+      flex-shrink: 0;
+      width: 75vw;
+      max-width: 320px;
+      height: 200px;
+      object-fit: contain;   /* show full image, no crop */
+      object-position: center;
+      display: block;
+      background: #1a1612;   /* dark bg for letterboxing */
+      border-radius: 8px;
+      scroll-snap-align: start;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Gallery shimmer while loading */
+    .spot-panel__gallery.is-loading .spot-panel__gallery-img {
+      background: linear-gradient(90deg, #e8e0d8 25%, #f0e8e0 50%, #e8e0d8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    /* Photo credit line */
+    .spot-panel__photo-credit {
+      font-size: 0.62rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.75rem;
+      text-align: right;
+    }
     .spot-panel__photo-credit a { color: var(--ink-muted); text-decoration: underline; }
+
     .spot-panel__name { font-family: "Playfair Display", Georgia, serif; font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; padding-right: 2.5rem; }
     .spot-panel__area { font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 0.75rem; }
+
     .spot-panel__season { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--paper); padding: 0.3rem 0.75rem; border-radius: 999px; margin-bottom: 0.4rem; }
     .spot-panel__season .season-badge { width: 10px; height: 10px; }
     .spot-panel__season .season-label { font-size: 0.75rem; }
+
     .spot-panel__season-note { font-size: 0.82rem; color: var(--ink-muted); margin-bottom: 1rem; line-height: 1.55; font-style: italic; }
+
     .spot-panel__section { margin-bottom: 1rem; }
     .spot-panel__section-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.3rem; }
     .spot-panel__section-text { font-size: 0.95rem; color: var(--ink); line-height: 1.6; }
     .spot-panel__divider { height: 1px; background: var(--border); margin: 1rem 0; }
+
     .spot-panel__add-btn { width: 100%; padding: 0.9rem; background: var(--ember); color: #fff; border: none; border-radius: 999px; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.2s; box-shadow: var(--shadow); margin-top: 0.5rem; }
     .spot-panel__add-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
     .spot-panel__add-btn.is-added { background: #16a34a; cursor: default; transform: none; box-shadow: none; }
+
     .spot-panel__remove-btn { width: 100%; padding: 0.65rem; background: transparent; color: #b91c1c; border: 1px solid #fecaca; border-radius: 999px; font-family: inherit; font-size: 0.85rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
     .spot-panel__remove-btn:hover { background: #fef2f2; }
-    .spot-panel__disclaimer { font-size: 0.78rem; color: #92400e; background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; padding: 0.5rem 0.75rem; margin-top: 0.75rem; line-height: 1.5; }
+    .spot-panel__disclaimer {
+      font-size: 0.78rem;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      margin-top: 0.75rem;
+      line-height: 1.5;
+    }
 
     /* ── SCREEN 4 — MAP ── */
-    .map-wrap { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; }
-    .china-caution { background: #fff8ed; border-bottom: 1px solid #e8d5a8; color: #9a6820; font-size: 0.78rem; font-weight: 500; padding: 0.45rem 1rem; text-align: center; display: none; }
-    .china-caution.is-visible { display: block; }
-    .map-and-panel { display: flex; flex: 1; overflow: hidden; }
+    .map-wrap { position: relative; width: 100%; height: 100%; display: flex; }
     #main-map { flex: 1; height: 100%; z-index: 1; }
+
     .map-panel { width: 260px; background: #fff; border-left: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; overflow: hidden; }
     .map-panel__header { padding: 0.85rem 1rem 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .map-panel__title { font-family: "Playfair Display", Georgia, serif; font-size: 0.95rem; font-weight: 700; }
@@ -387,6 +510,7 @@
     .map-panel__show-all:hover { text-decoration: underline; }
     .map-panel__list { overflow-y: auto; flex: 1; padding: 0.35rem 0; }
     .map-panel__empty { padding: 1.5rem 1rem; text-align: center; font-size: 0.82rem; color: var(--ink-muted); line-height: 1.5; }
+
     .map-panel__terminals { padding: 0.5rem 1rem 0; border-bottom: 1px solid var(--border); }
     .map-panel__terminals-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.4rem; }
     .map-terminal-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0; font-size: 0.8rem; }
@@ -395,6 +519,7 @@
     .map-terminal-icon--out { background: var(--ember); color: #fff; }
     .map-terminal-name { font-weight: 600; }
     .map-terminal-type { font-size: 0.68rem; color: var(--ink-muted); }
+
     .map-spot-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-bottom: 1px solid rgba(26,22,18,0.05); transition: background 0.1s; }
     .map-spot-row:hover { background: rgba(26,22,18,0.03); }
     .map-spot-row.is-hidden-pin { opacity: 0.38; }
@@ -409,10 +534,12 @@
     .map-spot-toggle[data-active="false"] { color: #a39e96; }
     .map-spot-remove { width: 26px; height: 26px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #c0b8b0; transition: color 0.15s; flex-shrink: 0; }
     .map-spot-remove:hover { color: #b91c1c; }
+
     .terminal-pin { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(26,22,18,0.3); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .terminal-pin--in  { background: #1a1612; }
     .terminal-pin--out { background: var(--ember); }
     .leaflet-pin-dot { width: 32px; height: 32px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(26,22,18,0.28); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; color: #fff; font-family: "DM Sans", sans-serif; }
+
     .giya-popup .leaflet-popup-content-wrapper { border-radius: 12px; padding: 0; box-shadow: 0 8px 32px rgba(26,22,18,0.18); border: none; font-family: "DM Sans", system-ui, sans-serif; }
     .giya-popup .leaflet-popup-content { margin: 0; min-width: 190px; }
     .giya-popup .leaflet-popup-tip-container { display: none; }
@@ -428,7 +555,7 @@
     .giya-pin-popup__btn:hover { background: #a04e20; }
 
     @media (max-width: 600px) {
-      .map-and-panel { flex-direction: column; }
+      .map-wrap { flex-direction: column; }
       #main-map { flex: 1; min-height: 52vh; }
       .map-panel { width: 100%; max-height: 42vh; border-left: none; border-top: 1px solid var(--border); }
     }
@@ -458,12 +585,15 @@
       <div class="topbar__warnings" aria-label="Travel warnings">
         <button type="button" class="warn-icon typhoon" id="warn-typhoon" data-tooltip="No typhoon warnings" aria-label="Typhoon warning">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <span id="warn-typhoon-text" class="warn-icon__text" hidden></span>
         </button>
         <button type="button" class="warn-icon temp" id="warn-temp" data-tooltip="No temperature data" aria-label="Temperature">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v2h-1v1h1v2h-2V5z"/></svg>
+          <span id="warn-temp-text" class="warn-icon__text" hidden></span>
         </button>
         <button type="button" class="warn-icon general" id="warn-general" data-tooltip="No advisories" aria-label="General advisory">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          <span id="warn-general-text" class="warn-icon__text" hidden></span>
         </button>
       </div>
     </div>
@@ -471,16 +601,20 @@
 
   <!-- SPOT DETAIL PANEL -->
   <div class="spot-overlay" id="spot-overlay" aria-hidden="true"></div>
+
   <div class="spot-panel" id="spot-panel" role="dialog" aria-modal="true" aria-labelledby="spot-panel-name" hidden>
     <div class="spot-panel__handle" aria-hidden="true"></div>
     <button type="button" class="spot-panel__close" id="spot-panel-close" aria-label="Close">×</button>
     <div class="spot-panel__inner">
+
+      <!-- 3-photo gallery — populated by JS from Pexels via Worker -->
       <div class="spot-panel__gallery is-loading" id="spot-panel-gallery" aria-hidden="true">
         <img class="spot-panel__gallery-img" id="spot-gallery-0" src="" alt="">
         <img class="spot-panel__gallery-img" id="spot-gallery-1" src="" alt="">
         <img class="spot-panel__gallery-img" id="spot-gallery-2" src="" alt="">
       </div>
       <p class="spot-panel__photo-credit" id="spot-photo-credit"></p>
+
       <h3 class="spot-panel__name" id="spot-panel-name">Spot Name</h3>
       <p  class="spot-panel__area" id="spot-panel-area"></p>
       <div class="spot-panel__season">
@@ -501,6 +635,7 @@
         <p class="spot-panel__section-label">🍜 What to eat nearby</p>
         <p class="spot-panel__section-text" id="spot-panel-food"></p>
       </div>
+      <!-- Event date disclaimer — shown only for festival/sport types -->
       <p class="spot-panel__disclaimer" id="spot-panel-disclaimer" hidden>
         ⚠️ Verify event dates and ticket availability independently before booking.
       </p>
@@ -511,8 +646,7 @@
 
   <!-- MAIN -->
   <main>
-
-    <!-- Screen 0 — Landing -->
+    <!-- Screen 0 -->
     <section id="screen-0" class="screen landing is-visible" data-screen-index="0" aria-label="Welcome">
       <h1>Found a cheap flight.<br>Don't know what to do with it?</h1>
       <p class="subheading">Tell us where you're flying in and out of. We'll handle the rest — destinations, hidden gems, local food, transport, and budget.</p>
@@ -520,36 +654,22 @@
       <p class="landing__note">No sign-up • No credit card • Free</p>
     </section>
 
-    <!-- Screen 1 — Form -->
+    <!-- Screen 1 -->
     <section id="screen-1" class="screen form-screen" data-screen-index="1" aria-label="Trip details" hidden>
       <h2>Let's build your trip.</h2>
       <form id="trip-form">
-
-        <!-- Trip type toggle -->
-        <div class="trip-type-toggle" role="group" aria-label="Trip type">
-          <button type="button" class="trip-type-btn" id="btn-oneway" data-val="oneway">One way</button>
-          <button type="button" class="trip-type-btn is-active" id="btn-return" data-val="return">Return trip</button>
+        <div class="trip-type-toggle" role="group">
+          <button type="button" class="trip-type-btn" id="btn-oneway">One way</button>
+          <button type="button" class="trip-type-btn is-active" id="btn-return">Return trip</button>
         </div>
-
-        <!-- Fly in -->
         <div class="form-group">
-          <label for="arrival-city">🛬 Flying into?</label>
-          <div class="airport-wrap">
-            <input type="text" id="arrival-city" name="flyInto" placeholder="Type city or airport name" autocomplete="off" required>
-            <div class="airport-dropdown" id="arrival-dropdown" role="listbox" aria-label="Airport suggestions"></div>
-          </div>
+          <label for="arrival-city">✈️ Flying into?</label>
+          <input type="text" id="arrival-city" name="flyInto" placeholder="city or airport name" required>
         </div>
-
-        <!-- Fly out (hidden when one-way) -->
         <div class="form-group" id="flyout-group">
-          <label for="departure-city">🛫 Flying out from?</label>
-          <div class="airport-wrap">
-            <input type="text" id="departure-city" name="flyOut" placeholder="Same city or different?" autocomplete="off">
-            <div class="airport-dropdown" id="departure-dropdown" role="listbox" aria-label="Airport suggestions"></div>
-          </div>
+          <label for="departure-city">✈️ Flying out from?</label>
+          <input type="text" id="departure-city" name="flyOut" placeholder="same city or different?" required>
         </div>
-
-        <!-- Dates -->
         <div class="form-row">
           <div class="form-group">
             <label for="date-from">📅 From</label>
@@ -560,7 +680,6 @@
             <input type="date" id="date-to" name="dateTo" required>
           </div>
         </div>
-
         <div id="loading-state" class="loading-state" aria-live="polite" hidden>
           <div class="loading-screen">
             <div id="loading-phase1">
@@ -580,31 +699,29 @@
 
     <!-- Screen 2 — Photo Discovery Grid -->
     <section id="screen-2" class="screen discovery-screen" data-screen-index="2" aria-label="Explore experiences" hidden>
-
       <div class="discovery-header">
-        <p class="discovery-welcome" id="discovery-welcome">Welcome. Tap anything that catches your eye.</p>
+        <p class="discovery-welcome" id="discovery-welcome">
+          Welcome. Tap anything that catches your eye.
+        </p>
       </div>
 
-      <!-- Static preference bar -->
       <div class="pref-bar" id="pref-bar">
-        <div class="pref-bar__top" id="pref-bar-toggle" role="button" aria-expanded="false" tabindex="0">
+        <div class="pref-bar__top" id="pref-bar-toggle">
           <div class="pref-bar__label">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
-            Personalise
+            ⚙ Personalise
             <span class="pref-active-dot" id="pref-active-dot" hidden></span>
           </div>
           <div class="pref-bar__warnings">
-            <button class="pref-warn-pill" type="button" data-tip="Event dates are AI-estimated. Always verify before visiting.">🗓 Festivals</button>
-            <button class="pref-warn-pill" type="button" data-tip="Map coordinates are AI-generated. Verify before navigating.">📍 Pins</button>
-            <button class="pref-warn-pill" type="button" data-tip="Photos are keyword-matched and may not exactly show the spot.">📷 Photos</button>
+            <span class="pref-warn-pill" data-tip="Event dates are AI-estimated. Verify before visiting.">🗓 Festivals</span>
+            <span class="pref-warn-pill" data-tip="Map coordinates are AI-generated. Verify before navigating.">📍 Pins</span>
+            <span class="pref-warn-pill" data-tip="Photos are keyword-matched and may not exactly show the spot.">📷 Photos</span>
           </div>
           <span class="pref-bar__chevron" id="pref-chevron">▾</span>
         </div>
-
         <div class="pref-bar__body" id="pref-bar-body" hidden>
           <div class="pref-row">
             <div class="pref-row__label">Style</div>
-            <div class="pref-chips" data-pref-group="style">
+            <div class="pref-chips">
               <button type="button" class="pref-chip is-hard-active" data-pref="style" data-val="both">Both</button>
               <button type="button" class="pref-chip" data-pref="style" data-val="outdoor">Outdoor</button>
               <button type="button" class="pref-chip" data-pref="style" data-val="indoor">Indoor</button>
@@ -612,7 +729,7 @@
           </div>
           <div class="pref-row">
             <div class="pref-row__label">Travelling with</div>
-            <div class="pref-chips" data-pref-group="companion">
+            <div class="pref-chips">
               <button type="button" class="pref-chip" data-pref="companion" data-val="solo">Solo</button>
               <button type="button" class="pref-chip" data-pref="companion" data-val="couple">Couple</button>
               <button type="button" class="pref-chip" data-pref="companion" data-val="family">Family + Kids</button>
@@ -620,7 +737,7 @@
           </div>
           <div class="pref-row">
             <div class="pref-row__label">Food</div>
-            <div class="pref-chips" data-pref-group="food">
+            <div class="pref-chips">
               <button type="button" class="pref-chip is-hard-active" data-pref="food" data-val="all">All</button>
               <button type="button" class="pref-chip" data-pref="food" data-val="halal">Halal</button>
               <button type="button" class="pref-chip" data-pref="food" data-val="vegetarian">Vegetarian</button>
@@ -628,15 +745,15 @@
           </div>
           <div class="pref-row">
             <div class="pref-row__label">Entrance fee</div>
-            <div class="pref-chips" data-pref-group="entrance">
+            <div class="pref-chips">
               <button type="button" class="pref-chip is-hard-active" data-pref="entrance" data-val="both">Both</button>
               <button type="button" class="pref-chip" data-pref="entrance" data-val="free">Free entry</button>
               <button type="button" class="pref-chip" data-pref="entrance" data-val="ticketed">Ticketed</button>
             </div>
           </div>
           <div class="pref-row">
-            <div class="pref-row__label">Interests <span style="font-size:0.6rem;color:#bbb;font-weight:400;text-transform:none;letter-spacing:0"> — boosts matching spots to top</span></div>
-            <div class="pref-chips" data-pref-group="interests">
+            <div class="pref-row__label">Interests</div>
+            <div class="pref-chips">
               <button type="button" class="pref-chip" data-pref="interest" data-val="photogenic">Photogenic</button>
               <button type="button" class="pref-chip" data-pref="interest" data-val="historic">Historic</button>
               <button type="button" class="pref-chip" data-pref="interest" data-val="adventure">Adventure</button>
@@ -646,12 +763,11 @@
         </div>
       </div>
 
-      <!-- Search bar -->
       <div class="discovery-search-wrap">
         <input type="search" class="discovery-search" id="discovery-search" placeholder="🔍 Filter spots..." aria-label="Filter experiences">
       </div>
 
-      <!-- Type filter chips -->
+      <!-- Filter chips -->
       <div class="discovery-chips" id="discovery-chips" aria-label="Filter by type">
         <button type="button" class="discovery-chip is-active" data-filter="all">All</button>
         <button type="button" class="discovery-chip" data-filter="sight">🏛️ Sights</button>
@@ -665,12 +781,13 @@
         <button type="button" class="discovery-chip" data-filter="day-trip">🚌 Day trips</button>
         <button type="button" class="discovery-chip" data-filter="seasonal">🌸 Seasonal</button>
       </div>
-
       <div class="discovery-grid" id="discovery-grid"></div>
-      <p class="discovery-no-results" id="discovery-no-results" hidden>No experiences match that filter. Try another.</p>
+      <p class="discovery-no-results" id="discovery-no-results" hidden>
+        No experiences match that filter. Try another.
+      </p>
     </section>
 
-    <!-- Screen 3 — Results (browse by type) -->
+    <!-- Screen 3 — Results -->
     <section id="screen-results" class="screen results-screen" data-screen-index="3" aria-label="Suggested spots" hidden>
       <h2 id="results-heading">Here's what's near</h2>
       <p id="results-empty" class="results-empty" hidden>Giya did not return any spots. Please try again.</p>
@@ -681,28 +798,22 @@
     <!-- Screen 4 — Map -->
     <section id="screen-map" class="screen" data-screen-index="4" aria-label="Trip map" hidden>
       <div class="map-wrap">
-        <div class="china-caution" id="china-caution">
-          📍 Map pins in China may be slightly offset due to coordinate system differences. Verify locations before navigating.
-        </div>
-        <div class="map-and-panel">
-          <div id="main-map"></div>
-          <aside class="map-panel" aria-label="Map pins">
-            <div class="map-panel__header">
-              <span class="map-panel__title">My Pins</span>
-              <button type="button" class="map-panel__show-all" id="btn-show-all-pins">Show all</button>
-            </div>
-            <div class="map-panel__terminals" id="map-terminals" hidden>
-              <p class="map-panel__terminals-label">Your journey</p>
-              <div id="map-terminals-list"></div>
-            </div>
-            <div class="map-panel__list" id="map-spot-list">
-              <p class="map-panel__empty">No spots added yet. Browse results and tap "+ Add to my map".</p>
-            </div>
-          </aside>
-        </div>
+        <div id="main-map"></div>
+        <aside class="map-panel" aria-label="Map pins">
+          <div class="map-panel__header">
+            <span class="map-panel__title">My Pins</span>
+            <button type="button" class="map-panel__show-all" id="btn-show-all-pins">Show all</button>
+          </div>
+          <div class="map-panel__terminals" id="map-terminals" hidden>
+            <p class="map-panel__terminals-label">Your journey</p>
+            <div id="map-terminals-list"></div>
+          </div>
+          <div class="map-panel__list" id="map-spot-list">
+            <p class="map-panel__empty">No spots added yet. Browse results and tap "+ Add to my map".</p>
+          </div>
+        </aside>
       </div>
     </section>
-
   </main>
 
   <!-- FOOTER -->
@@ -714,11 +825,6 @@
 
   <script>
     console.log('[Giya] SCRIPT STARTED');
-
-    /* ── AIRPORT DATA (1,175 large airports, OurAirports CC0) ── */
-    /* Format: [iata, name, city, country, lat, lng] */
-    const AIRPORTS=[["AAC","El Arish International Airport","El Arish","EG",31.0553,33.828],["AAE","Annaba Rabah Bitat Airport","Annaba","DZ",36.8268,7.8133],["AAL","Aalborg Airport","Aalborg","DK",57.0948,9.8499],["AAN","Al Ain International Airport","Al Ain","AE",24.2617,55.6092],["AAR","Aarhus Airport","Aarhus","DK",56.3033,10.6183],["ABA","Abakan International Airport","Abakan","RU",53.74,91.385],["ABB","Asaba International Airport","Asaba","NG",6.2042,6.6653],["ABD","Abadan Ayatollah Jami International Airport","Abadan","IR",30.3679,48.2301],["ABJ","F\u00e9lix-Houphou\u00ebt-Boigny International Airport","Abidjan","CI",5.2614,-3.9263],["ABQ","Albuquerque International Sunport","Albuquerque","US",35.04,-106.6089],["ABV","Nnamdi Azikiwe International Airport","Abuja","NG",9.0068,7.2632],["ABZ","Aberdeen International Airport","Aberdeen","GB",57.2019,-2.1978],["ACA","General Juan N. \u00c1lvarez International Airport","Acapulco","MX",16.7571,-99.7531],["ACC","Kotoka International Airport","Accra","GH",5.6052,-0.1668],["ACE","C\u00e9sar Manrique-Lanzarote Airport","San Bartolom\u00e9","ES",28.9455,-13.6052],["ADA","Adana \u015eakirpa\u015fa Airport","Seyhan","TR",36.9822,35.2804],["ADB","Adnan Menderes International Airport","Gaziemir","TR",38.2924,27.157],["ADD","Addis Ababa Bole International Airport","Addis Ababa","ET",8.9779,38.7993],["ADE","Aden International Airport","Aden","YE",12.8296,45.03],["ADJ","Marka International (Amman Civil) Airport","Amman","JO",31.9727,35.9916],["ADL","Adelaide International Airport","Adelaide","AU",-34.9475,138.5334],["ADZ","Gustavo Rojas Pinilla International Airport","San Andr\u00e9s","CO",12.5836,-81.7112],["AEP","Aeroparque Jorge Newbery","Buenos Aires","AR",-34.5594,-58.4155],["AER","Sochi International Airport","Sochi","RU",43.4499,39.9566],["AES","\u00c5lesund Airport","\u00c5lesund","NO",62.5604,6.1108],["AEY","Akureyri International Airport","Akureyri","IS",65.6566,-18.072],["AGA","Al Massira Airport","Agadir (Temsia)","MA",30.3225,-9.412],["AGP","M\u00e1laga-Costa del Sol Airport","M\u00e1laga","ES",36.6749,-4.4991],["AGT","Guaran\u00ed International Airport","Ciudad del Este","PY",-25.4572,-54.8395],["AGU","Aguascalientes International Airport","Aguascalientes","MX",21.6996,-102.3184],["AHB","Abha International Airport","Abha","SA",18.2404,42.6566],["AJF","Al-Jawf International Airport","Al-Jawf","SA",29.7833,40.1009],["AKL","Auckland International Airport","Auckland","NZ",-37.012,174.7863],["AKX","Aktobe International Airport","Aktobe","KZ",50.2481,57.2041],["ALA","Almaty International Airport","Almaty","KZ",43.3543,77.0428],["ALB","Albany International Airport","Albany","US",42.7483,-73.8017],["ALC","Alicante-Elche Miguel Hern\u00e1ndez Airport","Alicante","ES",38.2822,-0.5582],["ALG","Houari Boumediene Airport","Algiers","DZ",36.6939,3.2145],["ALP","Aleppo International Airport","Aleppo","SY",36.1813,37.2269],["AMD","Sardar Vallabh Patel International Airport","Ahmedabad","IN",23.0772,72.6347],["AMM","Queen Alia International Airport","Amman","JO",31.7226,35.9932],["AMQ","Pattimura International Airport","Ambon","ID",-3.7103,128.089],["AMS","Amsterdam Airport Schiphol","Amsterdam","NL",52.3086,4.7639],["ANC","Ted Stevens Anchorage International Airport","Anchorage","US",61.179,-149.9926],["ANF","Andr\u00e9s Sabella G\u00e1lvez International Airport","Antofagasta","CL",-23.4453,-70.4452],["ANU","V. C. Bird International Airport","Osbourn","AG",17.1367,-61.7927],["AOE","Hasan Polatkan Airport","Eski\u015fehir","TR",39.8116,30.5193],["AOJ","Aomori Airport","Aomori","JP",40.7338,140.6895],["APL","Nampula Airport","Nampula","MZ",-15.1056,39.2818],["APW","Faleolo International Airport","Apia","WS",-13.83,-172.008],["AQI","Qaisumah\u2013Hafar Al-Batin International Airport","Qaisumah","SA",28.3357,46.1271],["AQJ","King Hussein International Airport","Aqaba","JO",29.6116,35.0181],["AQP","Rodr\u00edguez Ball\u00f3n International Airport","Arequipa","PE",-16.3408,-71.5695],["ARN","Stockholm-Arlanda Airport","Stockholm","SE",59.6485,17.9288],["ASB","Ashgabat International Airport","Ashgabat","TM",37.9868,58.361],["ASF","Astrakhan Narimanovo Boris M. Kustodiev International Airport","Astrakhan","RU",46.2828,48.0105],["ASK","Yamoussoukro International Airport","Yamoussoukro","CI",6.9032,-5.3656],["ASR","Kayseri Erkilet International Airport","Kayseri","TR",38.7704,35.4954],["ASU","Silvio Pettirossi International Airport","Asunci\u00f3n","PY",-25.2402,-57.5192],["ASW","Aswan International Airport","Aswan","EG",23.9611,32.8204],["ATH","Athens Eleftherios Venizelos International Airport","Spata-Artemida","GR",37.9364,23.9445],["ATL","Hartsfield Jackson Atlanta International Airport","Atlanta","US",33.6367,-84.4281],["ATQ","Sri Guru Ram Das Ji International Airport","Amritsar","IN",31.7096,74.7973],["ATZ","Asyut International Airport","Asyut","EG",27.046,31.0128],["AUA","Queen Beatrix International Airport","Oranjestad","AW",12.5011,-70.0143],["AUH","Zayed International Airport","Abu Dhabi","AE",24.441,54.6492],["AUS","Austin Bergstrom International Airport","Austin","US",30.1975,-97.662],["AVV","Melbourne Avalon International Airport","Geelong/Melbourne","AU",-38.0403,144.4672],["AWA","Hawassa International Airport","Hawassa","ET",7.1006,38.3965],["AWZ","Qasem Soleimani International Airport","Ahvaz","IR",31.3364,48.7638],["AYT","Antalya International Airport","Antalya","TR",36.8987,30.8005],["AZI","Al Bateen Executive Airport","Abu Dhabi","AE",24.4271,54.4599],["BAH","Bahrain International Airport","Manama","BH",26.2673,50.6376],["BAQ","Ernesto Cortissoz International Airport","Barranquilla","CO",10.8896,-74.7808],["BAV","Baotou Donghe International Airport","Baotou","CN",40.56,109.997],["BAX","Barnaul Gherman Titov International Airport","Barnaul","RU",53.3613,83.5397],["BBI","Biju Patnaik International Airport","Bhubaneswar","IN",20.251,85.8147],["BBK","Kasane International Airport","Kasane","BW",-17.8317,25.1662],["BBU","Bucharest B\u0103neasa Aurel Vlaicu International Airport","Bucharest","RO",44.5031,26.1029],["BCD","Bacolod-Silay International Airport","Bacolod City","PH",10.7762,123.0189],["BCM","Bac\u0103u George Enescu International  Airport","Bac\u0103u","RO",46.5219,26.9103],["BCN","Josep Tarradellas Barcelona-El Prat Airport","Barcelona","ES",41.2971,2.0785],["BCU","Sir Abubakar Tafawa Balewa Bauchi State International Airport","Bauchi","NG",10.4828,9.744],["BDA","L.F. Wade International Airport","Hamilton","BM",32.3638,-64.6782],["BDJ","Syamsudin Noor International Airport","Banjarbaru","ID",-3.4401,114.7612],["BDL","Bradley International Airport","Hartford","US",41.9386,-72.688],["BDQ","Vadodara International Airport","Vadodara","IN",22.3362,73.2263],["BDS","Brindisi Airport","Brindisi","IT",40.6576,17.947],["BEG","Belgrade Nikola Tesla Airport","Belgrade","RS",44.8184,20.3091],["BEL","Val de Cans/J\u00falio Cezar Ribeiro International Airport","Bel\u00e9m","BR",-1.3793,-48.4762],["BEM","Beni Mellal Airport","Oulad Yaich","MA",32.4019,-6.3159],["BEN","Benina International Airport","Benina","LY",32.0968,20.2695],["BER","Berlin Brandenburg Airport","Berlin","DE",52.3617,13.5023],["BES","Brest Bretagne airport","Brest","FR",48.4479,-4.4185],["BEW","Beira International Airport","Beira","MZ",-19.7964,34.9076],["BEY","Beirut Rafic Hariri International Airport","Beirut","LB",33.8198,35.4874],["BFN","Bram Fischer International Airport","Bloemfontein","ZA",-29.0927,26.3024],["BFS","Belfast International Airport","Belfast","GB",54.6575,-6.2158],["BGF","Bangui M'Poko International Airport","Bangui","CF",4.3985,18.5188],["BGI","Grantley Adams International Airport","Bridgetown","BB",13.0747,-59.491],["BGO","Bergen Airport, Flesland","Bergen","NO",60.2934,5.2181],["BGW","Baghdad International Airport / New Al Muthana Air Base","Baghdad","IQ",33.2625,44.2346],["BGY","Il Caravaggio International Airport","Orio al Serio (BG)","IT",45.6694,9.7089],["BHK","Bukhara International Airport","Bukhara","UZ",39.7753,64.4823],["BHM","Birmingham-Shuttlesworth International Airport","Birmingham","US",33.5629,-86.7507],["BHO","Raja Bhoj International Airport","Bhopal","IN",23.2875,77.3374],["BHX","Birmingham Airport","Birmingham, West Midlands","GB",52.4539,-1.748],["BIA","Bastia-Poretta International airport","Bastia","FR",42.5527,9.4837],["BIO","Bilbao Airport","Bilbao","ES",43.3011,-2.9106],["BJA","Soummam\u2013Abane Ramdane Airport","B\u00e9ja\u00efa","DZ",36.7125,5.0699],["BJL","Banjul International Airport","Banjul (Yundum)","GM",13.338,-16.6522],["BJM","Bujumbura Melchior Ndadaye International Airport","Bujumbura","BI",-3.324,29.3185],["BJV","Milas Bodrum International Airport","Bodrum","TR",37.2493,27.664],["BJX","Guanajuato International Airport","Silao","MX",20.9927,-101.4803],["BKI","Kota Kinabalu International Airport","Kota Kinabalu","MY",5.9327,116.0493],["BKK","Suvarnabhumi Airport","Bangkok","TH",13.6811,100.747],["BKO","Modibo Keita International Airport","Bamako","ML",12.5335,-7.9499],["BLA","General Jos\u00e9 Antonio Anzoategui International Airport","Barcelona","VE",10.1111,-64.6922],["BLJ","Batna Mostefa Ben Boulaid Airport","Batna","DZ",35.7521,6.3086],["BLL","Billund Airport","Billund","DK",55.7403,9.157],["BLQ","Bologna Guglielmo Marconi Airport","Bologna","IT",44.5354,11.2887],["BLR","Kempegowda International Airport Bengaluru","Bengaluru","IN",13.1979,77.7063],["BLZ","Chileka International Airport","Blantyre","MW",-15.6772,34.9723],["BME","Broome International Airport","Broome","AU",-17.9492,122.2283],["BNA","Nashville International Airport","Nashville","US",36.1245,-86.6782],["BND","Bandar Abbas International Airport","Bandar Abbas","IR",27.2183,56.3778],["BNE","Brisbane International Airport","Brisbane","AU",-27.3842,153.117],["BNX","Banja Luka International Airport","Mahovljani","BA",44.9414,17.2975],["BOD","Bordeaux\u2013M\u00e9rignac Airport","Bordeaux","FR",44.8287,-0.7154],["BOG","El Dorado International Airport","Bogota","CO",4.7016,-74.1469],["BOI","Boise Air Terminal/Gowen Field","Boise","US",43.5644,-116.223],["BOJ","Burgas Airport","Burgas","BG",42.5699,27.5152],["BOM","Chhatrapati Shivaji Maharaj International Airport","Mumbai","IN",19.0887,72.8679],["BON","Flamingo International Airport","Kralendijk","BQ",12.131,-68.2685],["BOO","Bod\u00f8 Airport","Bod\u00f8","NO",67.2692,14.3653],["BOS","Boston Logan International Airport","Boston","US",42.362,-71.0079],["BOY","Bobo Dioulasso Airport","Bobo Dioulasso","BF",11.1601,-4.331],["BPN","Sultan Aji Muhammad Sulaiman Sepinggan International Airport","Balikpapan","ID",-1.2683,116.8945],["BPS","Porto Seguro International Airport","Porto Seguro","BR",-16.4384,-39.0806],["BQT","Brest International Airport","Brest","BY",52.1081,23.8968],["BRC","Teniente Luis Candelaria International Airport","San Carlos de Bariloche","AR",-41.1512,-71.1575],["BRE","Bremen Airport","Bremen","DE",53.0468,8.7893],["BRI","Bari Karol Wojty\u0142a International Airport","Bari","IT",41.1389,16.7606],["BRM","Jacinto Lara International Airport","Barquisimeto","VE",10.0427,-69.3586],["BRS","Bristol Airport","Bristol","GB",51.3823,-2.7165],["BRU","Brussels Airport","Zaventem","BE",50.9014,4.4844],["BSA","Bender Qassim International Airport","Bosaso","SO",11.2752,49.1392],["BSB","Presidente Juscelino Kubitschek International Airport","Bras\u00edlia","BR",-15.8692,-47.9208],["BSG","Bata International Airport","Bata","GQ",1.9055,9.8057],["BSK","Biskra - Mohamed Khider Airport","Biskra","DZ",34.7932,5.7389],["BSL","EuroAirport Basel\u2013Mulhouse\u2013Freiburg","B\u00e2le / Mulhouse","FR",47.6007,7.5211],["BSR","Basra International Airport","Basra","IQ",30.5491,47.6621],["BSZ","Manas International Airport","Bishkek","KG",43.0613,74.4776],["BTH","Hang Nadim International Airport","Batam","ID",1.121,104.119],["BTJ","Sultan Iskandar Muda International Airport","Banda Aceh","ID",5.5251,95.42],["BTS","M. R. \u0160tef\u00e1nik Airport","Bratislava","SK",48.1702,17.2127],["BUD","Budapest Liszt Ferenc International Airport","Budapest","HU",47.4302,19.2624],["BUF","Buffalo Niagara International Airport","Buffalo","US",42.9405,-78.7322],["BUQ","Joshua Mqabuko Nkomo International Airport","Bulawayo","ZW",-20.0163,28.6229],["BUR","Hollywood Burbank/Bob Hope Airport","Burbank","US",34.2028,-118.3581],["BUS","Alexander Kartveli Batumi International Airport","Batumi","GE",41.6094,41.6003],["BVA","Beauvais-Till\u00e9 airport","Beauvais","FR",49.4544,2.1128],["BVB","Atlas Brasil Cantanhede International Airport","Boa Vista","BR",2.8462,-60.6906],["BVC","Aristides Pereira International Airport","Rabil","CV",16.1365,-22.8889],["BWA","Gautam Buddha International Airport","Siddharthanagar (Bhairahawa)","NP",27.5046,83.4104],["BWI","Baltimore/Washington International Thurgood Marshall Airport","Baltimore","US",39.1754,-76.6683],["BWN","Brunei International Airport","Bandar Seri Begawan","BN",4.9442,114.928],["BXY","Baikonur Krayniy International Airport","Baikonur","KZ",45.622,63.2108],["BZE","Philip S. W. Goldson International Airport","Belize City","BZ",17.54,-88.3036],["BZV","Maya-Maya International Airport","Brazzaville","CG",-4.2517,15.253],["CAG","Cagliari Elmas Airport","Cagliari","IT",39.2515,9.0543],["CAI","Cairo International Airport","Cairo","EG",30.1115,31.3967],["CAN","Guangzhou Baiyun International Airport","Guangzhou (Huadu)","CN",23.3924,113.299],["CAP","Cap Haitien International Airport","Cap Haitien","HT",19.7255,-72.2007],["CAY","Cayenne \u2013 F\u00e9lix Ebou\u00e9 Airport","Matoury","GF",4.82,-52.3613],["CBB","Jorge Wilsterman International Airport","Cochabamba","BO",-17.4211,-66.1771],["CCJ","Calicut International Airport","Calicut","IN",11.136,75.9552],["CCK","Cocos (Keeling) Islands Airport","West Island","CC",-12.1922,96.8341],["CCP","Carriel Sur International Airport","Concepcion","CL",-36.7724,-73.0628],["CCS","Maiquet\u00eda Sim\u00f3n Bol\u00edvar International Airport","Maiquet\u00eda","VE",10.6022,-66.9912],["CCU","Netaji Subhash Chandra Bose International Airport","Kolkata","IN",22.654,88.4476],["CDG","Charles de Gaulle International Airport","Paris (Roissy-en-France, Val-d'Oise)","FR",49.009,2.5541],["CEB","Mactan Cebu International Airport","Cebu City/Lapu-Lapu City","PH",10.3093,123.9797],["CEI","Mae Fah Luang - Chiang Rai International Airport","Chiang Rai","TH",19.9523,99.8829],["CEK","Kurchatov Chelyabinsk International Airport","Chelyabinsk","RU",55.3031,61.5049],["CFE","Clermont-Ferrand Auvergne airport","Clermont-Ferrand","FR",45.7867,3.1692],["CFK","Chlef Aboubakr Belkaid International Airport","Chlef","DZ",36.2166,1.3411],["CFU","Corfu Ioannis Kapodistrias International Airport","Kerkyra (Corfu)","GR",39.6014,19.9122],["CGB","V\u00e1rzea Grande\u2013Marechal Rondon International Airport","Cuiab\u00e1","BR",-15.6529,-56.1167],["CGH","Congonhas\u2013Deputado Freitas Nobre Airport","S\u00e3o Paulo","BR",-23.6277,-46.6546],["CGK","Soekarno-Hatta International Airport","Jakarta","ID",-6.1256,106.656],["CGN","Cologne Bonn Airport","K\u00f6ln (Cologne)","DE",50.8659,7.1427],["CGO","Zhengzhou Xinzheng International Airport","Zhengzhou","CN",34.5265,113.8492],["CGP","Shah Amanat International Airport","Chattogram (Chittagong)","BD",22.2496,91.8133],["CGQ","Changchun Longjia International Airport","Changchun","CN",43.9962,125.685],["CGY","Laguindingan International Airport","Laguindingan","PH",8.6122,124.4565],["CHC","Christchurch International Airport","Christchurch","NZ",-43.489,172.5321],["CHQ","Chania International Airport","Souda","GR",35.5312,24.1507],["CHS","Charleston International Airport","Charleston","US",32.8962,-80.0382],["CIA","Ciampino\u2013G. B. Pastine International Airport","Rome","IT",41.7988,12.5953],["CIT","Shymkent International Airport","Shymkent","KZ",42.365,69.4756],["CIX","Capit\u00e1n FAP Jos\u00e9 A. Qui\u00f1ones Gonz\u00e1lez International Airport","Chiclayo","PE",-6.7892,-79.8283],["CJB","Coimbatore International Airport","Coimbatore","IN",11.03,77.0434],["CJJ","Cheongju International Airport/Cheongju Air Base (K-59/G-513)","Cheongju","KR",36.7156,127.5003],["CJS","Abraham Gonz\u00e1lez International Airport","Ciudad Ju\u00e1rez","MX",31.6367,-106.4285],["CJU","Jeju International Airport","Jeju City","KR",33.5121,126.4925],["CKG","Chongqing Jiangbei International Airport","Chongqing","CN",29.7123,106.6519],["CKY","Ahmed S\u00e9kou Tour\u00e9 International Airport","Conakry","GN",9.5769,-13.612],["CLE","Cleveland Hopkins International Airport","Cleveland","US",41.4117,-81.8498],["CLJ","Avram Iancu Cluj International Airport","Cluj-Napoca","RO",46.786,23.6857],["CLO","Alfonso Bonilla Aragon International Airport","Cali","CO",3.5427,-76.3819],["CLT","Charlotte Douglas International Airport","Charlotte","US",35.214,-80.9431],["CMB","Bandaranaike International Colombo Airport","Colombo","LK",7.1808,79.8841],["CMH","John Glenn Columbus International Airport","Columbus","US",39.998,-82.8919],["CMN","Mohammed V International Airport","Casablanca","MA",33.3675,-7.59],["CMW","Ignacio Agramonte International Airport","Camaguey","CU",21.4199,-77.848],["CND","Mihail Kog\u0103lniceanu International Airport","Constan\u021ba","RO",44.3622,28.4883],["CNF","Tancredo Neves International Airport","Belo Horizonte","BR",-19.6357,-43.9669],["CNN","Kannur International Airport","Kannur","IN",11.9163,75.545],["CNS","Cairns International Airport","Cairns","AU",-16.8789,145.7495],["CNX","Chiang Mai International Airport","Chiang Mai","TH",18.7668,98.9626],["COK","Cochin International Airport","Kochi","IN",10.151,76.4008],["COO","Cotonou Cadjehoun International Airport","Cotonou","BJ",6.3572,2.3843],["COR","Ingeniero Aeron\u00e1utico Ambrosio L.V. Taravella International Airport","Cordoba","AR",-31.3123,-64.2083],["COS","City of Colorado Springs Municipal Airport","Colorado Springs","US",38.8058,-104.701],["COV","\u00c7ukurova International Airport","Tarsus","TR",36.8915,35.0712],["CPH","Copenhagen Kastrup Airport","Copenhagen","DK",55.6179,12.656],["CPT","Cape Town International Airport","Cape Town","ZA",-33.974,18.6043],["CRA","Craiova International Airport","Craiova","RO",44.3181,23.8886],["CRD","General Enrique Mosconi International Airport","Comodoro Rivadavia","AR",-45.7869,-67.4634],["CRK","Clark International Airport / Clark Air Base","Mabalacat","PH",15.186,120.56],["CRL","Brussels South Charleroi Airport","Charleroi","BE",50.462,4.4596],["CRZ","T\u00fcrkmenabat International Airport","T\u00fcrkmenabat","TM",38.9307,63.564],["CSX","Changsha Huanghua International Airport","Changsha (Changsha)","CN",28.1892,113.22],["CTA","Catania-Fontanarossa Airport","Catania","IT",37.4668,15.0664],["CTG","Rafael Nu\u00f1ez International Airport","Cartagena","CO",10.4424,-75.513],["CTS","New Chitose Airport","Sapporo","JP",42.7748,141.6904],["CTU","Chengdu Shuangliu International Airport","Chengdu (Shuangliu)","CN",30.5583,103.946],["CUL","Bachigualato Federal International Airport","Culiac\u00e1n","MX",24.765,-107.4752],["CUN","Canc\u00fan International Airport","Canc\u00fan","MX",21.0408,-86.8735],["CUR","Hato International Airport","Willemstad","CW",12.1889,-68.9598],["CUU","General Roberto Fierro Villalobos International Airport","Chihuahua","MX",28.7026,-105.9638],["CUZ","Alejandro Velasco Astete International Airport","Cusco","PE",-13.5357,-71.9388],["CVG","Cincinnati Northern Kentucky International Airport","Cincinnati / Covington","US",39.0488,-84.6678],["CWB","Curitiba-Afonso Pena International Airport","Curitiba","BR",-25.5285,-49.1758],["CWL","Cardiff International Airport","Cardiff","GB",51.3967,-3.3433],["CXI","Cassidy International Airport","Kiritimati","KI",1.9863,-157.35],["CXR","Cam Ranh International Airport / Cam Ranh Air Base","Nha Trang/nha Trang aiurportCam Ranh","VN",11.9982,109.219],["CZL","Mohamed Boudiaf International Airport","Constantine","DZ",36.276,6.6204],["CZM","Cozumel International Airport","Cozumel","MX",20.5149,-86.9285],["DAC","Hazrat Shahjalal International Airport","Dhaka","BD",23.8433,90.3978],["DAD","Da Nang International Airport","Da Nang","VN",16.0439,108.199],["DAL","Dallas Love Field","Dallas","US",32.8448,-96.8477],["DAM","Damascus International Airport","Damascus","SY",33.4115,36.5156],["DAR","Julius Nyerere International Airport","Dar es Salaam","TZ",-6.8735,39.2073],["DAT","Datong Yungang International Airport","Datong","CN",40.0614,113.4805],["DBB","El Alamein International Airport","El Alamein","EG",30.9243,28.4616],["DBV","Dubrovnik Ru\u0111er Bo\u0161kovi\u0107 Airport","Dubrovnik","HR",42.5622,18.2655],["DCA","Ronald Reagan Washington National Airport","Washington","US",38.8521,-77.0377],["DEB","Debrecen International Airport","Debrecen","HU",47.4895,21.6163],["DEL","Indira Gandhi International Airport","New Delhi","IN",28.5556,77.0952],["DEN","Denver International Airport","Denver","US",39.86,-104.6738],["DFW","Dallas Fort Worth International Airport","Dallas-Fort Worth","US",32.8968,-97.038],["DHA","King Abdulaziz Air Base","Dhahran","SA",26.2654,50.152],["DIA","Doha International Airport","Doha","QA",25.2594,51.5655],["DIL","Presidente Nicolau Lobato International Airport","Dili","TL",-8.5466,125.5245],["DIR","Aba Tenna Dejazmach Yilma International Airport","Dire Dawa","ET",9.6235,41.855],["DJE","Djerba Zarzis International Airport","Mellita","TN",33.8737,10.7773],["DJG","Tiska Djanet Airport","Djanet","DZ",24.2854,9.4637],["DJJ","Dortheys Hiyo Eluay International Airport","Sentani","ID",-2.5796,140.5199],["DKR","L\u00e9opold S\u00e9dar Senghor International Airport","Dakar","SN",14.7423,-17.4792],["DLA","Douala International Airport","Douala","CM",4.0061,9.7195],["DLC","Dalian Zhoushuizi International Airport","Dalian (Ganjingzi)","CN",38.9657,121.5385],["DLM","Dalaman International Airport","Dalaman","TR",36.7131,28.7925],["DMB","Taraz International Airport","Taraz","KZ",42.8536,71.3036],["DME","Domodedovo International Airport","Moscow","RU",55.4088,37.9063],["DMK","Don Mueang International Airport","Bangkok","TH",13.9126,100.607],["DMM","King Fahd International Airport","Ad Dammam","SA",26.4691,49.7982],["DNA","Kadena Air Base","Okinawa","JP",26.3517,127.7694],["DNH","Dunhuang Mogao International Airport","Dunhuang","CN",40.162,94.8128],["DOH","Hamad International Airport","Doha","QA",25.2731,51.6081],["DPS","Denpasar I Gusti Ngurah Rai International Airport","Kuta, Badung","ID",-8.7484,115.1671],["DQM","Duqm International Airport","Duqm","OM",19.5019,57.6342],["DRP","Bicol International Airport","Legazpi","PH",13.1119,123.6768],["DRS","Dresden Airport","Dresden","DE",51.1341,13.7678],["DRW","Darwin International Airport / RAAF Darwin","Darwin","AU",-12.415,130.8818],["DSM","Des Moines International Airport","Des Moines","US",41.534,-93.6567],["DSN","Ordos Ejin Horo International Airport","Ordos","CN",39.4935,109.8599],["DSS","Blaise Diagne International Airport","Dakar","SN",14.6709,-17.0728],["DSY","Dara Sakor International Airport","Ta Noun","KH",10.9142,103.2267],["DTM","Dortmund Airport","Dortmund","DE",51.5183,7.6122],["DTW","Detroit Metropolitan Wayne County Airport","Detroit","US",42.2138,-83.3538],["DUB","Dublin Airport","Dublin","IE",53.4287,-6.2621],["DUR","King Shaka International Airport","Durban","ZA",-29.6144,31.1197],["DUS","D\u00fcsseldorf Airport","D\u00fcsseldorf","DE",51.2895,6.7668],["DVO","Francisco Bangoy International Airport","Davao","PH",7.1255,125.646],["DWC","Al Maktoum International Airport","Dubai(Jebel Ali)","AE",24.8962,55.1624],["DXB","Dubai International Airport","Dubai","AE",25.2498,55.371],["DXN","Noida International Airport","Gautam Buddha Nagar","IN",28.1799,77.6118],["DYG","Zhangjiajie Hehua International Airport","Zhangjiajie (Yongding)","CN",29.1047,110.4428],["DYU","Dushanbe International Airport","Dushanbe","TJ",38.5437,68.823],["DZA","Dzaoudzi Pamandzi International Airport","Dzaoudzi","YT",-12.8093,45.2818],["DZN","Zhezkazgan National Airport","Zhezkazgan","KZ",47.709,67.7381],["EBB","Entebbe International Airport","Entebbe","UG",0.0424,32.4435],["EBL","Erbil International Airport","Arbil","IQ",36.236,43.9466],["ECN","Ercan International Airport","Tymbou (Kirklar)","CY",35.1531,33.5074],["EDI","Edinburgh Airport","Edinburgh","GB",55.9501,-3.3723],["EDL","Eldoret International Airport","Eldoret","KE",0.4045,35.2389],["EDO","Bal\u0131kesir Koca Seyit Airport","Edremit","TR",39.5525,27.0102],["EES","Berenice International Airport / Banas Cape Air Base","Berenice Troglodytica","EG",23.9804,35.4603],["EHU","Ezhou Huahu International Airport","Ezhou","CN",30.3412,115.0393],["EIN","Eindhoven Airport","Eindhoven","NL",51.4501,5.3745],["EIS","Terrance B. Lettsome International Airport","Beef Island","VG",18.4455,-64.5417],["ELP","El Paso International Airport","El Paso","US",31.8099,-106.3756],["ELQ","Prince Naif bin Abdulaziz International Airport","Qassim","SA",26.3028,43.7744],["ELS","King Phalo Airport","East London","ZA",-33.0356,27.8259],["EMA","East Midlands Airport","Nottingham, Leicestershire","GB",52.8311,-1.3281],["ENO","Teniente Ramon A. Ayub Gonzalez International Airport","Encarnaci\u00f3n","PY",-27.2275,-55.8376],["ENU","Akanu Ibiam International Airport","Enegu","NG",6.4737,7.5605],["ERF","Erfurt-Weimar Airport","Erfurt","DE",50.9783,10.9607],["ESB","Esenbo\u011fa International Airport","Ankara","TR",40.1281,32.9951],["ESM","Carlos Concha Torres International Airport","Tachina","EC",0.9785,-79.6266],["ETM","Ramon International Airport","Eilat","IL",29.727,35.0141],["EUN","Laayoune Hassan I International Airport","El Aai\u00fan","EH",27.1425,-13.2249],["EVE","Harstad/Narvik Airport","Evenes","NO",68.4913,16.6781],["EVN","Zvartnots International Airport","Yerevan","AM",40.1489,44.3979],["EWR","Newark Liberty International Airport","Newark","US",40.6894,-74.1705],["EZE","Ezeiza International Airport - Ministro Pistarini","Buenos Aires (Ezeiza)","AR",-34.8222,-58.5358],["FAE","V\u00e1gar Airport","V\u00e1gar","FO",62.0633,-7.2758],["FAO","Faro - Gago Coutinho International Airport","Faro","PT",37.0159,-7.9709],["FAT","Fresno Yosemite International Airport","Fresno","US",36.7758,-119.718],["FBM","Lubumbashi International Airport","Lubumbashi","CD",-11.5915,27.5308],["FCO","Rome\u2013Fiumicino Leonardo da Vinci International Airport","Rome","IT",41.8045,12.252],["FDF","Martinique Aim\u00e9 C\u00e9saire International Airport","Fort-de-France","MQ",14.591,-61.0032],["FDH","Bodensee Airport Friedrichshafen","Friedrichshafen","DE",47.6713,9.5115],["FEZ","Fes Sa\u00efss International Airport","Sa\u00efss","MA",33.9273,-4.978],["FIH","Ndjili International Airport","Kinshasa","CD",-4.3857,15.4446],["FJR","Fujairah International Airport","Fujairah","AE",25.1084,56.3281],["FKB","Karlsruhe Baden-Baden Airport","Rheinm\u00fcnster","DE",48.7794,8.0805],["FKI","Bangoka International Airport","Kisangani","CD",0.4816,25.338],["FLL","Fort Lauderdale Hollywood International Airport","Fort Lauderdale","US",26.0726,-80.1527],["FLN","Herc\u00edlio Luz International Airport","Florian\u00f3polis","BR",-27.6703,-48.5525],["FLR","Florence Airport, Peretola","Firenze (FI)","IT",43.8086,11.2028],["FMM","Memmingen Allgau Airport","Memmingen","DE",47.9881,10.2382],["FMO","M\u00fcnster Osnabr\u00fcck Airport","Greven","DE",52.1338,7.6885],["FNA","Lungi International Airport","Freetown (Lungi-Town)","SL",8.6164,-13.1955],["FNC","Cristiano Ronaldo International Airport","Funchal","PT",32.6978,-16.7746],["FNJ","Pyongyang Sunan International Airport","Pyongyang","KP",39.2241,125.67],["FOC","Fuzhou Changle International Airport","Fuzhou (Changle)","CN",25.9293,119.6725],["FOR","Pinto Martins International Airport","Fortaleza","BR",-3.7758,-38.5322],["FPO","Grand Bahama International Airport","Freeport","BS",26.558,-78.6956],["FRA","Frankfurt Main Airport","Frankfurt am Main","DE",50.0267,8.5584],["FRW","Phillip Gaonwe Matante International Airport","Francistown","BW",-21.1592,27.4688],["FSC","Figari Sud-Corse Airport","Figari","FR",41.5018,9.0971],["FSZ","Mount Fuji Shizuoka Airport","Makinohara / Shimada","JP",34.795,138.191],["FTE","El Calafate - Commander Armando Tola International Airport","El Calafate","AR",-50.282,-72.0539],["FUE","Fuerteventura Airport","El Matorral","ES",28.4527,-13.8638],["FUK","Fukuoka Airport","Fukuoka","JP",33.5859,130.451],["GAN","Gan International Airport","Gan","MV",-0.693,73.1526],["GAU","Lokpriya Gopinath Bordoloi International Airport","Guwahati","IN",26.1067,91.5852],["GBE","Sir Seretse Khama International Airport","Gaborone","BW",-24.5552,25.9182],["GCM","Owen Roberts International Airport","George Town","KY",19.2928,-81.3577],["GDL","Guadalajara International Airport","Guadalajara","MX",20.5233,-103.3101],["GDN","Gda\u0144sk Lech Wa\u0142\u0119sa Airport","Gda\u0144sk","PL",54.3776,18.4662],["GEG","Spokane International Airport","Spokane","US",47.6199,-117.534],["GEO","Cheddi Jagan International Airport","Georgetown","GY",6.4985,-58.2541],["GES","General Santos International Airport","General Santos","PH",6.0572,125.0962],["GHV","Bra\u0219ov-Ghimbav International Airport","Bra\u0219ov (Ghimbav)","RO",45.7056,25.5229],["GIB","Gibraltar Airport","Gibraltar","GI",36.1517,-5.3498],["GIG","Rio Gale\u00e3o \u2013 Tom Jobim International Airport","Rio De Janeiro","BR",-22.81,-43.2506],["GJL","Jijel Ferhat Abbas Airport","Tahir","DZ",36.7941,5.8737],["GLA","Glasgow Airport","Glasgow","GB",55.8719,-4.4331],["GMP","Gimpo International Airport","Seoul","KR",37.5583,126.791],["GND","Maurice Bishop International Airport","Saint George's","GD",12.004,-61.7853],["GNJ","Ganja International Airport","Ganja","AZ",40.7387,46.3204],["GNY","\u015eanl\u0131urfa GAP Airport","\u015eanl\u0131urfa","TR",37.4457,38.8956],["GOA","Genoa Cristoforo Colombo Airport","Genova (GE)","IT",44.412,8.8407],["GOH","Nuuk International Airport","Nuuk","GL",64.1911,-51.6791],["GOI","Goa Dabolim International Airport","Vasco da Gama","IN",15.3801,73.8333],["GOJ","Nizhny Novgorod / Strigino International Airport","Nizhny Novgorod","RU",56.2274,43.7852],["GOM","Goma International Airport","Goma","CD",-1.6668,29.238],["GOT","G\u00f6teborg Landvetter Airport","G\u00f6teborg","SE",57.6628,12.2798],["GOU","Garoua International Airport","Garoua","CM",9.3348,13.3721],["GOX","Manohar International Airport","Mopa","IN",15.7443,73.8606],["GRJ","George Airport","George","ZA",-34.0056,22.3789],["GRO","Girona-Costa Brava Airport","Girona","ES",41.9046,2.7618],["GRQ","Groningen Airport Eelde","Groningen","NL",53.1191,6.5777],["GRR","Gerald R. Ford International Airport","Grand Rapids","US",42.8808,-85.5228],["GRU","S\u00e3o Paulo/Guarulhos\u2013Governor Andr\u00e9 Franco Montoro International Airport","S\u00e3o Paulo","BR",-23.4313,-46.47],["GRV","Akhmat Kadyrov Grozny International Airport","Grozny","RU",43.3881,45.6998],["GRZ","Graz Airport","Feldkirchen bei Graz","AT",46.9911,15.4396],["GSM","Qeshm International Airport","Qeshm(Dayrestan)","IR",26.7546,55.9024],["GSO","Piedmont Triad International Airport","Greensboro","US",36.0994,-79.9373],["GSV","Gagarin International Airport","Saratov","RU",51.7128,46.1711],["GUA","La Aurora International Airport","Guatemala City","GT",14.5829,-90.5275],["GUM","Antonio B. Won Pat International Airport","Hag\u00e5t\u00f1a","GU",13.485,144.7973],["GUW","Atyrau International Airport","Atyrau","KZ",47.1213,51.8203],["GVA","Geneva International Airport","Geneva","CH",46.2381,6.109],["GWD","New Gwadar International Airport","Gurandani","PK",25.2967,62.4988],["GXF","Seiyun Hadhramaut International Airport","Seiyun","YE",15.9659,48.7881],["GYD","Heydar Aliyev International Airport","Baku","AZ",40.4728,50.0509],["GYE","Jos\u00e9 Joaqu\u00edn de Olmedo International Airport","Guayaquil","EC",-2.1574,-79.8836],["GYN","Santa Genoveva International Airport","Goi\u00e2nia","BR",-16.632,-49.2207],["GZT","Gaziantep O\u011fuzeli International Airport","Gaziantep","TR",36.9472,37.4787],["HAH","Prince Said Ibrahim International Airport","Moroni","KM",-11.5337,43.2719],["HAJ","Hannover Airport","Hannover","DE",52.4611,9.6851],["HAK","Haikou Meilan International Airport","Haikou (Meilan)","CN",19.9349,110.459],["HAM","Hamburg Helmut Schmidt Airport","Hamburg","DE",53.6304,9.9882],["HAN","Noi Bai International Airport","Hanoi (Soc Son)","VN",21.2212,105.807],["HAQ","Hanimaadhoo International Airport","Haa Dhaalu Atoll","MV",6.7432,73.1671],["HAS","Hail International Airport","Hail","SA",27.4379,41.6863],["HAV","Jos\u00e9 Mart\u00ed International Airport","Havana","CU",22.9892,-82.4091],["HBA","Hobart International Airport","Hobart (Cambridge)","AU",-42.837,147.513],["HBE","Alexandria International Airport","Alexandria","EG",30.9325,29.6964],["HDY","Hat Yai International Airport","Hat Yai","TH",6.9332,100.393],["HEA","Herat - Khwaja Abdullah Ansari International Airport","Guzara","AF",34.21,62.2283],["HEL","Helsinki Vantaa Airport","Helsinki (Vantaa)","FI",60.3184,24.9633],["HER","Heraklion International Nikos Kazantzakis Airport","Heraklion","GR",35.3397,25.1803],["HET","Hohhot Baita International Airport","Hohhot","CN",40.8497,111.8246],["HFE","Hefei Xinqiao International Airport","Hefei","CN",31.9878,116.9769],["HGA","Egal International Airport","Hargeisa","SO",9.5141,44.0835],["HGH","Hangzhou Xiaoshan International Airport","Hangzhou","CN",30.2361,120.4289],["HHN","Frankfurt-Hahn Airport","Frankfurt am Main (Lautzenhausen)","DE",49.9464,7.2617],["HIA","Huai'an Lianshui Airport","Huai'an","CN",33.7927,119.1267],["HIJ","Hiroshima Airport","Hiroshima","JP",34.4361,132.919],["HIR","Honiara International Airport","Honiara","SB",-9.428,160.055],["HKD","Hakodate Airport","Hakodate","JP",41.77,140.822],["HKG","Hong Kong International Airport","Hong Kong","HK",22.3118,113.9149],["HKT","Phuket International Airport","Phuket","TH",8.1133,98.3174],["HLA","Lanseria International Airport","Johannesburg","ZA",-25.939,27.9266],["HLD","Hulunbuir Hailar Airport","Hailar","CN",49.2086,119.8223],["HLP","Halim Perdanakusuma International Airport","Jakarta","ID",-6.267,106.8903],["HMB","Sohag International Airport","Suhaj","EG",26.3425,31.743],["HMO","General Ignacio L. Pesqueira International Airport","Hermosillo","MX",29.0928,-111.053],["HND","Tokyo Haneda International Airport","Tokyo","JP",35.5497,139.787],["HNL","Daniel K. Inouye International Airport","Honolulu, Oahu","US",21.3184,-157.9257],["HOF","Al-Ahsa International Airport","Hofuf","SA",25.2853,49.4852],["HOG","Frank Pais International Airport","Holguin","CU",20.7851,-76.3155],["HOU","William P. Hobby Airport","Houston","US",29.6453,-95.2768],["HPH","Cat Bi International Airport","Haiphong (Hai An)","VN",20.8174,106.7243],["HRB","Harbin Taiping International Airport","Harbin","CN",45.6234,126.25],["HRE","Robert Gabriel Mugabe International Airport","Harare","ZW",-17.9318,31.0928],["HRG","Hurghada International Airport","Hurghada","EG",27.1768,33.7967],["HRI","Mattala Rajapaksa International Airport","Mattala","LK",6.2839,81.1242],["HSA","Hazrat Sultan International Airport","Turk\u0131stan","KZ",43.3111,68.5504],["HSG","Kyushu Saga International Airport","Saga","JP",33.1497,130.302],["HSN","Zhoushan Putuoshan International Airport","Zhoushan","CN",29.9339,122.3623],["HSR","Rajkot International Airport","Rajkot","IN",22.3788,71.0394],["HSS","Maharaja Agrasen International Airport","Hisar","IN",29.1861,75.7414],["HTA","Chita-Kadala International Airport","Chita","RU",52.0248,113.3058],["HUN","Hualien Chiashan Airport","Hualien City","TW",24.0232,121.618],["HUX","Bah\u00edas de Huatulco International Airport","Huatulco","MX",15.7754,-96.2605],["HWR","Halwara International Airport","Halwara","IN",30.7485,75.6298],["HYD","Rajiv Gandhi International Airport","Hyderabad","IN",17.2313,78.4299],["IAD","Washington Dulles International Airport","Dulles","US",38.9445,-77.4558],["IAH","George Bush Intercontinental Airport","Houston","US",29.9844,-95.3414],["IAR","Golden Ring Yaroslavl International Airport","Tunoshna","RU",57.5607,40.1574],["IAS","Ia\u015fi International Airport","Ia\u015fi","RO",47.1796,27.6214],["IBR","Ibaraki Airport","Omitama","JP",36.1815,140.4144],["IBZ","Ibiza Airport","Ibiza (Eivissa)","ES",38.8729,1.3731],["ICN","Incheon International Airport","Seoul","KR",37.4691,126.451],["IDR","Devi Ahilya Bai Holkar International Airport","Indore","IN",22.7214,75.8005],["IFN","Isfahan Shahid Beheshti International Airport","Isfahan","IR",32.7551,51.8839],["IGU","Cataratas International Airport","Foz do Igua\u00e7u","BR",-25.5942,-54.4894],["IKA","Imam Khomeini International Airport","Tehran","IR",35.4161,51.1522],["IKT","Irkutsk International Airport","Irkutsk","RU",52.2667,104.3956],["IKU","Issyk-Kul International Airport","Tamchy","KG",42.5856,76.7012],["ILO","Iloilo International Airport","Cabatuan","PH",10.833,122.4934],["ILR","General Tunde Idiagbon International Airport","Ilorin/Ogbomosho","NG",8.4402,4.4939],["IMF","Bir Tikendrajit International Airport","Imphal","IN",24.76,93.8967],["INC","Yinchuan Hedong International Airport","Yinchuan","CN",38.3228,106.3932],["IND","Indianapolis International Airport","Indianapolis","US",39.7173,-86.2944],["INI","Ni\u0161 Constantine the Great Airport","Ni\u0161","RS",43.3365,21.8562],["INN","Innsbruck Airport","Innsbruck","AT",47.2602,11.344],["IOM","Isle of Man Airport","Castletown","IM",54.0831,-4.6239],["IPC","Mataveri International Airport","Isla De Pascua","CL",-27.1654,-109.421],["IPH","Sultan Azlan Shah Airport","Ipoh","MY",4.5673,101.0916],["IQQ","Diego Aracena International Airport","Iquique","CL",-20.5363,-70.1814],["IQT","Coronel FAP Francisco Secada Vignetta International Airport","Iquitos","PE",-3.7847,-73.3088],["ISB","Islamabad International Airport","Attock","PK",33.549,72.8257],["ISK","Nashik International Airport","Nashik","IN",20.1191,73.9129],["ISL","\u0130stanbul Atat\u00fcrk Airport","Istanbul(Bak\u0131rk\u00f6y)","TR",40.9719,28.8237],["IST","\u0130stanbul Airport","Istanbul","TR",41.2749,28.7321],["ITM","Osaka Itami International Airport","Osaka","JP",34.7809,135.4408],["IVL","Ivalo Airport","Ivalo","FI",68.6073,27.4053],["IXB","Bagdogra Airport","Siliguri","IN",26.6812,88.3286],["IXC","Shaheed Bhagat Singh International Airport","Chandigarh","IN",30.6735,76.7885],["IXE","Mangaluru International Airport","Mangaluru","IN",12.9547,74.8868],["IXZ","Veer Savarkar International Airport / INS Utkrosh","Port Blair","IN",11.6402,92.729],["JAF","Jaffna International Airport","Jaffna","LK",9.7923,80.0701],["JAI","Jaipur International Airport","Jaipur","IN",26.8242,75.8122],["JAX","Jacksonville International Airport","Jacksonville","US",30.4925,-81.6878],["JCL","\u010cesk\u00e9 Bud\u011bjovice South Bohemian Airport","\u010cesk\u00e9 Bud\u011bjovice","CZ",48.9482,14.4283],["JED","King Abdulaziz International Airport","Jeddah","SA",21.6802,39.1574],["JFK","John F. Kennedy International Airport","New York","US",40.6394,-73.7793],["JGN","Jiayuguan International Airport","Jiayuguan","CN",39.8591,98.3393],["JHB","Senai International Airport","Johor Bahru","MY",1.6413,103.67],["JHG","Xishuangbanna Gasa International Airport","Jinghong (Gasa)","CN",21.9746,100.7622],["JIB","Djibouti-Ambouli Airport","Djibouti City","DJ",11.5473,43.1595],["JIJ","Gerad Wilwal International Airport","Jijiga","ET",9.3319,42.9118],["JJN","Quanzhou Jinjiang International Airport","Quanzhou","CN",24.7959,118.5886],["JNB","O.R. Tambo International Airport","Johannesburg","ZA",-26.1401,28.2468],["JPA","Presidente Castro Pinto International Airport","Jo\u00e3o Pessoa","BR",-7.1487,-34.9506],["JRO","Kilimanjaro International Airport","Arusha","TZ",-3.427,37.0735],["JTR","Santorini International Airport","Santorini Island","GR",36.4,25.4786],["JUB","Juba International Airport","Juba","SS",4.872,31.6011],["JUJ","Gobernador Horacio Guzman International Airport","San Salvador de Jujuy","AR",-24.3928,-65.0978],["JUL","Inca Manco Capac International Airport","Juliaca","PE",-15.4677,-70.1565],["KAD","Kaduna International Airport","Kaduna","NG",10.696,7.3201],["KAN","Mallam Aminu Kano International Airport","Kano","NG",12.0456,8.5236],["KBL","Kabul International Airport","Kabul","AF",34.5659,69.2123],["KBV","Krabi International Airport","Krabi","TH",8.0956,98.989],["KCH","Kuching International Airport","Kuching","MY",1.4874,110.3529],["KCZ","Kochi Ryoma Airport","Nankoku","JP",33.5452,133.6702],["KDH","Ahmad Shah Baba International Airport","Kandahar","AF",31.5058,65.848],["KDU","Skardu International Airport","Skardu","PK",35.3387,75.5386],["KEF","Keflavik International Airport","Reykjav\u00edk","IS",63.985,-22.6056],["KEJ","Alexei Leonov Kemerovo International Airport","Kemerovo","RU",55.2701,86.1072],["KER","Ayatollah Hashemi Rafsanjani International Airport","Kerman","IR",30.2713,56.9497],["KGD","Khrabrovo Airport","Kaliningrad","RU",54.8916,20.5986],["KGF","Sary-Arka Airport","Karaganda","KZ",49.6708,73.3344],["KGL","Kigali International Airport","Kigali","RW",-1.9686,30.1395],["KGS","Kos International Airport \"Ippokratis\"","Kos Island","GR",36.7945,27.0911],["KHG","Kashgar Laining International Airport","Kashgar","CN",39.5423,76.0202],["KHH","Kaohsiung International Airport","Kaohsiung (Xiaogang)","TW",22.5771,120.35],["KHI","Jinnah International Airport","Karachi","PK",24.9065,67.1608],["KHN","Nanchang Changbei International Airport","Nanchang","CN",28.8648,115.9027],["KIH","Kish International Airport","Kish Island","IR",26.5254,53.9805],["KIJ","Niigata Airport","Niigata","JP",37.9542,139.1122],["KIK","Kirkuk International Airport","Kirkuk","IQ",35.4695,44.3489],["KIM","Kimberley Airport","Kimberley","ZA",-28.8054,24.7649],["KIN","Norman Manley International Airport","Kingston","JM",17.9357,-76.7875],["KIS","Kisumu International Airport","Kisumu","KE",-0.0861,34.7289],["KIX","Kansai International Airport","Osaka","JP",34.4273,135.244],["KJA","Krasnoyarsk International Airport","Krasnoyarsk","RU",56.1757,92.4858],["KKJ","Kitakyushu Airport","Kitakyushu","JP",33.8459,131.035],["KLO","Kalibo International Airport","Kalibo","PH",11.6794,122.376],["KLU","Klagenfurt Airport","Klagenfurt am W\u00f6rthersee","AT",46.6425,14.3377],["KLV","Karlovy Vary Airport","Karlovy Vary","CZ",50.203,12.915],["KMG","Kunming Changshui International Airport","Kunming","CN",25.1103,102.9367],["KMI","Miyazaki Airport","Miyazaki","JP",31.8772,131.449],["KMJ","Kumamoto Airport","Kumamoto","JP",32.8373,130.855],["KMQ","Komatsu Airport / JASDF Komatsu Air Base","Kanazawa","JP",36.3934,136.4069],["KMS","Prempeh I International Airport","Kumasi","GH",6.7146,-1.5908],["KNO","Kualanamu International Airport","Beringin","ID",3.6378,98.8706],["KOA","Ellison Onizuka Kona International Airport at Ke\u0101hole","Kailua-Kona","US",19.7388,-156.0456],["KOJ","Kagoshima Airport","Kagoshima","JP",31.8034,130.719],["KOS","Sihanouk International Airport","Preah Sihanouk","KH",10.5706,103.6321],["KOV","Kokshetau International Airport","Kokshetau","KZ",53.3291,69.5946],["KQT","Bokhtar International Airport","Bokhtar","TJ",37.8663,68.8645],["KRK","Krak\u00f3w John Paul II International Airport","Balice","PL",50.0777,19.7848],["KRN","Kiruna Airport","Kiruna","SE",67.822,20.3368],["KRR","Krasnodar Pashkovsky International Airport","Krasnodar","RU",45.0345,39.1742],["KRS","Kristiansand Airport","Kristiansand(Kjevik)","NO",58.2042,8.0854],["KRT","Khartoum International Airport","Khartoum","SD",15.5895,32.5532],["KSA","Kosrae International Airport","Okat","FM",5.357,162.958],["KSF","Kassel Airport","Calden","DE",51.4184,9.3916],["KSN","Kostanay International Airport","Kostanay","KZ",53.2069,63.5503],["KTI","Techo International Airport","Phnom Penh (Boeng Khyang)","KH",11.36,104.9213],["KTM","Tribhuvan International Airport","Kathmandu","NP",27.6966,85.3591],["KTT","Kittil\u00e4 International Airport","Kittil\u00e4","FI",67.701,24.8468],["KTW","Katowice Wojciech Korfanty International Airport","Katowice","PL",50.476,19.0807],["KUF","Kurumoch International Airport","Samara","RU",53.5049,50.1643],["KUL","Kuala Lumpur International Airport","Sepang","MY",2.7456,101.71],["KUN","Kaunas International Airport","Kaunas","LT",54.964,24.0858],["KUO","Kuopio Airport","Kuopio / Siilinj\u00e4rvi","FI",63.0071,27.7978],["KUT","David the Builder Kutaisi International Airport","Kopitnari","GE",42.1774,42.4854],["KVA","Kavala Alexander the Great International Airport","Kavala","GR",40.9133,24.6192],["KWE","Guiyang Longdongbao International Airport","Guiyang (Nanming)","CN",26.5418,106.804],["KWI","Kuwait International Airport","Kuwait City","KW",29.2245,47.9698],["KWL","Guilin Liangjiang International Airport","Guilin (Lingui)","CN",25.2198,110.0396],["KYA","Konya Airport","Konya","TR",37.979,32.5619],["KZN","Kazan International Airport","Kazan","RU",55.6062,49.2787],["KZO","Korkyt Ata International Airport","Kyzylorda","KZ",44.7069,65.5925],["LAD","Quatro de Fevereiro International Airport","Luanda","AO",-8.8584,13.2312],["LAE","Nadzab Tomodachi International Airport","Lae","PG",-6.568,146.7265],["LAO","Laoag International Airport","Laoag City","PH",18.1751,120.531],["LAQ","Al Abraq International Airport","Al Albraq","LY",32.789,21.9549],["LAS","Harry Reid International Airport","Las Vegas","US",36.0834,-115.1518],["LAX","Los Angeles International Airport","Los Angeles","US",33.9425,-118.408],["LBA","Leeds Bradford Airport","Leeds, West Yorkshire","GB",53.8659,-1.6606],["LBD","Khujand International Airport","Khujand","TJ",40.2154,69.6947],["LBG","Paris-Le Bourget International Airport","Paris","FR",48.9623,2.4365],["LBV","Libreville Leon M'ba International Airport","Libreville","GA",0.459,9.4121],["LCA","Larnaca International Airport","Larnaca","CY",34.8751,33.6249],["LCJ","\u0141\u00f3d\u017a W\u0142adys\u0142aw Reymont Airport","\u0141\u00f3d\u017a","PL",51.7219,19.3981],["LED","Pulkovo Airport","St. Petersburg","RU",59.8003,30.2625],["LEJ","Leipzig/Halle Airport","Schkeuditz","DE",51.4207,12.2327],["LFW","Lom\u00e9\u2013Tokoin International Airport","Lom\u00e9","TG",6.1656,1.2545],["LGA","LaGuardia Airport","New York","US",40.7772,-73.8726],["LGB","Long Beach International Airport","Long Beach","US",33.8165,-118.1499],["LGK","Langkawi International Airport","Langkawi","MY",6.3297,99.7287],["LGW","London Gatwick Airport","London","GB",51.1487,-0.1857],["LHE","Allama Iqbal International Airport","Lahore","PK",31.5216,74.4036],["LHR","London Heathrow Airport","London","GB",51.4707,-0.4599],["LHW","Lanzhou Zhongchuan International Airport","Lanzhou (Yongdeng)","CN",36.5152,103.62],["LIH","Lihue Airport","Lihue, Kauai","US",21.9744,-159.3371],["LIL","Lille Airport","Lesquin","FR",50.5666,3.1024],["LIM","Jorge Ch\u00e1vez International Airport","Lima","PE",-12.0219,-77.1143],["LIN","Milano Linate Airport","Segrate (MI)","IT",45.4451,9.2767],["LIR","Daniel Oduber Quir\u00f3s International Airport","Liberia","CR",10.5933,-85.5444],["LIS","Lisbon Humberto Delgado Airport","Lisbon","PT",38.7813,-9.1359],["LJG","Lijiang Sanyi International Airport","Lijiang","CN",26.6775,100.2449],["LJU","Ljubljana Jo\u017ee Pu\u010dnik Airport","Zgornji Brnik","SI",46.2237,14.4576],["LKO","Chaudhary Charan Singh International Airport","Lucknow","IN",26.7606,80.8893],["LLA","Lule\u00e5 Airport","Lule\u00e5","SE",65.5438,22.122],["LLW","Kamuzu International Airport","Lumbadzi","MW",-13.7894,33.781],["LNZ","Linz-H\u00f6rsching Airport","Linz","AT",48.2354,14.1881],["LOP","Lombok International Airport","Mataram (Pujut, Lombok Tengah)","ID",-8.76,116.2782],["LOS","Murtala Muhammed International Airport","Lagos","NG",6.5774,3.3212],["LPA","Gran Canaria Airport","Gran Canaria Island","ES",27.9319,-15.3866],["LPB","El Alto International Airport","La Paz / El Alto","BO",-16.5103,-68.1894],["LPI","Link\u00f6ping City Airport","Link\u00f6ping","SE",58.4049,15.6845],["LPL","Liverpool John Lennon Airport","Liverpool","GB",53.3349,-2.8496],["LPP","Lappeenranta Airport","Lappeenranta","FI",61.0446,28.1447],["LPQ","Luang Phabang International Airport","Luang Phabang","LA",19.9043,102.1672],["LPX","Liep\u0101ja International Airport","Liep\u0101ja","LV",56.5175,21.0969],["LRL","Niamtougou International Airport","Niamtougou","TG",9.7667,1.0909],["LRM","Casa De Campo International Airport","La Romana","DO",18.4522,-68.9111],["LTH","Long Thanh International Airport (Under Construction)","Ho Chi Minh City (Long Thanh)","VN",10.7728,107.0406],["LTN","London Luton Airport","Luton, Luton","GB",51.8747,-0.3683],["LTO","Loreto International Airport","Loreto","MX",25.9895,-111.3484],["LUN","Kenneth Kaunda International Airport","Lusaka","ZM",-15.3308,28.4527],["LUX","Luxembourg-Findel International Airport","Luxembourg","LU",49.6268,6.2121],["LUZ","Lublin Airport","Lublin","PL",51.2402,22.7135],["LVI","Harry Mwanga Nkumbula International Airport","Livingstone","ZM",-17.8215,25.8196],["LWN","Shirak International Airport","Gyumri","AM",40.7504,43.8593],["LWO","Lviv International Airport","Lviv","UA",49.8125,23.9561],["LXA","Lhasa Gonggar International Airport","Shannan (Gonggar)","CN",29.298,90.912],["LXR","Luxor International Airport","Luxor","EG",25.671,32.7064],["LYA","Luoyang Beijiao Airport","Luoyang (Laocheng)","CN",34.7411,112.388],["LYG","Lianyungang Huaguoshan International Airport","Lianyungang","CN",34.4141,119.179],["LYP","Faisalabad International Airport","Faisalabad","PK",31.3649,72.9953],["LYS","Lyon Saint-Exup\u00e9ry Airport","Colombier-Saugnieu, Rh\u00f4ne","FR",45.726,5.0901],["MAA","Chennai International Airport","Chennai","IN",12.99,80.1693],["MAD","Adolfo Su\u00e1rez Madrid\u2013Barajas Airport","Madrid","ES",40.4934,-3.5722],["MAH","Menorca Airport","Mah\u00f3n (Ma\u00f3)","ES",39.8626,4.2187],["MAJ","Marshall Islands International Airport","Majuro Atoll","MH",7.0651,171.2717],["MAN","Manchester Airport","Manchester, Greater Manchester","GB",53.3494,-2.2795],["MAO","Eduardo Gomes International Airport","Manaus","BR",-3.0386,-60.0497],["MAR","La Chinita International Airport","Maracaibo","VE",10.5575,-71.7293],["MBA","Moi International Airport","Mombasa","KE",-4.0348,39.5942],["MBJ","Sangster International Airport","Montego Bay","JM",18.5034,-77.9132],["MCI","Kansas City International Airport","Kansas City","US",39.3017,-94.7139],["MCO","Orlando International Airport","Orlando","US",28.4294,-81.309],["MCT","Muscat International Airport","Muscat/Seeb","OM",23.6002,58.2853],["MCX","Makhachkala Uytash International Airport","Makhachkala","RU",42.8168,47.6523],["MCY","Sunshine Coast Airport","Maroochydore","AU",-26.5933,153.0832],["MCZ","Zumbi dos Palmares International Airport","Macei\u00f3","BR",-9.5126,-35.7918],["MDC","Sam Ratulangi International Airport","Manado","ID",1.5486,124.9262],["MDE","Jose Maria C\u00f3rdova International Airport","Medell\u00edn","CO",6.1645,-75.4231],["MDL","Mandalay International Airport","Mandalay","MM",21.7022,95.9779],["MDW","Chicago Midway International Airport","Chicago","US",41.786,-87.7524],["MDZ","Governor Francisco Gabrielli International Airport","Mendoza","AR",-32.8317,-68.7929],["MED","Prince Mohammad Bin Abdulaziz Airport","Medina","SA",24.5534,39.7051],["MEL","Melbourne Airport","Melbourne","AU",-37.6707,144.8379],["MEM","Memphis International Airport","Memphis","US",35.0438,-89.9763],["MEX","Mexico City Benito Ju\u00e1rez International Airport","Mexico City","MX",19.4358,-99.0703],["MFM","Macau International Airport","Nossa Senhora do Carmo","MO",22.1496,113.592],["MFU","Mfuwe International Airport","Mfuwe","ZM",-13.2589,31.9366],["MGA","Augusto C. Sandino (Managua) International Airport","Managua","NI",12.1415,-86.1682],["MGQ","Aden Adde International Airport","Mogadishu","SO",2.0144,45.3047],["MHD","Mashhad International Airport","Mashhad","IR",36.2348,59.6429],["MHQ","Mariehamn Airport","Mariehamn","FI",60.1222,19.8982],["MIA","Miami International Airport","Miami","US",25.796,-80.2898],["MID","Manuel Crescencio Rej\u00f3n International Airport","M\u00e9rida","MX",20.9305,-89.6455],["MIU","Maiduguri International Airport","Maiduguri","NG",11.8542,13.0807],["MJI","Mitiga International Airport","Tripoli","LY",32.8918,13.2879],["MJN","Amborovy Airport","Mahajanga","MG",-15.6668,46.3512],["MKE","General Mitchell International Airport","Milwaukee","US",42.9472,-87.8966],["MLA","Malta International Airport","Valletta","MT",35.8459,14.4915],["MLE","Velana International Airport","Mal\u00e9","MV",4.1918,73.5291],["MLM","General Francisco J. Mujica International Airport","Morelia","MX",19.8499,-101.025],["MMK","Emperor Nicholas II Murmansk Airport","Murmansk","RU",68.7817,32.7508],["MMX","Malm\u00f6 Sturup Airport","Malm\u00f6","SE",55.5356,13.3763],["MNI","John A. Osborne Airport","Gerald's Park","MS",16.7918,-62.1932],["MNL","Ninoy Aquino International Airport","Manila (Pasay)","PH",14.5086,121.02],["MPL","Montpellier-M\u00e9diterran\u00e9e Airport","Montpellier/M\u00e9diterran\u00e9e","FR",43.5762,3.963],["MPM","Maputo Airport","Maputo","MZ",-25.9208,32.5726],["MPN","Mount Pleasant Airport / RAF Mount Pleasant","Mount Pleasant","FK",-51.8226,-58.4458],["MQF","Magnitogorsk International Airport","Magnitogorsk","RU",53.392,58.7552],["MQP","Kruger Mpumalanga International Airport","Mbombela","ZA",-25.3833,31.1053],["MRS","Marseille Provence Airport","Marignane, Bouches-du-Rh\u00f4ne","FR",43.4381,5.2125],["MRU","Sir Seewoosagur Ramgoolam International Airport","Plaine Magnien","MU",-20.4302,57.6836],["MRV","Mineralnye Vody Airport","Mineralnyye Vody","RU",44.2251,43.0819],["MSP","Minneapolis\u2013Saint Paul International Airport / Wold\u2013Chamberlain Field","Minneapolis","US",44.8801,-93.2217],["MSQ","Minsk National Airport","Minsk","BY",53.8881,28.04],["MST","Maastricht Aachen Airport","Maastricht","NL",50.9111,5.7694],["MSU","Moshoeshoe I International Airport","Maseru(Mazenod)","LS",-29.4563,27.5545],["MSY","Louis Armstrong New Orleans International Airport","New Orleans","US",29.9934,-90.2647],["MTY","Monterrey International Airport","Monterrey","MX",25.7785,-100.107],["MUB","Maun International Airport","Maun","BW",-19.9705,23.4314],["MUC","Munich Airport","Munich","DE",48.3538,11.7861],["MUH","Mersa Matruh International Airport","Marsa Matruh","EG",31.3243,27.2223],["MUX","Multan International Airport","Multan","PK",30.2032,71.4191],["MVB","M'Vengue El Hadj Omar Bongo Ondimba International Airport","Franceville","GA",-1.6562,13.438],["MVD","Carrasco General Ces\u00e1reo L. Berisso International Airport","Ciudad de la Costa","UY",-34.8356,-56.0265],["MWX","Muan International Airport","Muan (Piseo-ri)","KR",34.9914,126.3828],["MWZ","Mwanza International Airport","Mwanza","TZ",-2.4466,32.936],["MXP","Milan Malpensa International Airport","Ferno (VA)","IT",45.6306,8.7281],["MYJ","Matsuyama Airport","Matsuyama","JP",33.8269,132.7001],["MYR","Myrtle Beach International Airport","Myrtle Beach","US",33.6797,-78.9283],["MZG","Penghu Magong Airport","Huxi","TW",23.5687,119.628],["MZR","Mazar-i-Sharif International Airport","Mazar-i-Sharif","AF",36.7041,67.2105],["MZT","General Rafael Buelna International Airport","Mazatl\u00e0n","MX",23.1628,-106.2645],["NAG","Dr. Babasaheb Ambedkar International Airport","Nagpur","IN",21.0922,79.0472],["NAJ","Nakhchivan International Airport","Nakhchivan","AZ",39.1888,45.4584],["NAN","Nadi International Airport","Nadi","FJ",-17.7618,177.4378],["NAP","Naples International Airport","Napoli","IT",40.886,14.2908],["NAS","Lynden Pindling International Airport","Nassau","BS",25.039,-77.4662],["NAT","Rio Grande do Norte/S\u00e3o Gon\u00e7alo do Amarante\u2013Governador Alu\u00edzio Alves International Airport","Natal","BR",-5.7698,-35.3666],["NAV","Nev\u015fehir Kapadokya Airport","Nev\u015fehir","TR",38.7719,34.5345],["NBJ","Dr. Antonio Agostinho Neto International Airport","Luanda (\u00cdcolo e Bengo)","AO",-9.0507,13.4991],["NBO","Jomo Kenyatta International Airport","Nairobi","KE",-1.3189,36.9282],["NCE","Nice-C\u00f4te d'Azur Airport","Nice, Alpes-Maritimes","FR",43.6584,7.2159],["NCL","Newcastle International Airport","Newcastle upon Tyne, Tyne and Wear","GB",55.038,-1.6896],["NCU","Nukus International Airport","Nukus","UZ",42.4884,59.6233],["NDB","Nouadhibou International Airport","Nouadhibou","MR",20.9324,-17.0302],["NDG","Qiqihar Sanjiazi Airport","Qiqihar","CN",47.23,123.9142],["NDJ","N'Djamena International Airport","N'Djamena","TD",12.1337,15.034],["NDR","Nador Al Aaroui International Airport","Al Aaroui","MA",34.9888,-3.0282],["NGB","Ningbo Lishe International Airport","Ningbo","CN",29.8267,121.462],["NGO","Chubu Centrair International Airport","Tokoname","JP",34.8584,136.805],["NGS","Nagasaki Airport","Nagasaki","JP",32.9169,129.914],["NIM","Diori Hamani International Airport","Niamey","NE",13.4815,2.1836],["NJC","Nizhnevartovsk Airport","Nizhnevartovsk","RU",60.9493,76.4836],["NJF","Al Najaf International Airport","Najaf","IQ",31.9911,44.405],["NKC","Nouakchott\u2013Oumtounsy International Airport","Nouakchott","MR",18.31,-15.9697],["NKG","Nanjing Lukou International Airport","Nanjing","CN",31.735,118.8659],["NLA","Simon Mwansa Kapwepwe International Airport","Ndola","ZM",-12.9651,28.5156],["NLU","Felipe \u00c1ngeles International Airport","Mexico City","MX",19.7438,-99.0151],["NMA","Namangan International Airport","Namangan","UZ",40.9846,71.5578],["NMF","Maafaru International Airport","Noonu Atoll","MV",5.8174,73.4684],["NMI","Navi Mumbai International Airport","Navi Mumbai","IN",18.9846,73.0653],["NNG","Nanning Wuxu International Airport","Nanning (Jiangnan)","CN",22.5981,108.1819],["NOC","Ireland West Airport Knock","Charlestown","IE",53.9104,-8.817],["NOS","Nosy Be International Airport","Nosy Be","MG",-13.3121,48.3148],["NOU","La Tontouta International Airport","Noum\u00e9a (La Tontouta)","NC",-22.0146,166.213],["NQN","Presidente Per\u00f3n International Airport","Neuqu\u00e9n","AR",-38.949,-68.1557],["NQZ","Nursultan Nazarbayev International Airport","Astana","KZ",51.027,71.4671],["NRN","Weeze (Niederrhein) Airport","Weeze","DE",51.6014,6.1412],["NRT","Narita International Airport","Narita","JP",35.7686,140.3887],["NSI","Yaound\u00e9 Nsimalen International Airport","Yaound\u00e9","CM",3.7226,11.5533],["NSK","Alykel International Airport","Norilsk","RU",69.308,87.3259],["NTL","Newcastle Airport","Williamtown","AU",-32.7961,151.835],["NUE","Nuremberg Airport","Nuremberg","DE",49.4987,11.0781],["NUM","Neom Bay Airport","Sharma","SA",27.9243,35.2936],["NVT","Ministro Victor Konder International Airport","Navegantes","BR",-26.8794,-48.651],["NYO","Stockholm Skavsta Airport","Nyk\u00f6ping","SE",58.7897,16.9115],["NYT","Nay Pyi Taw International Airport","Naypyitaw","MM",19.6235,96.201],["OAK","San Francisco Bay Oakland International Airport","Oakland","US",37.7201,-122.2212],["OAX","Xoxocotl\u00e1n International Airport","Oaxaca","MX",16.9988,-96.7261],["OCS","Corisco International Airport","Corisco Island","GQ",0.9109,9.3303],["ODE","Odense Hans Christian Andersen Airport","Odense","DK",55.4753,10.3272],["ODS","Odesa International Airport","Odesa","UA",46.4272,30.6726],["OEC","Oecusse Route of the Sandalwood International Airport","Oecussi-Ambeno","TL",-9.1984,124.3379],["OGG","Kahului International Airport","Kahului","US",20.8963,-156.4318],["OHD","Ohrid St. Paul the Apostle Airport","Ohrid","MK",41.18,20.7423],["OHS","Suhar International Airport","Suhar","OM",24.386,56.6254],["OKA","Naha International Airport","Naha","JP",26.1924,127.6398],["OKC","OKC Will Rogers World Airport","Oklahoma City","US",35.3934,-97.5982],["OKJ","Okayama Momotaro Airport","Okayama","JP",34.7569,133.855],["OLB","Olbia Costa Smeralda Airport","Olbia (SS)","IT",40.899,9.5185],["OMA","Eppley Airfield","Omaha","US",41.3032,-95.8941],["OMO","Mostar International Airport","Mostar","BA",43.2825,17.8461],["OMR","Oradea International Airport","Oradea","RO",47.0253,21.9025],["OMS","Omsk Central Airport","Omsk","RU",54.9631,73.3124],["ONT","Ontario International Airport","Ontario","US",34.056,-117.601],["OOL","Gold Coast Airport","Gold Coast","AU",-28.166,153.5066],["OPO","Francisco de S\u00e1 Carneiro Airport","Porto","PT",41.2481,-8.6814],["ORD","Chicago O'Hare International Airport","Chicago","US",41.9786,-87.9048],["ORF","Norfolk International Airport","Norfolk","US",36.8953,-76.201],["ORK","Cork International Airport","Cork","IE",51.8413,-8.4911],["ORN","Oran Es-S\u00e9nia (Ahmed Ben Bella) International Airport","Es-S\u00e9nia","DZ",35.6206,-0.6225],["ORU","Juan Mendoza International Airport","Oruro","BO",-17.9562,-67.0758],["ORY","Paris-Orly Airport","Paris (Orly, Val-de-Marne)","FR",48.7295,2.359],["OSL","Oslo-Gardermoen International Airport","Oslo (Gardermoen)","NO",60.1939,11.1004],["OSM","Mosul International Airport","Mosul","IQ",36.3058,43.1474],["OSR","Leo\u0161 Jan\u00e1\u010dek Airport Ostrava","Mo\u0161nov","CZ",49.6963,18.1111],["OSS","Osh International Airport","Osh","KG",40.609,72.7933],["OST","Ostend-Bruges International Airport","Oostende","BE",51.1998,2.8747],["OTP","Bucharest Henri Coand\u0103 International Airport","Otopeni","RO",44.5718,26.1033],["OUA","Ouagadougou Thomas Sankara International Airport","Ouagadougou","BF",12.3532,-1.5124],["OUD","Oujda Angads Airport","Ahl Angad","MA",34.7896,-1.926],["OUL","Oulu Airport","Oulu / Oulunsalo","FI",64.9301,25.3546],["OVB","Novosibirsk Tolmachevo Airport","Novosibirsk","RU",55.0198,82.6187],["OVD","Asturias Airport","Ran\u00f3n","ES",43.5636,-6.0346],["OXB","Osvaldo Vieira International Airport","Bissau","GW",11.8943,-15.6536],["OZG","Zagora Airport","Zagora","MA",30.2658,-5.8608],["OZH","Zaporizhzhia International Airport","Zaporizhia","UA",47.867,35.3147],["OZZ","Ouarzazate International Airport","Ouarzazate","MA",30.9391,-6.9094],["PAD","Paderborn Lippstadt Airport","B\u00fcren","DE",51.6125,8.6175],["PAP","Toussaint Louverture International Airport","Port-au-Prince","HT",18.58,-72.2926],["PBC","Hermanos Serd\u00e1n International Airport","Puebla","MX",19.1585,-98.3716],["PBH","Paro International Airport","Paro","BT",27.4032,89.4246],["PBI","Palm Beach International Airport","West Palm Beach","US",26.6832,-80.0956],["PBM","Johan Adolf Pengel International Airport","Paramaribo","SR",5.4528,-55.1878],["PCL","Cap FAP David Abenzur Rengifo International Airport","Pucallpa","PE",-8.3781,-74.5745],["PDG","Minangkabau International Airport","Padang (Katapiang)","ID",-0.786,100.2804],["PDL","Jo\u00e3o Paulo II Airport","Ponta Delgada","PT",37.7412,-25.6979],["PDV","Plovdiv International Airport","Plovdiv","BG",42.0678,24.8508],["PDX","Portland International Airport","Portland","US",45.5887,-122.598],["PED","Pardubice Airport","Pardubice","CZ",50.015,15.7398],["PEE","Perm International Airport","Perm","RU",57.9145,56.0212],["PEG","Perugia San Francesco d'Assisi \u2013 Umbria International Airport","Perugia (PG)","IT",43.0959,12.5132],["PEK","Beijing Capital International Airport","Beijing","CN",40.0773,116.5967],["PEN","Penang International Airport","Penang","MY",5.2963,100.2762],["PER","Perth International Airport","Perth","AU",-31.9403,115.967],["PEV","P\u00e9cs-Pog\u00e1ny International Airport","P\u00e9cs","HU",45.9889,18.242],["PEW","Bacha Khan International Airport","Peshawar","PK",33.9939,71.5146],["PFO","Paphos International Airport","Paphos","CY",34.718,32.4857],["PHC","Port Harcourt International Airport","Port Harcourt","NG",5.0155,6.9496],["PHE","Port Hedland International Airport","Port Hedland","AU",-20.3828,118.6298],["PHH","Pokhara International Airport","Pokhara","NP",28.1838,84.0147],["PHL","Philadelphia International Airport","Philadelphia","US",39.8719,-75.2411],["PHX","Phoenix Sky Harbor International Airport","Phoenix","US",33.4353,-112.0059],["PIE","St. Petersburg Clearwater International Airport","Pinellas Park","US",27.9102,-82.6874],["PIK","Glasgow Prestwick Airport","Prestwick, South Ayrshire","GB",55.5015,-4.5772],["PIO","Captain Ren\u00e1n El\u00edas Olivera International Airport","Pisco","PE",-13.7449,-76.2203],["PIT","Pittsburgh International Airport","Pittsburgh","US",40.4915,-80.2329],["PKC","Yelizovo Airport","Petropavlovsk-Kamchatsky","RU",53.1687,158.4511],["PKX","Beijing Daxing International Airport","Beijing","CN",39.5013,116.414],["PKZ","Pakse International Airport","Pakse","LA",15.134,105.7799],["PLQ","Palanga International Airport","Palanga","LT",55.9732,21.0939],["PLS","Providenciales International Airport","Providenciales","TC",21.7737,-72.2683],["PLX","Semei International Airport","Semey","KZ",50.3513,80.2344],["PLZ","Chief Dawid Stuurman International Airport","Gqeberha (Port Elizabeth)","ZA",-33.9897,25.6174],["PMC","El Tepual International Airport","Puerto Montt","CL",-41.4431,-73.0941],["PMI","Palma de Mallorca Airport","Palma de Mallorca","ES",39.5517,2.7388],["PMO","Falcone\u2013Borsellino Airport","Palermo","IT",38.176,13.091],["PMV","Del Caribe Santiago Mari\u00f1o International Airport","Isla Margarita","VE",10.9126,-63.9666],["PNH","Phnom Penh International Airport","Phnom Penh (Pou Senchey)","KH",11.5472,104.8447],["PNK","Supadio International Airport","Pontianak","ID",-0.1523,109.4045],["PNQ","Pune International Airport","Pune","IN",18.5821,73.9197],["PNR","Antonio Agostinho-Neto International Airport","Pointe Noire","CG",-4.816,11.8866],["PNS","Pensacola International Airport","Pensacola","US",30.4727,-87.1866],["POA","Porto Alegre-Salgado Filho International Airport","Porto Alegre","BR",-29.994,-51.1675],["POG","Port Gentil International Airport","Port Gentil","GA",-0.7117,8.7544],["POM","Port Moresby Jacksons International Airport","Port Moresby","PG",-9.4434,147.22],["POS","Piarco International Airport","Port of Spain","TT",10.5953,-61.3376],["POZ","Pozna\u0144-\u0141awica Airport","Pozna\u0144","PL",52.4216,16.8234],["PPG","Pago Pago International Airport","Pago Pago","AS",-14.331,-170.71],["PPK","Petropavl International Airport","Petropavl","KZ",54.7756,69.1874],["PPS","Puerto Princesa International Airport / PAF Antonio Bautista Air Base","Puerto Princesa","PH",9.742,118.7591],["PPT","Fa'a'\u0101 International Airport","Papeete","PF",-17.5535,-149.6069],["PQC","Ph\u00fa Qu\u1ed1c International Airport","Phu Quoc Island","VN",10.1698,103.9935],["PRG","V\u00e1clav Havel Airport Prague","Prague","CZ",50.1009,14.2599],["PRN","Pri\u0161tina Adem Jashari International Airport","Prishtina","XK",42.5728,21.0358],["PSA","Pisa International Airport","Pisa (PI)","IT",43.6839,10.3927],["PSD","Port Said International Airport","Port Said","EG",31.2793,32.2406],["PSP","Palm Springs International Airport","Palm Springs","US",33.8297,-116.507],["PSR","Abruzzo Airport","Pescara","IT",42.4311,14.183],["PTG","Polokwane International Airport","Polokwane","ZA",-23.8453,29.4586],["PTP","Maryse Cond\u00e9 International Airport","Pointe-\u00e0-Pitre","GP",16.2654,-61.5328],["PTY","Tocumen International Airport","Tocumen","PA",9.0714,-79.3835],["PUJ","Punta Cana International Airport","Punta Cana","DO",18.5671,-68.3646],["PUQ","President Carlos Ib\u00e1\u00f1ez International Airport","Punta Arenas","CL",-53.0026,-70.8546],["PUS","Gimhae International Airport","Busan","KR",35.1795,128.938],["PUY","Pula Airport","Pula","HR",44.8935,13.9222],["PVD","Rhode Island T. F. Green International Airport","Providence/Warwick","US",41.725,-71.4257],["PVG","Shanghai Pudong International Airport","Shanghai (Pudong)","CN",31.1434,121.805],["PVH","Governador Jorge Teixeira de Oliveira International Airport","Porto Velho","BR",-8.7085,-63.9023],["PVR","Puerto Vallarta International Airport","Puerto Vallarta","Mexico","MX",20.6801,-105.2539],
-    };
 
     document.addEventListener('DOMContentLoaded', function () {
       console.log('[Giya] DOM ready');
@@ -734,6 +840,8 @@
       let terminalMarkers  = [];
       let currentArrival   = '';
       let currentDeparture = '';
+      let tripType         = 'return';
+      let activePrefs      = { style: 'both', companion: null, food: 'all', entrance: 'both', interests: [] };
 
       function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
 
@@ -852,6 +960,53 @@
         if (mBtn) { n > 0 ? mBtn.classList.add('is-visible') : mBtn.classList.remove('is-visible'); }
         if (sBtn) { n > 0 ? sBtn.classList.add('is-visible') : sBtn.classList.remove('is-visible'); }
       }
+
+      /* ── TRIP TYPE TOGGLE ── */
+      (function () {
+        var btnOne = document.getElementById('btn-oneway');
+        var btnRet = document.getElementById('btn-return');
+        var flyoutGroup = document.getElementById('flyout-group');
+        if (!btnOne || !btnRet || !flyoutGroup) return;
+        function setType(t) {
+          tripType = t;
+          btnOne.classList.toggle('is-active', t === 'oneway');
+          btnRet.classList.toggle('is-active', t === 'return');
+          flyoutGroup.style.display = t === 'oneway' ? 'none' : '';
+        }
+        btnOne.addEventListener('click', function () { setType('oneway'); });
+        btnRet.addEventListener('click', function () { setType('return'); });
+      })();
+
+      /* ── PREFERENCE BAR ── */
+      (function () {
+        var toggle  = document.getElementById('pref-bar-toggle');
+        var body    = document.getElementById('pref-bar-body');
+        var chevron = document.getElementById('pref-chevron');
+        if (!toggle || !body) return;
+        toggle.addEventListener('click', function () {
+          var open = !body.hidden;
+          body.hidden = open;
+          if (chevron) chevron.classList.toggle('is-open', !open);
+        });
+        document.querySelectorAll('.pref-chip').forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            var pref = chip.getAttribute('data-pref');
+            var val  = chip.getAttribute('data-val');
+            if (pref === 'interest') {
+              var idx = activePrefs.interests.indexOf(val);
+              if (idx >= 0) { activePrefs.interests.splice(idx, 1); chip.classList.remove('is-boost-active'); }
+              else          { activePrefs.interests.push(val);       chip.classList.add('is-boost-active'); }
+            } else {
+              document.querySelectorAll('.pref-chip[data-pref="' + pref + '"]').forEach(function (c) { c.classList.remove('is-hard-active', 'is-boost-active'); });
+              chip.classList.add('is-hard-active');
+              activePrefs[pref] = val;
+            }
+            var dot = document.getElementById('pref-active-dot');
+            if (dot) dot.hidden = !(activePrefs.style !== 'both' || activePrefs.companion || activePrefs.food !== 'all' || activePrefs.entrance !== 'both' || activePrefs.interests.length > 0);
+            applyDiscoveryFilter();
+          });
+        });
+      })();
 
       document.getElementById('btn-view-map').addEventListener('click', function () { showScreen(4); });
       document.getElementById('btn-spots-badge').addEventListener('click', function () {
@@ -991,12 +1146,18 @@
           gallery.classList.remove('is-loading');
 
           const ids = ['spot-gallery-0','spot-gallery-1','spot-gallery-2'];
-          photos.forEach(function (photo, i) {
-            if (i > 2) return;
-            const img = document.getElementById(ids[i]);
+          const usedUrls = new Set();
+          let slotIndex = 0;
+          photos.forEach(function (photo) {
+            if (slotIndex > 2) return;
+            const url = photo.url_small || photo.url;
+            if (usedUrls.has(url)) return; /* skip duplicate */
+            usedUrls.add(url);
+            const img = document.getElementById(ids[slotIndex]);
             if (!img) return;
-            img.src = photo.url_small || photo.url;
+            img.src = url;
             img.alt = photo.alt || spot.spot_name;
+            slotIndex++;
           });
 
           /* Photo credit for first photographer */
@@ -1097,23 +1258,49 @@
       let allExperiences = [];
       let activeFilter   = 'all';
       let searchQuery    = '';
+      let usedPhotoUrls  = new Set();
 
       function applyDiscoveryFilter() {
         const grid      = document.getElementById('discovery-grid');
         const noResults = document.getElementById('discovery-no-results');
         if (!grid) return;
-        const usedPhotoIds = new Set(); /* track across all cards */
+        usedPhotoUrls = new Set(); /* reset on each filter/render */
 
         const filtered = allExperiences.filter(function (exp) {
-          const matchesChip   = activeFilter === 'all' || exp.type === activeFilter;
-          const tagString = (exp.tags || []).join(' ').toLowerCase();
-          const matchesSearch = searchQuery === '' ||
+          var tags = exp.tags || [];
+          var matchesChip   = activeFilter === 'all' || exp.type === activeFilter;
+          var tagString = tags.join(' ').toLowerCase();
+          var matchesSearch = searchQuery === '' ||
             (exp.spot_name || '').toLowerCase().includes(searchQuery) ||
             (exp.area      || '').toLowerCase().includes(searchQuery) ||
             (exp.type      || '').toLowerCase().includes(searchQuery) ||
             (exp.why       || '').toLowerCase().includes(searchQuery) ||
             tagString.includes(searchQuery);
-          return matchesChip && matchesSearch;
+          var matchesStyle = true;
+          if (activePrefs.style === 'outdoor') matchesStyle = tags.indexOf('outdoor') >= 0;
+          if (activePrefs.style === 'indoor')  matchesStyle = tags.indexOf('indoor')  >= 0;
+          var matchesFood = true;
+          if (activePrefs.food !== 'all' && exp.type === 'food') {
+            if (activePrefs.food === 'halal')      matchesFood = tags.indexOf('halal') >= 0;
+            if (activePrefs.food === 'vegetarian') matchesFood = tags.indexOf('vegetarian') >= 0 || tags.indexOf('vegan-options') >= 0;
+          }
+          var matchesEntrance = true;
+          if (activePrefs.entrance !== 'both') {
+            var fee = exp.entranceFee || '';
+            if (activePrefs.entrance === 'free')     matchesEntrance = fee === 'free';
+            if (activePrefs.entrance === 'ticketed') matchesEntrance = fee === 'ticketed';
+          }
+          return matchesChip && matchesSearch && matchesStyle && matchesFood && matchesEntrance;
+        });
+
+        filtered.sort(function (a, b) {
+          function score(e) {
+            var s = 0, t = e.tags || [];
+            if (activePrefs.companion === 'family' && t.indexOf('kids-friendly') >= 0) s += 3;
+            activePrefs.interests.forEach(function (i) { if (t.indexOf(i) >= 0) s += 2; });
+            return s;
+          }
+          return score(b) - score(a);
         });
 
         /* Re-render only visible cards */
@@ -1130,22 +1317,30 @@
           card.setAttribute('tabindex', '0');
           card.setAttribute('aria-label', exp.spot_name);
 
-          /* Photo */
+         /* Image wrap */
+         const imgWrap = document.createElement('div');
+          imgWrap.className = 'discovery-card__img-wrap';
           const img = document.createElement('img');
           img.className = 'discovery-card__img';
           img.alt = exp.spot_name || '';
           img.setAttribute('data-query',
             encodeURIComponent((exp.spot_name || '') + ' ' + (exp.type || '') + ' ' + currentArrival)
           );
-          card.appendChild(img);
+          imgWrap.appendChild(img);
+          card.appendChild(imgWrap);
 
-          /* Name + emoji overlay — NO dot */
+          /* White frame footer */
+          const foot = document.createElement('div');
+          foot.className = 'discovery-card__foot';
+          const typeRow = document.createElement('div');
+          typeRow.className = 'discovery-card__type-row';
+          typeRow.innerHTML = '<span class="discovery-card__type-emoji">' + emoji + '</span><span class="discovery-card__type-label">' + esc(exp.type || '') + '</span>';
           const nameEl = document.createElement('div');
           nameEl.className = 'discovery-card__name';
-          nameEl.innerHTML =
-            '<span class="discovery-card__type-emoji">' + emoji + '</span>' +
-            esc(exp.spot_name || 'Unnamed');
-          card.appendChild(nameEl);
+          nameEl.textContent = exp.spot_name || 'Unnamed';
+          foot.appendChild(typeRow);
+          foot.appendChild(nameEl);
+          card.appendChild(foot);
 
           /* Tap → open spot panel */
           card.addEventListener('click', function () {
@@ -1178,13 +1373,15 @@
             const q = decodeURIComponent(im.getAttribute('data-query') || 'travel');
             fetchPhotos(q, 3).then(function (photos) {
               c.classList.remove('is-loading');
-              /* Pick first photo not already used on another card */
-              const fresh = photos.find(function (p) {
-                return p.id && !usedPhotoIds.has(p.id);
-              }) || photos[0];
-              if (fresh) {
-                if (fresh.id) usedPhotoIds.add(fresh.id);
-                im.src = fresh.url_small || fresh.url;
+            /* Filter out already-used URLs across the grid */
+              const available = photos.filter(function (p) {
+                return !usedPhotoUrls.has(p.url_small || p.url);
+              });
+              const photo = available[0] || photos[0];
+              if (photo) {
+                const url = photo.url_small || photo.url;
+                usedPhotoUrls.add(url);
+                im.src = url;
                 im.onload = function () { im.classList.add('is-loaded'); };
               }
             });
