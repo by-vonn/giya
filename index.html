@@ -169,17 +169,14 @@
     .trip-type-btn { flex: 1; font-family: inherit; font-size: 0.85rem; font-weight: 500; padding: 0.45rem 0; border: none; border-radius: 999px; background: transparent; color: var(--ink-muted); cursor: pointer; text-align: center; }
     .trip-type-btn.is-active { background: #fff; color: var(--ink); font-weight: 600; box-shadow: 0 1px 4px rgba(26,22,18,0.12); }
     .form-screen .btn-primary { width: 100%; margin-top: 0.5rem; }
-    .pref-bar { margin: 0 -1.25rem; background: #fff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .pref-bar__top { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem; cursor: pointer; user-select: none; }
-    .pref-bar__label { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600; color: var(--ink-muted); }
+    .discovery-topbar { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 1.25rem; background: #fff; border-bottom: 1px solid var(--border); margin: 0 -1.25rem; }
+    .pref-trigger { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600; color: var(--ink-muted); cursor: pointer; user-select: none; white-space: nowrap; flex-shrink: 0; padding: 0.2rem 0; }
+    .pref-trigger:hover { color: var(--ink); }
     .pref-active-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); }
-    .pref-bar__warnings { display: flex; gap: 5px; flex: 1; justify-content: flex-end; flex-wrap: wrap; }
-    .pref-warn-pill { position: relative; display: inline-flex; align-items: center; gap: 3px; font-family: inherit; font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 999px; background: #fff8ed; border: 1px solid #e8d5a8; color: #9a6820; white-space: nowrap; }
-    .pref-warn-pill::after { content: attr(data-tip); position: absolute; top: calc(100% + 6px); right: 0; font-size: 0.67rem; line-height: 1.4; max-width: 200px; background: var(--ink); color: var(--paper); padding: 0.3rem 0.55rem; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 500; white-space: normal; text-align: left; font-weight: 400; }
-    .pref-warn-pill:hover::after { opacity: 1; }
-    .pref-bar__chevron { font-size: 0.8rem; color: var(--ink-muted); flex-shrink: 0; transition: transform 0.2s; }
+    .pref-bar__chevron { font-size: 0.75rem; color: var(--ink-muted); transition: transform 0.2s; }
     .pref-bar__chevron.is-open { transform: rotate(180deg); }
-    .pref-bar__body { padding: 0.6rem 1.25rem 0.85rem; border-top: 1px solid rgba(26,22,18,0.07); background: #faf8f4; }
+    .pref-bar { margin: 0 -1.25rem; }
+    .pref-bar__body { padding: 0.6rem 1.25rem 0.85rem; border-bottom: 1px solid var(--border); background: #faf8f4; }
     .pref-row { margin-bottom: 0.55rem; }
     .pref-row:last-child { margin-bottom: 0; }
     .pref-row__label { font-size: 0.65rem; font-weight: 600; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.3rem; }
@@ -189,6 +186,18 @@
     .pref-chip.is-hard-active { background: var(--ink); color: #fff; border-color: var(--ink); }
     .pref-chip.is-boost-active { background: #fdf3e0; color: #7a5020; border-color: #d4b060; }
 
+    /* Airport autocomplete */
+    .airport-wrap { position: relative; }
+    .airport-dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(26,22,18,0.12); z-index: 300; overflow: hidden; display: none; }
+    .airport-dropdown.is-open { display: block; }
+    .airport-option { padding: 0.6rem 1rem; cursor: pointer; border-bottom: 1px solid rgba(26,22,18,0.06); transition: background 0.1s; display: flex; align-items: center; gap: 0.6rem; }
+    .airport-option:last-child { border-bottom: none; }
+    .airport-option:hover { background: var(--paper); }
+    .airport-option__iata { font-size: 0.8rem; font-weight: 700; color: var(--ember); flex-shrink: 0; width: 34px; }
+    .airport-option__name { font-size: 0.8rem; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .airport-option__city { font-size: 0.7rem; color: var(--ink-muted); }
+    /* Photo note in panel */
+    .spot-panel__photo-note { font-size: 0.62rem; color: #b0a898; margin-bottom: 0.75rem; font-style: italic; }
 
     /* ── LOADING ── */
     .loading-state { display: none; }
@@ -269,25 +278,8 @@
     .discovery-card__name { font-size: 0.8rem; font-weight: 600; color: var(--ink); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* ── DISCOVERY SEARCH + CHIPS ── */
-    .discovery-search-wrap {
-      padding: 0 1.25rem 0.5rem;
-    }
-
-    .discovery-search {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      font-family: inherit;
-      font-size: 0.9rem;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: #fff;
-      color: var(--ink);
-      outline: none;
-    }
-    .discovery-search:focus {
-      border-color: var(--ember);
-      box-shadow: 0 0 0 2px rgba(200,98,42,0.15);
-    }
+    .discovery-search { flex: 1; min-width: 0; padding: 0.35rem 0.85rem; font-family: inherit; font-size: 0.82rem; border: 1px solid var(--border); border-radius: 999px; background: var(--paper); color: var(--ink); outline: none; }
+    .discovery-search:focus { border-color: var(--ember); box-shadow: 0 0 0 2px rgba(200,98,42,0.15); background: #fff; }
 
     /* Chips scrollable row */
     .discovery-chips {
@@ -614,6 +606,7 @@
         <img class="spot-panel__gallery-img" id="spot-gallery-2" src="" alt="">
       </div>
       <p class="spot-panel__photo-credit" id="spot-photo-credit"></p>
+      <p class="spot-panel__photo-note">📷 Photos are keyword-matched and may not exactly show this location</p>
 
       <h3 class="spot-panel__name" id="spot-panel-name">Spot Name</h3>
       <p  class="spot-panel__area" id="spot-panel-area"></p>
@@ -622,6 +615,9 @@
         <span class="season-label" id="spot-panel-season-label">Good time</span>
       </div>
       <p class="spot-panel__season-note" id="spot-panel-season-note"></p>
+      <p class="spot-panel__disclaimer" id="spot-panel-disclaimer" hidden>
+        ⚠️ Event dates are AI-estimated. Verify exact dates and ticket availability before booking.
+      </p>
       <div class="spot-panel__section" id="spot-panel-why-section">
         <p class="spot-panel__section-label">Why backpackers love it</p>
         <p class="spot-panel__section-text" id="spot-panel-why"></p>
@@ -636,9 +632,6 @@
         <p class="spot-panel__section-text" id="spot-panel-food"></p>
       </div>
       <!-- Event date disclaimer — shown only for festival/sport types -->
-      <p class="spot-panel__disclaimer" id="spot-panel-disclaimer" hidden>
-        ⚠️ Verify event dates and ticket availability independently before booking.
-      </p>
       <button type="button" class="spot-panel__add-btn" id="spot-panel-add-btn">+ Add to my map</button>
       <button type="button" class="spot-panel__remove-btn" id="spot-panel-remove-btn" style="display:none">Remove from map</button>
     </div>
@@ -663,12 +656,18 @@
           <button type="button" class="trip-type-btn is-active" id="btn-return">Return trip</button>
         </div>
         <div class="form-group">
-          <label for="arrival-city">✈️ Flying into?</label>
-          <input type="text" id="arrival-city" name="flyInto" placeholder="city or airport name" required>
+          <label for="arrival-city">🛬 Flying into?</label>
+          <div class="airport-wrap">
+            <input type="text" id="arrival-city" name="flyInto" placeholder="Type city or airport (e.g. Osaka, KIX)" autocomplete="off" required>
+            <div class="airport-dropdown" id="arrival-dropdown"></div>
+          </div>
         </div>
         <div class="form-group" id="flyout-group">
-          <label for="departure-city">✈️ Flying out from?</label>
-          <input type="text" id="departure-city" name="flyOut" placeholder="same city or different?" required>
+          <label for="departure-city">🛫 Flying out from?</label>
+          <div class="airport-wrap">
+            <input type="text" id="departure-city" name="flyOut" placeholder="Same city or different?" autocomplete="off">
+            <div class="airport-dropdown" id="departure-dropdown"></div>
+          </div>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -699,25 +698,16 @@
 
     <!-- Screen 2 — Photo Discovery Grid -->
     <section id="screen-2" class="screen discovery-screen" data-screen-index="2" aria-label="Explore experiences" hidden>
-      <div class="discovery-header">
-        <p class="discovery-welcome" id="discovery-welcome">
-          Welcome. Tap anything that catches your eye.
-        </p>
+      <div class="discovery-topbar">
+        <div class="pref-trigger" id="pref-bar-toggle">
+          ⚙ Personalise
+          <span class="pref-active-dot" id="pref-active-dot" hidden></span>
+          <span class="pref-bar__chevron" id="pref-chevron">▾</span>
+        </div>
+        <input type="search" class="discovery-search" id="discovery-search" placeholder="🔍 Filter spots..." aria-label="Filter experiences">
       </div>
 
       <div class="pref-bar" id="pref-bar">
-        <div class="pref-bar__top" id="pref-bar-toggle">
-          <div class="pref-bar__label">
-            ⚙ Personalise
-            <span class="pref-active-dot" id="pref-active-dot" hidden></span>
-          </div>
-          <div class="pref-bar__warnings">
-            <span class="pref-warn-pill" data-tip="Event dates are AI-estimated. Verify before visiting.">🗓 Festivals</span>
-            <span class="pref-warn-pill" data-tip="Map coordinates are AI-generated. Verify before navigating.">📍 Pins</span>
-            <span class="pref-warn-pill" data-tip="Photos are keyword-matched and may not exactly show the spot.">📷 Photos</span>
-          </div>
-          <span class="pref-bar__chevron" id="pref-chevron">▾</span>
-        </div>
         <div class="pref-bar__body" id="pref-bar-body" hidden>
           <div class="pref-row">
             <div class="pref-row__label">Style</div>
@@ -763,8 +753,8 @@
         </div>
       </div>
 
-      <div class="discovery-search-wrap">
-        <input type="search" class="discovery-search" id="discovery-search" placeholder="🔍 Filter spots..." aria-label="Filter experiences">
+      <div class="discovery-header" style="padding: 0.6rem 1.25rem 0.25rem;">
+        <p class="discovery-welcome" id="discovery-welcome">Welcome. Tap anything that catches your eye.</p>
       </div>
 
       <!-- Filter chips -->
@@ -841,9 +831,269 @@
       let currentArrival   = '';
       let currentDeparture = '';
       let tripType         = 'return';
+      let selectedFlyIn    = null;
+      let selectedFlyOut   = null;
       let activePrefs      = { style: 'both', companion: null, food: 'all', entrance: 'both', interests: [] };
 
       function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
+/* ── AIRPORT DATA (~200 key airports) ── */
+      /* Format: [iata, name, city, country, lat, lng] */
+      const APT = [
+        ['NRT','Narita International','Tokyo','JP',35.7647,140.3864],
+        ['HND','Haneda International','Tokyo','JP',35.5494,139.7798],
+        ['KIX','Kansai International','Osaka','JP',34.4273,135.2440],
+        ['ITM','Osaka Itami','Osaka','JP',34.7854,135.4383],
+        ['CTS','New Chitose','Sapporo','JP',42.7752,141.6920],
+        ['FUK','Fukuoka','Fukuoka','JP',33.5859,130.4511],
+        ['OKA','Naha','Okinawa','JP',26.1958,127.6460],
+        ['NGO','Chubu Centrair','Nagoya','JP',34.8583,136.8050],
+        ['SDJ','Sendai','Sendai','JP',38.1397,140.9171],
+        ['HIJ','Hiroshima','Hiroshima','JP',34.4361,132.9194],
+        ['ICN','Incheon International','Seoul','KR',37.4602,126.4407],
+        ['GMP','Gimpo International','Seoul','KR',37.5583,126.7906],
+        ['PUS','Gimhae International','Busan','KR',35.1795,128.9382],
+        ['CJU','Jeju International','Jeju','KR',33.5113,126.4930],
+        ['TPE','Taoyuan International','Taipei','TW',25.0777,121.2327],
+        ['KHH','Kaohsiung International','Kaohsiung','TW',22.5771,120.3498],
+        ['HKG','Hong Kong International','Hong Kong','HK',22.3080,113.9185],
+        ['MFM','Macau International','Macau','MO',22.1496,113.5916],
+        ['PEK','Beijing Capital','Beijing','CN',40.0799,116.6031],
+        ['PKX','Beijing Daxing','Beijing','CN',39.5090,116.4100],
+        ['PVG','Shanghai Pudong','Shanghai','CN',31.1443,121.8083],
+        ['SHA','Shanghai Hongqiao','Shanghai','CN',31.1979,121.3364],
+        ['CAN','Guangzhou Baiyun','Guangzhou','CN',23.3924,113.2988],
+        ['SZX','Shenzhen Bao\'an','Shenzhen','CN',22.6395,113.8105],
+        ['CTU','Chengdu Shuangliu','Chengdu','CN',30.5785,103.9469],
+        ['CKG','Chongqing Jiangbei','Chongqing','CN',29.7192,106.6417],
+        ['XIY','Xi\'an Xianyang','Xi\'an','CN',34.4471,108.7516],
+        ['BKK','Suvarnabhumi','Bangkok','TH',13.6900,100.7501],
+        ['DMK','Don Mueang','Bangkok','TH',13.9126,100.6068],
+        ['CNX','Chiang Mai','Chiang Mai','TH',18.7667,98.9626],
+        ['HKT','Phuket','Phuket','TH',8.1132,98.3169],
+        ['USM','Koh Samui','Koh Samui','TH',9.5478,100.0628],
+        ['KUL','Kuala Lumpur International','Kuala Lumpur','MY',2.7456,101.7099],
+        ['LGK','Langkawi','Langkawi','MY',6.3297,99.7287],
+        ['PEN','Penang','Penang','MY',5.2971,100.2765],
+        ['SIN','Singapore Changi','Singapore','SG',1.3644,103.9915],
+        ['DPS','Ngurah Rai','Bali','ID',-8.7482,115.1670],
+        ['CGK','Soekarno-Hatta','Jakarta','ID',-6.1256,106.6559],
+        ['SUB','Juanda','Surabaya','ID',-7.3798,112.7870],
+        ['LOP','Lombok','Lombok','ID',-8.7572,116.2767],
+        ['HAN','Noi Bai','Hanoi','VN',21.2212,105.8072],
+        ['SGN','Tan Son Nhat','Ho Chi Minh City','VN',10.8188,106.6520],
+        ['DAD','Da Nang','Da Nang','VN',16.0439,108.1992],
+        ['MNL','Ninoy Aquino','Manila','PH',14.5086,121.0194],
+        ['CEB','Mactan-Cebu','Cebu','PH',10.3075,123.9790],
+        ['KLO','Kalibo','Boracay','PH',11.6795,122.3759],
+        ['RGN','Yangon','Yangon','MM',16.9073,96.1332],
+        ['MDL','Mandalay','Mandalay','MM',21.7020,95.9779],
+        ['PNH','Phnom Penh','Phnom Penh','KH',11.5466,104.8440],
+        ['REP','Siem Reap','Siem Reap','KH',13.4107,103.8129],
+        ['VTE','Wattay','Vientiane','LA',17.9883,102.5633],
+        ['LPQ','Luang Prabang','Luang Prabang','LA',19.8973,102.1610],
+        ['KTM','Tribhuvan','Kathmandu','NP',27.6966,85.3591],
+        ['PKR','Pokhara','Pokhara','NP',28.2009,83.9816],
+        ['MLE','Velana','Male','MV',4.1918,73.5290],
+        ['BOM','Chhatrapati Shivaji','Mumbai','IN',19.0896,72.8656],
+        ['DEL','Indira Gandhi','Delhi','IN',28.5665,77.1031],
+        ['BLR','Kempegowda','Bangalore','IN',13.1979,77.7063],
+        ['MAA','Chennai','Chennai','IN',12.9900,80.1693],
+        ['CCU','Netaji Subhas Chandra Bose','Kolkata','IN',22.6549,88.4467],
+        ['GOI','Goa','Goa','IN',15.3808,73.8314],
+        ['JAI','Jaipur','Jaipur','IN',26.8242,75.8122],
+        ['COK','Cochin','Kochi','IN',10.1520,76.4019],
+        ['HYD','Rajiv Gandhi','Hyderabad','IN',17.2313,78.4298],
+        ['CMB','Bandaranaike','Colombo','LK',7.1808,79.8841],
+        ['DAC','Hazrat Shahjalal','Dhaka','BD',23.8433,90.3978],
+        ['KHI','Jinnah','Karachi','PK',24.9065,67.1608],
+        ['LHE','Allama Iqbal','Lahore','PK',31.5216,74.4036],
+        ['ISB','Islamabad','Islamabad','PK',33.5569,72.8516],
+        ['SYD','Kingsford Smith','Sydney','AU',-33.9399,151.1753],
+        ['MEL','Melbourne','Melbourne','AU',-37.6690,144.8410],
+        ['BNE','Brisbane','Brisbane','AU',-27.3842,153.1175],
+        ['PER','Perth','Perth','AU',-31.9403,115.9669],
+        ['AKL','Auckland','Auckland','NZ',-37.0082,174.7850],
+        ['CHC','Christchurch','Christchurch','NZ',-43.4894,172.5322],
+        ['NAN','Nadi','Fiji','FJ',-17.7554,177.4430],
+        ['PPT','Faa\'a','Tahiti','PF',-17.5534,-149.6066],
+        ['DXB','Dubai','Dubai','AE',25.2528,55.3644],
+        ['AUH','Abu Dhabi','Abu Dhabi','AE',24.4330,54.6511],
+        ['DOH','Hamad','Doha','QA',25.2609,51.6138],
+        ['RUH','King Khalid','Riyadh','SA',24.9576,46.6988],
+        ['JED','King Abdulaziz','Jeddah','SA',21.6796,39.1565],
+        ['MCT','Muscat','Muscat','OM',23.5933,58.2844],
+        ['AMM','Queen Alia','Amman','JO',31.7226,35.9932],
+        ['AQJ','King Hussein','Aqaba','JO',29.6116,35.0181],
+        ['TLV','Ben Gurion','Tel Aviv','IL',32.0114,34.8867],
+        ['BEY','Rafic Hariri','Beirut','LB',33.8209,35.4886],
+        ['IST','Istanbul','Istanbul','TR',41.2753,28.7519],
+        ['SAW','Sabiha Gokcen','Istanbul','TR',40.8983,29.3092],
+        ['AYT','Antalya','Antalya','TR',36.8987,30.7992],
+        ['ADB','Adnan Menderes','Izmir','TR',38.2924,27.1570],
+        ['TBS','Tbilisi','Tbilisi','GE',41.6692,44.9547],
+        ['BUS','Batumi','Batumi','GE',41.6103,41.5997],
+        ['EVN','Zvartnots','Yerevan','AM',40.1473,44.3959],
+        ['GYD','Heydar Aliyev','Baku','AZ',40.4675,50.0467],
+        ['CAI','Cairo','Cairo','EG',30.1219,31.4056],
+        ['HRG','Hurghada','Hurghada','EG',27.1783,33.7990],
+        ['SSH','Sharm el-Sheikh','Sharm el-Sheikh','EG',27.9773,34.3950],
+        ['RAK','Menara','Marrakech','MA',31.6069,-8.0363],
+        ['CMN','Mohammed V','Casablanca','MA',33.3675,-7.5899],
+        ['AGA','Al Massira','Agadir','MA',30.3250,-9.4138],
+        ['FEZ','Saiss','Fez','MA',33.9273,-4.9778],
+        ['TUN','Carthage','Tunis','TN',36.8510,10.2272],
+        ['NBO','Jomo Kenyatta','Nairobi','KE',-1.3192,36.9275],
+        ['MBA','Moi','Mombasa','KE',-4.0348,39.5942],
+        ['DAR','Julius Nyerere','Dar es Salaam','TZ',-6.8781,39.2026],
+        ['ZNZ','Abeid Amani Karume','Zanzibar','TZ',-6.2220,39.2249],
+        ['ADD','Bole','Addis Ababa','ET',8.9779,38.7993],
+        ['LOS','Murtala Muhammed','Lagos','NG',6.5774,3.3212],
+        ['ACC','Kotoka','Accra','GH',5.6052,-0.1668],
+        ['CPT','Cape Town','Cape Town','ZA',-33.9648,18.6017],
+        ['JNB','OR Tambo','Johannesburg','ZA',-26.1367,28.2411],
+        ['DUR','King Shaka','Durban','ZA',-29.6144,31.1197],
+        ['LHR','Heathrow','London','GB',51.4775,-0.4614],
+        ['LGW','Gatwick','London','GB',51.1537,-0.1821],
+        ['STN','Stansted','London','GB',51.8850,0.2350],
+        ['EDI','Edinburgh','Edinburgh','GB',55.9508,-3.3725],
+        ['MAN','Manchester','Manchester','GB',53.3537,-2.2750],
+        ['DUB','Dublin','Dublin','IE',53.4213,-6.2701],
+        ['CDG','Charles de Gaulle','Paris','FR',49.0097,2.5479],
+        ['ORY','Orly','Paris','FR',48.7262,2.3652],
+        ['NCE','Nice','Nice','FR',43.6584,7.2159],
+        ['MRS','Marseille','Marseille','FR',43.4393,5.2214],
+        ['BCN','El Prat','Barcelona','ES',41.2971,2.0785],
+        ['MAD','Barajas','Madrid','ES',40.4719,-3.5626],
+        ['AGP','Malaga','Malaga','ES',36.6749,-4.4991],
+        ['PMI','Palma de Mallorca','Palma','ES',39.5517,2.7388],
+        ['VLC','Valencia','Valencia','ES',39.4893,-0.4816],
+        ['SVQ','Seville','Seville','ES',37.4180,-5.8931],
+        ['LPA','Gran Canaria','Las Palmas','ES',27.9319,-15.3866],
+        ['LIS','Humberto Delgado','Lisbon','PT',38.7742,-9.1342],
+        ['OPO','Francisco Sa Carneiro','Porto','PT',41.2481,-8.6814],
+        ['FNC','Funchal','Madeira','PT',32.6979,-16.7745],
+        ['AMS','Schiphol','Amsterdam','NL',52.3086,4.7639],
+        ['BRU','Zaventem','Brussels','BE',50.9010,4.4844],
+        ['BER','Brandenburg','Berlin','DE',52.3667,13.5033],
+        ['MUC','Munich','Munich','DE',48.3538,11.7861],
+        ['FRA','Frankfurt','Frankfurt','DE',50.0379,8.5622],
+        ['ZRH','Zurich','Zurich','CH',47.4647,8.5492],
+        ['GVA','Geneva','Geneva','CH',46.2380,6.1089],
+        ['VIE','Schwechat','Vienna','AT',48.1103,16.5697],
+        ['PRG','Vaclav Havel','Prague','CZ',50.1008,14.2600],
+        ['BUD','Budapest Liszt Ferenc','Budapest','HU',47.4298,19.2610],
+        ['WAW','Chopin','Warsaw','PL',52.1657,20.9671],
+        ['FCO','Fiumicino','Rome','IT',41.8003,12.2389],
+        ['MXP','Malpensa','Milan','IT',45.6301,8.7231],
+        ['FLR','Peretola','Florence','IT',43.8097,11.2051],
+        ['VCE','Marco Polo','Venice','IT',45.5053,12.3519],
+        ['ATH','Eleftherios Venizelos','Athens','GR',37.9364,23.9445],
+        ['HER','Nikos Kazantzakis','Heraklion','GR',35.3397,25.1803],
+        ['RHO','Diagoras','Rhodes','GR',36.4054,28.0862],
+        ['CFU','Ioannis Kapodistrias','Corfu','GR',39.6019,19.9117],
+        ['SKG','Makedonia','Thessaloniki','GR',40.5197,22.9709],
+        ['DBV','Dubrovnik','Dubrovnik','HR',42.5614,18.2682],
+        ['SPU','Split','Split','HR',43.5389,16.2998],
+        ['ZAG','Franjo Tudjman','Zagreb','HR',45.7429,16.0688],
+        ['TGD','Podgorica','Podgorica','ME',42.3597,19.2519],
+        ['BEG','Nikola Tesla','Belgrade','RS',44.8184,20.3091],
+        ['SKP','Alexander the Great','Skopje','MK',41.9616,21.6214],
+        ['SJJ','Sarajevo','Sarajevo','BA',43.8246,18.3315],
+        ['LJU','Joze Pucnik','Ljubljana','SI',46.2237,14.4576],
+        ['SOF','Sofia','Sofia','BG',42.6967,23.4114],
+        ['OTP','Henri Coanda','Bucharest','RO',44.5711,26.0850],
+        ['TIA','Tirana','Tirana','AL',41.4147,19.7206],
+        ['CPH','Kastrup','Copenhagen','DK',55.6181,12.6561],
+        ['ARN','Arlanda','Stockholm','SE',59.6498,17.9238],
+        ['OSL','Gardermoen','Oslo','NO',60.1939,11.1004],
+        ['HEL','Helsinki-Vantaa','Helsinki','FI',60.3172,24.9633],
+        ['KEF','Keflavik','Reykjavik','IS',63.9850,-22.6056],
+        ['TLL','Lennart Meri','Tallinn','EE',59.4133,24.8328],
+        ['RIX','Riga','Riga','LV',56.9236,23.9711],
+        ['VNO','Vilnius','Vilnius','LT',54.6341,25.2858],
+        ['MLA','Malta','Malta','MT',35.8575,14.4775],
+        ['JFK','John F Kennedy','New York','US',40.6413,-73.7781],
+        ['EWR','Newark Liberty','Newark','US',40.6895,-74.1745],
+        ['LGA','LaGuardia','New York','US',40.7773,-73.8726],
+        ['LAX','Los Angeles','Los Angeles','US',33.9425,-118.4081],
+        ['MIA','Miami','Miami','US',25.7959,-80.2870],
+        ['ORD','O\'Hare','Chicago','US',41.9742,-87.9073],
+        ['SFO','San Francisco','San Francisco','US',37.6213,-122.3790],
+        ['SEA','Sea-Tac','Seattle','US',47.4502,-122.3088],
+        ['BOS','Logan','Boston','US',42.3656,-71.0096],
+        ['DCA','Reagan National','Washington','US',38.8521,-77.0377],
+        ['IAD','Dulles','Washington','US',38.9531,-77.4565],
+        ['YYZ','Pearson','Toronto','CA',43.6777,-79.6248],
+        ['YVR','Vancouver','Vancouver','CA',49.1967,-123.1815],
+        ['YUL','Pierre Elliott Trudeau','Montreal','CA',45.4706,-73.7408],
+        ['MEX','Benito Juarez','Mexico City','MX',19.4363,-99.0721],
+        ['CUN','Cancun','Cancun','MX',21.0365,-86.8771],
+        ['HAV','Jose Marti','Havana','CU',22.9892,-82.4091],
+        ['BOG','El Dorado','Bogota','CO',4.7016,-74.1469],
+        ['MDE','Jose Maria Cordova','Medellin','CO',6.1645,-75.4231],
+        ['LIM','Jorge Chavez','Lima','PE',-12.0219,-77.1143],
+        ['CUZ','Alejandro Velasco Astete','Cusco','PE',-13.5357,-71.9388],
+        ['UIO','Mariscal Sucre','Quito','EC',-0.1292,-78.3575],
+        ['EZE','Ministro Pistarini','Buenos Aires','AR',-34.8222,-58.5358],
+        ['SCL','Arturo Merino Benitez','Santiago','CL',-33.3930,-70.7858],
+        ['GIG','Galeao','Rio de Janeiro','BR',-22.8099,-43.2505],
+        ['GRU','Guarulhos','Sao Paulo','BR',-23.4356,-46.4731],
+        ['MVD','Carrasco','Montevideo','UY',-34.8384,-56.0308],
+      ];
+
+      /* Airport search function */
+      function searchAirports(query) {
+        if (!query || query.length < 2) return [];
+        var q = query.toLowerCase().trim();
+        var results = [];
+        for (var i = 0; i < APT.length; i++) {
+          var a = APT[i];
+          var iata = a[0].toLowerCase();
+          var city = a[2].toLowerCase();
+          var name = a[1].toLowerCase();
+          var score = 0;
+          if (iata === q)              score = 100;
+          else if (iata.startsWith(q)) score = 80;
+          else if (city === q)         score = 70;
+          else if (city.startsWith(q)) score = 60;
+          else if (city.includes(q))   score = 40;
+          else if (name.includes(q))   score = 20;
+          if (score > 0) results.push({ score: score, iata: a[0], name: a[1], city: a[2], country: a[3], lat: a[4], lng: a[5] });
+        }
+        results.sort(function (a, b) { return b.score - a.score; });
+        return results.slice(0, 6);
+      }
+
+      /* Airport autocomplete init */
+      function initAutocomplete(inputId, dropdownId, onSelect) {
+        var input    = document.getElementById(inputId);
+        var dropdown = document.getElementById(dropdownId);
+        if (!input || !dropdown) return;
+
+        input.addEventListener('input', function () {
+          var results = searchAirports(input.value);
+          if (!results.length) { dropdown.classList.remove('is-open'); dropdown.innerHTML = ''; return; }
+          dropdown.innerHTML = '';
+          results.forEach(function (ap) {
+            var opt = document.createElement('div');
+            opt.className = 'airport-option';
+            opt.innerHTML = '<span class="airport-option__iata">' + ap.iata + '</span><div><div class="airport-option__name">' + ap.name + '</div><div class="airport-option__city">' + ap.city + ', ' + ap.country + '</div></div>';
+            opt.addEventListener('mousedown', function (e) {
+              e.preventDefault();
+              input.value = ap.iata + ' — ' + ap.city;
+              dropdown.classList.remove('is-open');
+              dropdown.innerHTML = '';
+              onSelect(ap);
+            });
+            dropdown.appendChild(opt);
+          });
+          dropdown.classList.add('is-open');
+        });
+
+        input.addEventListener('blur', function () {
+          setTimeout(function () { dropdown.classList.remove('is-open'); }, 200);
+        });
+      }
 
       /* ── PEXELS PHOTO FETCH (via Worker) ────────
          All photo requests go through the Worker so
@@ -1268,7 +1518,8 @@
 
         const filtered = allExperiences.filter(function (exp) {
           var tags = exp.tags || [];
-          var matchesChip   = activeFilter === 'all' || exp.type === activeFilter;
+          var addT = exp.additionalTypes || [];
+          var matchesChip = activeFilter === 'all' || exp.type === activeFilter || addT.indexOf(activeFilter) >= 0;
           var tagString = tags.join(' ').toLowerCase();
           var matchesSearch = searchQuery === '' ||
             (exp.spot_name || '').toLowerCase().includes(searchQuery) ||
@@ -1785,7 +2036,10 @@
       document.getElementById('trip-form').addEventListener('submit', async function (e) {
         e.preventDefault();
         const arrEl=document.getElementById('arrival-city'),depEl=document.getElementById('departure-city'),frEl=document.getElementById('date-from'),toEl=document.getElementById('date-to');
-        const arrival=arrEl.value.trim(),departure=depEl.value.trim(),dateFrom=frEl.value,dateTo=toEl.value;
+        const arrival   = selectedFlyIn  ? selectedFlyIn.city  : (arrEl ? arrEl.value.trim() : '');
+        const departure = tripType === 'oneway' ? arrival : (selectedFlyOut ? selectedFlyOut.city : (depEl ? depEl.value.trim() : arrival));
+        const dateFrom  = frEl ? frEl.value : '';
+        const dateTo    = toEl ? toEl.value : '';
         if(!arrival||!dateFrom||!dateTo){showErr('Please fill in all fields.');return;}
 
         currentArrival=arrival; currentDeparture=departure||arrival;
@@ -1834,7 +2088,9 @@
           if(submitBtn)submitBtn.disabled=false;
         }
       });
-
+      
+      initAutocomplete('arrival-city',   'arrival-dropdown',   function (ap) { selectedFlyIn  = ap; });
+      initAutocomplete('departure-city', 'departure-dropdown', function (ap) { selectedFlyOut = ap; });
       log('ready','all listeners attached');
     });
   </script>
