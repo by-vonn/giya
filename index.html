@@ -1685,6 +1685,18 @@
         if (searchInput) searchInput.value = '';
 
         applyDiscoveryFilter();
+
+        /* Hide type chips that have zero matching spots */
+        document.querySelectorAll('.discovery-chip[data-filter]').forEach(function (chip) {
+          var f = chip.getAttribute('data-filter');
+          if (f === 'all') return;
+          var count = allExperiences.filter(function (exp) {
+            var addT = exp.additionalTypes || [];
+            return exp.type === f || addT.indexOf(f) >= 0;
+          }).length;
+          chip.style.display = count === 0 ? 'none' : '';
+        });
+
         log('renderDiscovery', allExperiences.length + ' experiences loaded');
       }
 
