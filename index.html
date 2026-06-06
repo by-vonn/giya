@@ -654,8 +654,14 @@
         <div class="trip-type-toggle" role="group">
           <button type="button" class="trip-type-btn" id="btn-oneway">One way</button>
           <button type="button" class="trip-type-btn is-active" id="btn-return">Return trip</button>
+          <button type="button" class="trip-type-btn" id="btn-explore">🧭 Exploring</button>
         </div>
-        <div class="form-group">
+
+        <div class="form-group" id="explore-group" style="display:none">
+          <label for="explore-dest">🧭 Where do you want to explore?</label>
+          <input type="text" id="explore-dest" placeholder="City, neighbourhood or landmark" autocomplete="off">
+        </div>
+        <div class="form-group" id="arrival-group">
           <label for="arrival-city">🛬 Flying into?</label>
           <div class="airport-wrap">
             <input type="text" id="arrival-city" name="flyInto" placeholder="Type city or airport (e.g. Osaka, KIX)" autocomplete="off" required>
@@ -1217,15 +1223,22 @@
         var btnRet = document.getElementById('btn-return');
         var flyoutGroup = document.getElementById('flyout-group');
         if (!btnOne || !btnRet || !flyoutGroup) return;
+        var btnExp      = document.getElementById('btn-explore');
+        var exploreGroup = document.getElementById('explore-group');
+        var arrivalGroup = document.getElementById('arrival-group');
+
         function setType(t) {
           tripType = t;
           btnOne.classList.toggle('is-active', t === 'oneway');
           btnRet.classList.toggle('is-active', t === 'return');
-          flyoutGroup.style.display = t === 'oneway' ? 'none' : '';
+          if (btnExp) btnExp.classList.toggle('is-active', t === 'explore');
+          flyoutGroup.style.display  = (t === 'oneway' || t === 'explore') ? 'none' : '';
+          if (arrivalGroup)  arrivalGroup.style.display  = t === 'explore' ? 'none' : '';
+          if (exploreGroup)  exploreGroup.style.display  = t === 'explore' ? '' : 'none';
         }
         btnOne.addEventListener('click', function () { setType('oneway'); });
         btnRet.addEventListener('click', function () { setType('return'); });
-      })();
+        if (btnExp) btnExp.addEventListener('click', function () { setType('explore'); });
 
       /* ── PREFERENCE BAR ── */
       (function () {
@@ -1418,8 +1431,15 @@
           }
         });
 
+        /* Track spot + category click in KV */
+        if (currentArrival) {
+          fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'click', city: currentArrival, spotName: spot.spot_name, category: spot.type }),
+          }).catch(function () {});
+        }
         log('openPanel', spot.spot_name);
-      }
 
       function closePanel() {
         const panel   = document.getElementById('spot-panel');
@@ -2048,8 +2068,15 @@
       document.getElementById('trip-form').addEventListener('submit', async function (e) {
         e.preventDefault();
         const arrEl=document.getElementById('arrival-city'),depEl=document.getElementById('departure-city'),frEl=document.getElementById('date-from'),toEl=document.getElementById('date-to');
-        const arrival   = selectedFlyIn  ? selectedFlyIn.city  : (arrEl ? arrEl.value.trim() : '');
-        const departure = tripType === 'oneway' ? arrival : (selectedFlyOut ? selectedFlyOut.city : (depEl ? depEl.value.trim() : arrival));
+        let arrival, departure;
+        if (tripType === 'explore') {
+          var expEl = document.getElementById('explore-dest');
+          arrival   = expEl ? expEl.value.trim() : '';
+          departure = arrival;
+        } else {
+          arrival   = selectedFlyIn  ? selectedFlyIn.city  : (arrEl ? arrEl.value.trim() : '');
+          departure = tripType === 'oneway' ? arrival : (selectedFlyOut ? selectedFlyOut.city : (depEl ? depEl.value.trim() : arrival));
+        }
         const dateFrom  = frEl ? frEl.value : '';
         const dateTo    = toEl ? toEl.value : '';
         if(!arrival||!dateFrom||!dateTo){showErr('Please fill in all fields.');return;}
