@@ -1441,6 +1441,7 @@
           }).catch(function () {});
         }
         log('openPanel', spot.spot_name);
+      }
 
       function closePanel() {
         const panel   = document.getElementById('spot-panel');
@@ -1626,6 +1627,7 @@
               season_note:  exp.season_note,
               coordinates:  exp.coordinates,
               type:         exp.type,
+              photo_query: exp.photo_query,
             }, color, null);
           });
           card.addEventListener('keydown', function (e) {
