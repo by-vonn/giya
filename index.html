@@ -1403,7 +1403,7 @@
         document.body.style.overflow = 'hidden';
 
         /* Fetch 3 relevant photos from Pexels (async — does not block panel open) */
-        const photoQuery = (spot.spot_name || '') + ' ' + (spot.area || '') + ' ' + currentArrival;
+        const photoQuery = spot.photo_query || ((spot.spot_name || '') + ' ' + (spot.type || '') + ' ' + currentArrival);
         fetchPhotos(photoQuery.trim(), 3).then(function (photos) {
           if (!gallery) return;
           gallery.classList.remove('is-loading');
@@ -1595,7 +1595,7 @@
           img.className = 'discovery-card__img';
           img.alt = exp.spot_name || '';
           img.setAttribute('data-query',
-            encodeURIComponent((exp.spot_name || '') + ' ' + (exp.type || '') + ' ' + currentArrival)
+            encodeURIComponent(exp.photo_query || ((exp.spot_name || '') + ' ' + (exp.type || '') + ' ' + currentArrival))
           );
           imgWrap.appendChild(img);
           card.appendChild(imgWrap);
