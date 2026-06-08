@@ -857,7 +857,7 @@
         if (type === 'nature')                       return name + ' nature ' + city;
         return name + ' ' + city;
       }
-      
+
 /* ── AIRPORT DATA (~200 key airports) ── */
       /* Format: [iata, name, city, country, lat, lng] */
       const APT = [
@@ -1905,19 +1905,29 @@
         ).addTo(mainMap);
 
         const allBounds = [];
-        const arrCoords = CITIES[currentArrival.toLowerCase()];
-        const depCoords = CITIES[currentDeparture.toLowerCase()];
+        const arrCoords = selectedFlyIn
+          ? [selectedFlyIn.lat, selectedFlyIn.lng]
+          : CITIES[currentArrival.toLowerCase()];
+        const depCoords = selectedFlyOut
+          ? [selectedFlyOut.lat, selectedFlyOut.lng]
+          : CITIES[currentDeparture.toLowerCase()];
         const sameCity  = currentArrival.toLowerCase() === currentDeparture.toLowerCase();
+        const arrLabel  = selectedFlyIn
+          ? selectedFlyIn.iata + ' — ' + selectedFlyIn.name
+          : currentArrival;
+        const depLabel  = selectedFlyOut
+          ? selectedFlyOut.iata + ' — ' + selectedFlyOut.name
+          : currentDeparture;
 
         if (arrCoords) {
           const m = L.marker(arrCoords, { icon: L.divIcon({ html: '<div class="terminal-pin terminal-pin--in">🛬</div>', className: '', iconSize: [36,36], iconAnchor: [18,18] }) }).addTo(mainMap);
-          m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛬 Flying into</strong><br>' + esc(currentArrival) + '</div>', { maxWidth: 180 });
+          m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛬 Flying into</strong><br>' + esc(arrLabel) + '</div>', { maxWidth: 200 });
           terminalMarkers.push(m); allBounds.push(arrCoords);
         }
 
-        if (depCoords && !sameCity) {
+        if (depCoords && !sameCity && tripType === 'return') {
           const m = L.marker(depCoords, { icon: L.divIcon({ html: '<div class="terminal-pin terminal-pin--out">🛫</div>', className: '', iconSize: [36,36], iconAnchor: [18,18] }) }).addTo(mainMap);
-          m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛫 Flying out from</strong><br>' + esc(currentDeparture) + '</div>', { maxWidth: 180 });
+          m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛫 Flying out from</strong><br>' + esc(depLabel) + '</div>', { maxWidth: 200 });
           terminalMarkers.push(m); allBounds.push(depCoords);
         }
 
