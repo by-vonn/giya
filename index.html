@@ -619,12 +619,12 @@
         ⚠️ Event dates are AI-estimated. Verify exact dates and ticket availability before booking.
       </p>
       <div class="spot-panel__section" id="spot-panel-why-section">
-        <p class="spot-panel__section-label">Why backpackers love it</p>
+        <p class="spot-panel__section-label">About this place</p>
         <p class="spot-panel__section-text" id="spot-panel-why"></p>
       </div>
       <div class="spot-panel__divider"></div>
       <div class="spot-panel__section" id="spot-panel-hidden-section" hidden>
-        <p class="spot-panel__section-label">💎 What most visitors miss</p>
+        <p class="spot-panel__section-label">✅ Must see / do</p>
         <p class="spot-panel__section-text" id="spot-panel-hidden"></p>
       </div>
       <div class="spot-panel__section" id="spot-panel-food-section" hidden>
@@ -842,6 +842,22 @@
       let activePrefs      = { style: 'both', companion: null, food: 'all', entrance: 'both', interests: [] };
 
       function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
+      /* ── TYPE-BASED PHOTO QUERY ── */
+      function buildPhotoQuery(exp) {
+        var name = exp.spot_name || '';
+        var city = currentArrival  || '';
+        var type = exp.type        || '';
+        var tags = exp.tags        || [];
+        var isIndoor = tags.indexOf('indoor') >= 0;
+        if (type === 'nightlife')                    return name + ' night ' + city;
+        if (type === 'food')                         return name + ' food '  + city;
+        if (type === 'market')                       return name + ' market ' + city;
+        if (type === 'festival' || type === 'sport') return name + ' festival ' + city;
+        if (type === 'activity' && isIndoor)         return name + ' interior ' + city;
+        if (type === 'nature')                       return name + ' nature ' + city;
+        return name + ' ' + city;
+      }
+      
 /* ── AIRPORT DATA (~200 key airports) ── */
       /* Format: [iata, name, city, country, lat, lng] */
       const APT = [
@@ -1369,7 +1385,7 @@
         /* Populate text content immediately */
         set('spot-panel-name', spot.spot_name || 'Unnamed spot');
         set('spot-panel-area', spot.area      || '');
-        set('spot-panel-why',  spot.why       || '');
+        set('spot-panel-why',  spot.description || spot.why || '');
 
         const status  = spot.season_status || 'caution';
         const badgeEl = document.getElementById('spot-panel-season-badge');
@@ -1379,7 +1395,7 @@
         if (labelEl) labelEl.textContent = seasonLbl(status);
         if (noteEl)  noteEl.textContent  = spot.season_note || '';
 
-        showSec('spot-panel-hidden-section', 'spot-panel-hidden', spot.hidden_angle);
+        showSec('spot-panel-hidden-section', 'spot-panel-hidden', spot.must_do || spot.hidden_angle);
         showSec('spot-panel-food-section',   'spot-panel-food',   spot.food_nearby);
 
         /* Festival/sport disclaimer */
@@ -1404,7 +1420,7 @@
         document.body.style.overflow = 'hidden';
 
         /* Fetch 3 relevant photos from Pexels (async — does not block panel open) */
-        const photoQuery = spot.photo_query || ((spot.spot_name || '') + ' ' + (spot.type || '') + ' ' + currentArrival);
+        const photoQuery = buildPhotoQuery(spot);
         fetchPhotos(photoQuery.trim(), 3).then(function (photos) {
           if (!gallery) return;
           gallery.classList.remove('is-loading');
@@ -1597,7 +1613,7 @@
           img.className = 'discovery-card__img';
           img.alt = exp.spot_name || '';
           img.setAttribute('data-query',
-            encodeURIComponent(exp.photo_query || ((exp.spot_name || '') + ' ' + (exp.type || '') + ' ' + currentArrival))
+            encodeURIComponent(buildPhotoQuery(exp))
           );
           imgWrap.appendChild(img);
           card.appendChild(imgWrap);
@@ -1617,18 +1633,7 @@
 
           /* Tap → open spot panel */
           card.addEventListener('click', function () {
-            openPanel({
-              spot_name:    exp.spot_name,
-              area:         exp.area,
-              why:          exp.why,
-              hidden_angle: exp.hidden_angle,
-              food_nearby:  exp.food_nearby,
-              season_status:exp.season_status,
-              season_note:  exp.season_note,
-              coordinates:  exp.coordinates,
-              type:         exp.type,
-              photo_query: exp.photo_query,
-            }, color, null);
+            openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query }, color, null);
           });
           card.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
@@ -1891,6 +1896,7 @@
       function initOrRefreshMap() {
         const mapEl = document.getElementById('main-map');
         if (!mapEl || typeof L === 'undefined') return;
+        console.log('[Map] selectedFlyIn at render:', selectedFlyIn ? selectedFlyIn.iata : 'NULL');
         if (mainMap) { mainMap.remove(); mainMap = null; mapMarkers = {}; terminalMarkers = []; }
 
         mainMap = L.map(mapEl, { zoomControl: true, scrollWheelZoom: true });
