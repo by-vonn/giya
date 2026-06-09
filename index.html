@@ -845,17 +845,32 @@
       /* ── TYPE-BASED PHOTO QUERY ── */
       function buildPhotoQuery(exp) {
         var name = exp.spot_name || '';
-        var city = currentArrival  || '';
-        var type = exp.type        || '';
-        var tags = exp.tags        || [];
-        var isIndoor = tags.indexOf('indoor') >= 0;
-        if (type === 'nightlife')                    return name + ' night ' + city;
-        if (type === 'food')                         return name + ' food '  + city;
+        var city = currentArrival || '';
+        var type = exp.type       || '';
+        var tags = exp.tags       || [];
+        var desc = ((exp.description || '') + ' ' + (exp.why || '')).toLowerCase();
+        var isIndoor  = tags.indexOf('indoor') >= 0;
+        var isNight   = tags.indexOf('nightlife') >= 0
+                     || desc.indexOf('night') >= 0
+                     || desc.indexOf('evening') >= 0
+                     || desc.indexOf('illuminat') >= 0;
+
+        if (isNight || type === 'nightlife')         return name + ' night illumination ' + city;
+        if (type === 'food')                         return name + ' food ' + city;
         if (type === 'market')                       return name + ' market ' + city;
         if (type === 'festival' || type === 'sport') return name + ' festival ' + city;
         if (type === 'activity' && isIndoor)         return name + ' interior ' + city;
-        if (type === 'nature')                       return name + ' nature ' + city;
+        if (type === 'nature')  return name + ' ' + getSeasonKeyword(window._giyaDateFrom) + ' ' + city;
         return name + ' ' + city;
+      }
+
+      function getSeasonKeyword(dateFrom) {
+        if (!dateFrom) return '';
+        var month = parseInt((dateFrom || '').split('-')[1], 10);
+        if (month >= 3  && month <= 5)  return 'spring cherry blossom';
+        if (month >= 6  && month <= 8)  return 'summer';
+        if (month >= 9  && month <= 11) return 'autumn foliage';
+        return 'winter snow';
       }
 
 /* ── AIRPORT DATA (~200 key airports) ── */
@@ -2100,7 +2115,9 @@
         const dateTo    = toEl ? toEl.value : '';
         if(!arrival||!dateFrom||!dateTo){showErr('Please fill in all fields.');return;}
 
-        currentArrival=arrival; currentDeparture=departure||arrival;
+        currentArrival   = arrival;
+        currentDeparture = departure || arrival;
+        window._giyaDateFrom = dateFrom;
         clearErr(); resetWarnings();
         giyaAddedSpots=[]; mapMarkers={}; terminalMarkers=[];
         if(mainMap){mainMap.remove();mainMap=null;}
