@@ -759,8 +759,9 @@
         </div>
       </div>
 
-      <div class="discovery-header" style="padding: 0.6rem 1.25rem 0.25rem;">
+      <div class="discovery-header" style="padding: 0.6rem 1.25rem 0.25rem; display:flex; align-items:center; justify-content:space-between;">
         <p class="discovery-welcome" id="discovery-welcome">Welcome. Tap anything that catches your eye.</p>
+        <button type="button" id="btn-pin-all" style="font-family:inherit;font-size:0.72rem;font-weight:600;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:0.3rem 0.8rem;cursor:pointer;white-space:nowrap;flex-shrink:0;">📍 Pin all</button>
       </div>
 
       <!-- Filter chips -->
@@ -799,6 +800,7 @@
           <div class="map-panel__header">
             <span class="map-panel__title">My Pins</span>
             <button type="button" class="map-panel__show-all" id="btn-show-all-pins">Show all</button>
+            <button type="button" class="map-panel__show-all" id="btn-hide-all-pins" style="margin-left:0.5rem;">Hide all</button>
           </div>
           <div class="map-panel__terminals" id="map-terminals" hidden>
             <p class="map-panel__terminals-label">Your journey</p>
@@ -854,14 +856,16 @@
                      || desc.indexOf('night') >= 0
                      || desc.indexOf('evening') >= 0
                      || desc.indexOf('illuminat') >= 0;
-
-        if (isNight || type === 'nightlife')         return name + ' night illumination ' + city;
-        if (type === 'food')                         return name + ' food ' + city;
-        if (type === 'market')                       return name + ' market ' + city;
-        if (type === 'festival' || type === 'sport') return name + ' festival ' + city;
-        if (type === 'activity' && isIndoor)         return name + ' interior ' + city;
-        if (type === 'nature')  return name + ' ' + getSeasonKeyword(window._giyaDateFrom) + ' ' + city;
-        return name + ' ' + city;
+        var query;
+        if (isNight || type === 'nightlife')         query = name + ' night illumination ' + city;
+        else if (type === 'food')                    query = name + ' food ' + city;
+        else if (type === 'market')                  query = name + ' market ' + city;
+        else if (type === 'festival' || type === 'sport') query = name + ' festival ' + city;
+        else if (type === 'activity' && isIndoor)   query = name + ' interior ' + city;
+        else if (type === 'nature')                  query = name + ' ' + getSeasonKeyword(window._giyaDateFrom) + ' ' + city;
+        else                                         query = name + ' ' + city;
+        console.log('[Photo] spot:', name, '| query:', query);
+        return query;
       }
 
       function getSeasonKeyword(dateFrom) {
@@ -1302,6 +1306,23 @@
           });
         });
       })();
+
+      document.getElementById('btn-pin-all').addEventListener('click', function () {
+        var added = 0;
+        allExperiences.forEach(function (exp) {
+          var alreadyAdded = giyaAddedSpots.some(function (e) { return e.spot.spot_name === exp.spot_name; });
+          if (alreadyAdded) return;
+          var catColor = getTypeColor(exp.type);
+          var catEmoji = getTypeEmoji(exp.type);
+          giyaAddedSpots.push({ spot: exp, categoryName: exp.type, categoryColor: catColor, categoryEmoji: catEmoji, cardEl: null });
+          added++;
+        });
+        updateCounters();
+        if (added > 0) {
+          var btn = document.getElementById('btn-pin-all');
+          if (btn) { btn.textContent = '✅ ' + added + ' pinned'; setTimeout(function(){ btn.textContent = '📍 Pin all'; }, 2000); }
+        }
+      });
 
       document.getElementById('btn-view-map').addEventListener('click', function () { showScreen(4); });
       document.getElementById('btn-spots-badge').addEventListener('click', function () {
@@ -2029,6 +2050,10 @@
 
       document.getElementById('btn-show-all-pins').addEventListener('click', function () {
         Object.values(mapMarkers).forEach(function (m) { if (!m.visible && mainMap) { m.marker.addTo(mainMap); m.visible = true; } });
+        refreshMapPanel();
+      });
+      document.getElementById('btn-hide-all-pins').addEventListener('click', function () {
+        Object.values(mapMarkers).forEach(function (m) { if (m.visible && mainMap) { mainMap.removeLayer(m.marker); m.visible = false; } });
         refreshMapPanel();
       });
 
