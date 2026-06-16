@@ -836,6 +836,31 @@
       const WORKER_URL = 'https://giya-ai-worker.calleylearn.workers.dev';
       const DEBUG      = true;
 
+      function normaliseType(type) {
+        const valid = [
+          'sight', 'food', 'activity', 'festival', 'sport',
+          'nature', 'nightlife', 'market', 'day-trip', 'seasonal',
+        ];
+        if (!type) return 'sight';
+        if (valid.indexOf(type) >= 0) return type;
+        const map = {
+          'museum': 'sight', 'historic': 'sight', 'historical': 'sight',
+          'cultural': 'sight', 'temple': 'sight', 'shrine': 'sight',
+          'monument': 'sight', 'landmark': 'sight', 'architecture': 'sight',
+          'gallery': 'activity', 'art': 'activity', 'entertainment': 'activity',
+          'recreation': 'activity', 'attraction': 'activity',
+          'restaurant': 'food', 'cafe': 'food', 'dining': 'food',
+          'shopping': 'market', 'shop': 'market', 'mall': 'market',
+          'park': 'nature', 'garden': 'nature',
+          'sports': 'sport', 'stadium': 'sport',
+          'bar': 'nightlife', 'club': 'nightlife',
+          'excursion': 'day-trip', 'trip': 'day-trip',
+          'event': 'festival', 'celebration': 'festival',
+          'seasonal event': 'seasonal',
+        };
+        return map[type.toLowerCase()] || 'sight';
+      }
+
       let giyaData         = null;
       let giyaAddedSpots   = [];
       let panelCurrentSpot = null;
@@ -1615,7 +1640,8 @@
         const filtered = allExperiences.filter(function (exp) {
           var tags = exp.tags || [];
           var addT = exp.additionalTypes || [];
-          var matchesChip = activeFilter === 'all' || exp.type === activeFilter || addT.indexOf(activeFilter) >= 0;
+          var normType = normaliseType(exp.type);
+          var matchesChip = activeFilter === 'all' || normType === activeFilter || addT.indexOf(activeFilter) >= 0;
           var tagString = tags.join(' ').toLowerCase();
           var matchesSearch = searchQuery === '' ||
             (exp.spot_name || '').toLowerCase().includes(searchQuery) ||
@@ -1655,8 +1681,8 @@
         if (noResults) noResults.hidden = filtered.length > 0;
 
         filtered.forEach(function (exp) {
-          const color = getTypeColor(exp.type);
-          const emoji = getTypeEmoji(exp.type);
+          const color = getTypeColor(normaliseType(exp.type));
+          const emoji = getTypeEmoji(normaliseType(exp.type));
 
           const card = document.createElement('article');
           card.className = 'discovery-card is-loading';
@@ -1778,7 +1804,7 @@
           if (f === 'all') return;
           var count = allExperiences.filter(function (exp) {
             var addT = exp.additionalTypes || [];
-            return exp.type === f || addT.indexOf(f) >= 0;
+            return normaliseType(exp.type) === f || addT.indexOf(f) >= 0;
           }).length;
           chip.style.display = count === 0 ? 'none' : '';
         });
