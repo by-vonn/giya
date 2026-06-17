@@ -480,11 +480,13 @@
     .fee-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 999px; white-space: nowrap; }
     .fee-badge--free     { background: #dcfce7; color: #15803d; }
     .fee-badge--ticketed { background: #fef3c7; color: #92400e; }
+    .fee-badge--mixed    { background: #e0f2fe; color: #0369a1; }
 
     /* Entrance fee row — in spot panel */
     .spot-panel__fee { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 8px; margin-bottom: 0.75rem; }
     .spot-panel__fee--free     { background: #f0fdf4; border: 1px solid #bbf7d0; }
     .spot-panel__fee--ticketed { background: #fffbeb; border: 1px solid #fde68a; }
+    .spot-panel__fee--mixed    { background: #f0f9ff; border: 1px solid #bae6fd; }
     .spot-panel__fee-icon  { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
     .spot-panel__fee-text  { font-size: 0.82rem; color: var(--ink); line-height: 1.5; }
     .spot-panel__fee-price { font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 1px; }
@@ -1317,10 +1319,19 @@
           btnOne.classList.toggle('is-active', t === 'oneway');
           btnRet.classList.toggle('is-active', t === 'return');
           if (btnExp) btnExp.classList.toggle('is-active', t === 'explore');
-          flyoutGroup.style.display  = (t === 'oneway' || t === 'explore') ? 'none' : '';
-          if (arrivalGroup)  arrivalGroup.style.display  = t === 'explore' ? 'none' : '';
-          if (exploreGroup)  exploreGroup.style.display  = t === 'explore' ? '' : 'none';
+          flyoutGroup.style.display = (t === 'oneway' || t === 'explore') ? 'none' : '';
+          if (arrivalGroup) arrivalGroup.style.display = t === 'explore' ? 'none' : '';
+          if (exploreGroup) exploreGroup.style.display = t === 'explore' ? '' : 'none';
+
+          /* Fix: a hidden input with required= still triggers browser
+             validation and throws "not focusable" on submit.
+             Move required to whichever input is actually visible. */
+          const arrivalInput = document.getElementById('arrival-city');
+          const exploreInput = document.getElementById('explore-dest');
+          if (arrivalInput) arrivalInput.required = t !== 'explore';
+          if (exploreInput) exploreInput.required = t === 'explore';
         }
+        
         btnOne.addEventListener('click', function () { setType('oneway'); });
         btnRet.addEventListener('click', function () { setType('return'); });
         if (btnExp) btnExp.addEventListener('click', function () { setType('explore'); });
@@ -1479,18 +1490,20 @@
         const feeText    = document.getElementById('spot-panel-fee-text');
         const feePriceEl = document.getElementById('spot-panel-fee-price');
         if (feeEl) {
-          const isFree = spot.entranceFee === 'free' ||
-                         (spot.ticketPriceNote || '').toLowerCase() === 'free';
+          const isFree  = spot.entranceFee === 'free' ||
+                          (spot.ticketPriceNote || '').toLowerCase() === 'free';
+          const isMixed = spot.entranceFee === 'mixed';
           feeEl.hidden    = false;
           feeEl.className = 'spot-panel__fee ' +
-            (isFree ? 'spot-panel__fee--free' : 'spot-panel__fee--ticketed');
-          if (feeIcon)    feeIcon.textContent = isFree ? '✅' : '🎟️';
-          if (feeText)    feeText.textContent  = isFree ? 'Free entry' : 'Ticketed';
-          const priceNote = (!isFree && spot.ticketPriceNote &&
-                             spot.ticketPriceNote.toLowerCase() !== 'free' &&
-                             spot.ticketPriceNote !== 'ticketed — check official website')
+            (isFree ? 'spot-panel__fee--free' :
+             isMixed ? 'spot-panel__fee--mixed' : 'spot-panel__fee--ticketed');
+          if (feeIcon) feeIcon.textContent = isFree ? '✅' : isMixed ? '↕️' : '🎟️';
+          if (feeText) feeText.textContent  = isFree ? 'Free entry' :
+                                              isMixed ? 'Partly free' : 'Ticketed';
+          const priceNote = spot.ticketPriceNote &&
+                            spot.ticketPriceNote.toLowerCase() !== 'free'
                             ? spot.ticketPriceNote
-                            : (!isFree ? 'Check official website for current price' : '');
+                            : (isFree ? '' : 'Check official website for current price');
           if (feePriceEl) feePriceEl.textContent = priceNote;
         }
 
@@ -1760,6 +1773,9 @@
           } else if (exp.entranceFee === 'ticketed') {
             feeEl.className = 'fee-badge fee-badge--ticketed';
             feeEl.textContent = '🎟 Ticketed';
+          } else if (exp.entranceFee === 'mixed') {
+            feeEl.className = 'fee-badge fee-badge--mixed';
+            feeEl.textContent = '↕ Partly free';
           }
 
           foot.appendChild(typeRow);
