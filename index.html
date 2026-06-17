@@ -476,6 +476,19 @@
     .spot-panel__verified { background: #f0f7ff; border: 1px solid #cfe3fc; border-radius: 8px; padding: 0.6rem 0.75rem; }
     .spot-panel__verified-badge { font-size: 0.68rem; color: #2563eb; font-weight: 500; text-transform: none; letter-spacing: normal; }
 
+    /* Entrance fee badge — on discovery card */
+    .fee-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 999px; white-space: nowrap; }
+    .fee-badge--free     { background: #dcfce7; color: #15803d; }
+    .fee-badge--ticketed { background: #fef3c7; color: #92400e; }
+
+    /* Entrance fee row — in spot panel */
+    .spot-panel__fee { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 8px; margin-bottom: 0.75rem; }
+    .spot-panel__fee--free     { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .spot-panel__fee--ticketed { background: #fffbeb; border: 1px solid #fde68a; }
+    .spot-panel__fee-icon  { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
+    .spot-panel__fee-text  { font-size: 0.82rem; color: var(--ink); line-height: 1.5; }
+    .spot-panel__fee-price { font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 1px; }
+
     .spot-panel__add-btn { width: 100%; padding: 0.9rem; background: var(--ember); color: #fff; border: none; border-radius: 999px; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.2s; box-shadow: var(--shadow); margin-top: 0.5rem; }
     .spot-panel__add-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
     .spot-panel__add-btn.is-added { background: #16a34a; cursor: default; transform: none; box-shadow: none; }
@@ -612,6 +625,13 @@
 
       <h3 class="spot-panel__name" id="spot-panel-name">Spot Name</h3>
       <p  class="spot-panel__area" id="spot-panel-area"></p>
+      <div class="spot-panel__fee" id="spot-panel-fee" hidden>
+        <span class="spot-panel__fee-icon" id="spot-panel-fee-icon"></span>
+        <div>
+          <span class="spot-panel__fee-text" id="spot-panel-fee-text"></span>
+          <span class="spot-panel__fee-price" id="spot-panel-fee-price"></span>
+        </div>
+      </div>
       <div class="spot-panel__season">
         <span class="season-badge season-badge--good" id="spot-panel-season-badge" role="img" aria-label="Season status"></span>
         <span class="season-label" id="spot-panel-season-label">Good time</span>
@@ -1453,6 +1473,27 @@
         set('spot-panel-area', spot.area      || '');
         set('spot-panel-why',  spot.description || spot.why || '');
 
+        /* Entrance fee row */
+        const feeEl      = document.getElementById('spot-panel-fee');
+        const feeIcon    = document.getElementById('spot-panel-fee-icon');
+        const feeText    = document.getElementById('spot-panel-fee-text');
+        const feePriceEl = document.getElementById('spot-panel-fee-price');
+        if (feeEl) {
+          const isFree = spot.entranceFee === 'free' ||
+                         (spot.ticketPriceNote || '').toLowerCase() === 'free';
+          feeEl.hidden    = false;
+          feeEl.className = 'spot-panel__fee ' +
+            (isFree ? 'spot-panel__fee--free' : 'spot-panel__fee--ticketed');
+          if (feeIcon)    feeIcon.textContent = isFree ? '✅' : '🎟️';
+          if (feeText)    feeText.textContent  = isFree ? 'Free entry' : 'Ticketed';
+          const priceNote = (!isFree && spot.ticketPriceNote &&
+                             spot.ticketPriceNote.toLowerCase() !== 'free' &&
+                             spot.ticketPriceNote !== 'ticketed — check official website')
+                            ? spot.ticketPriceNote
+                            : (!isFree ? 'Check official website for current price' : '');
+          if (feePriceEl) feePriceEl.textContent = priceNote;
+        }
+
         const verifiedSection = document.getElementById('spot-panel-verified-section');
         const verifiedText    = document.getElementById('spot-panel-verified-text');
         const verifiedBadge   = document.getElementById('spot-panel-verified-badge');
@@ -1711,13 +1752,24 @@
           const nameEl = document.createElement('div');
           nameEl.className = 'discovery-card__name';
           nameEl.textContent = exp.spot_name || 'Unnamed';
+
+          const feeEl = document.createElement('span');
+          if (exp.entranceFee === 'free') {
+            feeEl.className = 'fee-badge fee-badge--free';
+            feeEl.textContent = '✓ Free';
+          } else if (exp.entranceFee === 'ticketed') {
+            feeEl.className = 'fee-badge fee-badge--ticketed';
+            feeEl.textContent = '🎟 Ticketed';
+          }
+
           foot.appendChild(typeRow);
           foot.appendChild(nameEl);
+          if (exp.entranceFee) foot.appendChild(feeEl);
           card.appendChild(foot);
 
           /* Tap → open spot panel */
           card.addEventListener('click', function () {
-            openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified }, color, null);
+            openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified, entranceFee: exp.entranceFee, ticketPriceNote: exp.ticketPriceNote }, color, null);
           });
           card.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
