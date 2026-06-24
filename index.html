@@ -1788,7 +1788,11 @@
           }
         }
 
-        const pinEntry = { spot, categoryName: catName, categoryColor: catColor, categoryEmoji: catEmoji, cardEl };
+        const pinEntry = {
+          spot, categoryName: catName, categoryColor: catColor,
+          categoryEmoji: catEmoji, cardEl,
+          sourceCity: currentArrival || 'Unknown',
+        };
         pinnedSpots.push(pinEntry);
         giyaAddedSpots = pinnedSpots;
         log('added', spot.spot_name);
@@ -1810,14 +1814,9 @@
         if (addBtn) { addBtn.textContent = '+ Add to my map'; addBtn.classList.remove('is-added'); addBtn.disabled = false; }
         if (remBtn) remBtn.style.display = 'none';
       });
-
-      const pinEntry = {
-          spot, categoryName: catName, categoryColor: catColor,
-          categoryEmoji: catEmoji, cardEl,
-          sourceCity: currentArrival || 'Unknown',
-        };
-        pinnedSpots.push(pinEntry);
-        giyaAddedSpots = pinnedSpots;
+      
+      function removeSpotByName(name, cardEl) {
+        giyaAddedSpots = giyaAddedSpots.filter(function (e) { return e.spot.spot_name !== name; });
         if (mapMarkers[name]) {
           if (mainMap && mainMap.hasLayer(mapMarkers[name].marker)) mainMap.removeLayer(mapMarkers[name].marker);
           delete mapMarkers[name];
@@ -1826,6 +1825,7 @@
         updateCounters(); refreshMapPanel(); renumberMarkers();
         log('removed', name);
       }
+
 
       /* ── RESULTS RENDERING ──────────────────── */
       function countAll(experiences) {
