@@ -622,6 +622,95 @@
       .map-panel { width: 100%; max-height: 42vh; border-left: none; border-top: 1px solid var(--border); }
     }
 
+    /* ── BREADCRUMB (Phase 5 P4) ── */
+    .journey-breadcrumb {
+      display: none; align-items: center;
+      overflow-x: auto; scrollbar-width: none;
+      padding: 0.45rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: #faf8f4; gap: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    .journey-breadcrumb.is-visible { display: flex; }
+    .journey-breadcrumb::-webkit-scrollbar { display: none; }
+    .bc-item {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      font-size: 0.75rem; font-weight: 600; color: var(--ink-muted);
+      cursor: pointer; padding: 0.15rem 0.45rem; border-radius: 999px;
+      flex-shrink: 0; transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .bc-item:hover:not(.is-current) { background: rgba(26,22,18,0.06); color: var(--ink); }
+    .bc-item.is-current { color: var(--ember); cursor: default; font-weight: 700; }
+    .bc-sep { color: #ccc; font-size: 0.7rem; padding: 0 0.05rem; flex-shrink: 0; }
+
+    /* ── EXPLORE NEARBY BUTTON ── */
+    .explore-nearby-cta {
+      display: none; width: calc(100% - 2.5rem);
+      margin: 0 1.25rem 1.5rem; padding: 0.75rem 1rem;
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 12px; cursor: pointer; font-family: inherit;
+      text-align: left; transition: border-color 0.15s, box-shadow 0.15s;
+      box-shadow: var(--shadow);
+    }
+    .explore-nearby-cta.is-visible { display: flex; align-items: center; gap: 0.75rem; }
+    .explore-nearby-cta:hover { border-color: var(--ember); box-shadow: 0 4px 16px rgba(200,98,42,0.12); }
+    .explore-nearby-cta__icon { font-size: 1.5rem; flex-shrink: 0; }
+    .explore-nearby-cta__text { flex: 1; }
+    .explore-nearby-cta__label { font-size: 0.88rem; font-weight: 700; color: var(--ink); }
+    .explore-nearby-cta__sub { font-size: 0.72rem; color: var(--ink-muted); margin-top: 1px; }
+    .explore-nearby-cta__arrow { color: var(--ember); font-size: 1rem; flex-shrink: 0; }
+
+    /* ── NEARBY PANEL (Phase 5 P4) ── */
+    .nearby-overlay {
+      position: fixed; inset: 0; background: rgba(26,22,18,0.5);
+      z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .nearby-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+    .nearby-panel {
+      position: fixed; bottom: 0; left: 0; right: 0; max-height: 75vh;
+      background: #fff; border-radius: 16px 16px 0 0;
+      box-shadow: 0 -8px 40px rgba(26,22,18,0.18); z-index: 201;
+      overflow-y: auto; transform: translateY(100%);
+      transition: transform 0.3s ease; border-top: 4px solid var(--ember);
+    }
+    .nearby-panel.is-open { transform: translateY(0); }
+    .nearby-panel__handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0.75rem auto 0; }
+    .nearby-panel__inner { padding: 0.75rem 1.25rem 2.5rem; }
+    .nearby-panel__title { font-family: "Playfair Display", Georgia, serif; font-size: 1.2rem; font-weight: 700; color: var(--ink); margin-bottom: 0.25rem; }
+    .nearby-panel__sub { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 1.25rem; line-height: 1.5; }
+    .nearby-panel__close {
+      position: absolute; top: 0.75rem; right: 1rem;
+      width: 32px; height: 32px; border: none;
+      background: rgba(26,22,18,0.55); border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem; color: #fff;
+      transition: background 0.15s;
+    }
+    .nearby-panel__close:hover { background: rgba(26,22,18,0.8); }
+
+    .nearby-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .nearby-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1rem; background: var(--paper);
+      border-radius: 12px; cursor: pointer; border: 1.5px solid transparent;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .nearby-item:hover { border-color: var(--ember); background: #fff; }
+    .nearby-item__dist {
+      font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.55rem;
+      border-radius: 999px; flex-shrink: 0; white-space: nowrap;
+    }
+    .nearby-item__dist--near   { background: #dcfce7; color: #15803d; }
+    .nearby-item__dist--medium { background: #fef3c7; color: #92400e; }
+    .nearby-item__dist--far    { background: #f1f5f9; color: #64748b; }
+    .nearby-item__info { flex: 1; }
+    .nearby-item__name { font-size: 0.92rem; font-weight: 700; color: var(--ink); }
+    .nearby-item__country { font-size: 0.72rem; color: var(--ink-muted); }
+    .nearby-item__arrow { color: var(--ember); font-size: 0.9rem; flex-shrink: 0; }
+    .nearby-loading { text-align: center; padding: 2rem; color: var(--ink-muted); font-size: 0.9rem; }
+
     /* ── FOOTER ── */
     .site-footer { max-width: 640px; margin: 2.5rem auto 0; padding: 0 1.25rem; text-align: center; font-size: 0.75rem; color: var(--ink-muted); line-height: 1.7; }
     .site-footer p + p { margin-top: 0.5rem; }
@@ -787,6 +876,10 @@
 
     <!-- Screen 2 — Photo Discovery Grid -->
     <section id="screen-2" class="screen discovery-screen" data-screen-index="2" aria-label="Explore experiences" hidden>
+
+      <!-- Journey breadcrumb (P4) -->
+      <div class="journey-breadcrumb" id="journey-breadcrumb" aria-label="Journey path"></div>
+
       <div class="discovery-topbar">
         <div class="pref-trigger" id="pref-bar-toggle">
           ⚙ Personalise
@@ -872,7 +965,32 @@
       <p class="discovery-no-results" id="discovery-no-results" hidden>
         No experiences match that filter. Try another.
       </p>
+
+      <!-- Explore nearby CTA -->
+      <button type="button" class="explore-nearby-cta" id="btn-explore-nearby" aria-label="Explore nearby areas">
+        <span class="explore-nearby-cta__icon">🧭</span>
+        <span class="explore-nearby-cta__text">
+          <span class="explore-nearby-cta__label">Explore nearby</span>
+          <span class="explore-nearby-cta__sub" id="explore-nearby-sub">See what else is within reach</span>
+        </span>
+        <span class="explore-nearby-cta__arrow">›</span>
+      </button>
+
     </section>
+
+    <!-- Nearby areas overlay + panel (Phase 5 P4) -->
+    <div class="nearby-overlay" id="nearby-overlay" aria-hidden="true"></div>
+    <div class="nearby-panel" id="nearby-panel" role="dialog" aria-modal="true" aria-labelledby="nearby-panel-title" hidden>
+      <div class="nearby-panel__handle" aria-hidden="true"></div>
+      <button type="button" class="nearby-panel__close" id="nearby-panel-close" aria-label="Close">×</button>
+      <div class="nearby-panel__inner">
+        <h3 class="nearby-panel__title" id="nearby-panel-title">Explore from here</h3>
+        <p class="nearby-panel__sub">Tap any area to search it — your current pins stay saved.</p>
+        <div class="nearby-list" id="nearby-list">
+          <p class="nearby-loading">Finding nearby areas…</p>
+        </div>
+      </div>
+    </div>
 
     <!-- Screen 3 — Results -->
     <section id="screen-results" class="screen results-screen" data-screen-index="3" aria-label="Suggested spots" hidden>
@@ -967,8 +1085,23 @@
       function savePins(pins) {
         try { localStorage.setItem('giya_pins', JSON.stringify(pins)); } catch {}
       }
-      let pinnedSpots = loadPins(); /* persists across searches */
-      let giyaAddedSpots = pinnedSpots; /* map view — same reference for now, separated in P4 */
+      let pinnedSpots = loadPins();
+      let giyaAddedSpots = pinnedSpots;
+
+      /* ── PHASE 5 P4: Journey path — branching anchor history ── */
+      function loadJourney() {
+        try { return JSON.parse(localStorage.getItem('giya_journey') || '[]'); } catch { return []; }
+      }
+      function saveJourney(path) {
+        try { localStorage.setItem('giya_journey', JSON.stringify(path)); } catch {}
+      }
+      let journeyPath = loadJourney();
+
+      /* Reusable search params — kept so anchor searches reuse the same dates */
+      let _searchDateFrom = '';
+      let _searchDateTo   = '';
+      let _searchDuration = 1;
+      let _searchDeparture = '';
 
       /* ── PHASE 5: Batch click tracking ──
          Accumulates client-side, flushes in one Worker call. */
@@ -991,6 +1124,95 @@
       window.addEventListener('beforeunload', flushClicks); /* flush on tab close */
 
       function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
+      /* ── PHASE 5 P4: NEARBY AREAS ── */
+      function haversineKmClient(lat1, lng1, lat2, lng2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLng/2) * Math.sin(dLng/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      }
+
+      function getNearbyAreas(lat, lng, radiusKm) {
+        const results = [];
+        const seen    = new Set();
+        const currentKey = (currentArrival || '').toLowerCase().trim();
+
+        /* Scan CITIES object */
+        Object.keys(CITIES).forEach(function (cityName) {
+          if (cityName === currentKey) return;
+          const coords = CITIES[cityName];
+          const dist   = Math.round(haversineKmClient(lat, lng, coords[0], coords[1]));
+          if (dist <= radiusKm && !seen.has(cityName)) {
+            seen.add(cityName);
+            results.push({
+              city: cityName.charAt(0).toUpperCase() + cityName.slice(1).replace(/-/g, ' '),
+              lat: coords[0], lng: coords[1], distKm: dist, country: '',
+            });
+          }
+        });
+
+        /* Scan APT airports */
+        APT.forEach(function (a) {
+          const key = a[2].toLowerCase();
+          if (key === currentKey) return;
+          const dist = Math.round(haversineKmClient(lat, lng, a[4], a[5]));
+          if (dist <= radiusKm && !seen.has(key)) {
+            seen.add(key);
+            results.push({ city: a[2], lat: a[4], lng: a[5], distKm: dist, country: a[3] });
+          }
+        });
+
+        results.sort(function (a, b) { return a.distKm - b.distKm; });
+        return results.slice(0, 12);
+      }
+
+      function getCurrentAnchorCoords() {
+        if (selectedFlyIn) return { lat: selectedFlyIn.lat, lng: selectedFlyIn.lng };
+        const key = (currentArrival || '').toLowerCase().trim();
+        if (CITIES[key]) return { lat: CITIES[key][0], lng: CITIES[key][1] };
+        /* Try last journeyPath entry */
+        if (journeyPath.length > 0) {
+          const last = journeyPath[journeyPath.length - 1];
+          if (last.lat) return { lat: last.lat, lng: last.lng };
+        }
+        return null;
+      }
+
+      /* ── BREADCRUMB ── */
+      function renderBreadcrumb() {
+        const strip = document.getElementById('journey-breadcrumb');
+        if (!strip) return;
+        if (journeyPath.length <= 1) {
+          strip.classList.remove('is-visible');
+          return;
+        }
+        strip.classList.add('is-visible');
+        strip.innerHTML = '';
+        journeyPath.forEach(function (entry, idx) {
+          const isCurrent = idx === journeyPath.length - 1;
+          if (idx > 0) {
+            const sep = document.createElement('span');
+            sep.className = 'bc-sep'; sep.textContent = '›'; strip.appendChild(sep);
+          }
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'bc-item' + (isCurrent ? ' is-current' : '');
+          item.textContent = (idx === 0 ? '🏠 ' : '') + entry.city;
+          if (!isCurrent) {
+            item.addEventListener('click', function () {
+              /* Navigate back to this anchor */
+              journeyPath = journeyPath.slice(0, idx + 1);
+              saveJourney(journeyPath);
+              searchFromAnchor(entry.city, entry.lat, entry.lng, true /* isReturn */);
+            });
+          }
+          strip.appendChild(item);
+        });
+      }
+
       /* ── TYPE-BASED PHOTO QUERY ── */
       function buildPhotoQuery(exp) {
         var name = exp.spot_name || '';
@@ -1314,6 +1536,122 @@
         'Ultra Budget':         'backpacker travel hostel',
       };
 
+      /* ── PHASE 5 P4: NEARBY PANEL ── */
+      function openNearbyPanel() {
+        const panel   = document.getElementById('nearby-panel');
+        const overlay = document.getElementById('nearby-overlay');
+        const list    = document.getElementById('nearby-list');
+        const title   = document.getElementById('nearby-panel-title');
+        if (!panel || !overlay) return;
+
+        if (title) title.textContent = 'Explore from ' + (currentArrival || 'here');
+
+        panel.hidden = false;
+        overlay.setAttribute('aria-hidden', 'false');
+        panel.getBoundingClientRect();
+        panel.classList.add('is-open');
+        overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+
+        /* Populate list */
+        if (list) {
+          list.innerHTML = '<p class="nearby-loading">Finding nearby areas…</p>';
+          const coords = getCurrentAnchorCoords();
+          if (!coords) {
+            list.innerHTML = '<p class="nearby-loading">Could not determine current location.</p>';
+            return;
+          }
+          const areas = getNearbyAreas(coords.lat, coords.lng, 600);
+          if (areas.length === 0) {
+            list.innerHTML = '<p class="nearby-loading">No areas found within 600km.</p>';
+            return;
+          }
+          list.innerHTML = '';
+          areas.forEach(function (area) {
+            const distClass = area.distKm < 100 ? 'near' : area.distKm < 400 ? 'medium' : 'far';
+            const row = document.createElement('div');
+            row.className = 'nearby-item';
+            row.innerHTML =
+              '<span class="nearby-item__dist nearby-item__dist--' + distClass + '">' + area.distKm + ' km</span>' +
+              '<div class="nearby-item__info">' +
+                '<div class="nearby-item__name">' + esc(area.city) + '</div>' +
+                (area.country ? '<div class="nearby-item__country">' + esc(area.country) + '</div>' : '') +
+              '</div>' +
+              '<span class="nearby-item__arrow">›</span>';
+            row.addEventListener('click', function () {
+              closeNearbyPanel();
+              searchFromAnchor(area.city, area.lat, area.lng, false);
+            });
+            list.appendChild(row);
+          });
+        }
+      }
+
+      function closeNearbyPanel() {
+        const panel   = document.getElementById('nearby-panel');
+        const overlay = document.getElementById('nearby-overlay');
+        if (!panel || !overlay) return;
+        panel.classList.remove('is-open');
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(function () { panel.hidden = true; }, 320);
+      }
+
+      /* ── ANCHOR SEARCH ── */
+      async function searchFromAnchor(cityName, lat, lng, isReturn) {
+        if (!cityName) return;
+
+        /* Push to journey (unless returning to an existing node) */
+        if (!isReturn) {
+          journeyPath.push({ city: cityName, lat: lat || null, lng: lng || null });
+          saveJourney(journeyPath);
+        }
+
+        currentArrival = cityName;
+        updateTopBarFlight(cityName, _searchDeparture || cityName, _searchDateFrom, _searchDateTo);
+        window._giyaDateFrom = _searchDateFrom;
+
+        /* Show loading state inline on Screen 2 */
+        const welcome = document.getElementById('discovery-welcome');
+        if (welcome) welcome.textContent = 'Finding the best of ' + cityName + '…';
+        const grid = document.getElementById('discovery-grid');
+        if (grid) grid.innerHTML = '';
+
+        renderBreadcrumb();
+
+        try {
+          const res = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              arrival:    cityName,
+              departure:  _searchDeparture || cityName,
+              dateFrom:   _searchDateFrom,
+              dateTo:     _searchDateTo,
+              duration:   _searchDuration,
+            }),
+          });
+          const text = await res.text();
+          let data;
+          try { data = JSON.parse(text); } catch { throw new Error('Server returned non-JSON.'); }
+          if (!res.ok) throw new Error(data.error || 'Worker error HTTP ' + res.status);
+
+          giyaData = data;
+          applyWarnings(data.warnings);
+          renderDiscovery(data.experiences || []);
+
+          /* Update explore CTA sub-text */
+          const sub = document.getElementById('explore-nearby-sub');
+          const coords = lat ? lat.toFixed(1) + '°, ' + (lng || 0).toFixed(1) + '°' : cityName;
+          if (sub) sub.textContent = 'Currently in ' + cityName + ' · tap to branch out';
+
+        } catch (err) {
+          if (welcome) welcome.textContent = 'Something went wrong. Try again.';
+          log('searchFromAnchor error', err.message);
+        }
+      }
+
       /* ── SCREEN NAVIGATION ──────────────────── */
       function showScreen(id) {
         document.querySelectorAll('.screen').forEach(function (s) {
@@ -1533,6 +1871,10 @@
       });
 
       document.getElementById('btn-view-map').addEventListener('click', function () { showScreen(4); });
+
+      document.getElementById('btn-explore-nearby').addEventListener('click', openNearbyPanel);
+      document.getElementById('nearby-panel-close').addEventListener('click', closeNearbyPanel);
+      document.getElementById('nearby-overlay').addEventListener('click', closeNearbyPanel);
       document.getElementById('btn-spots-badge').addEventListener('click', function () {
         /* Return to screen 2 if it has content, otherwise screen 3 */
         if (allExperiences.length > 0) {
@@ -1825,7 +2167,6 @@
         updateCounters(); refreshMapPanel(); renumberMarkers();
         log('removed', name);
       }
-
 
       /* ── RESULTS RENDERING ──────────────────── */
       function countAll(experiences) {
@@ -2175,6 +2516,10 @@
         });
 
         log('renderDiscovery', allExperiences.length + ' experiences loaded');
+
+        /* Ensure explore CTA is visible whenever discovery has content */
+        const ctaBtn = document.getElementById('btn-explore-nearby');
+        if (ctaBtn && allExperiences.length > 0) ctaBtn.classList.add('is-visible');
       }
 
       function renderSpots(experiences) {
@@ -2555,6 +2900,17 @@
         currentArrival   = arrival;
         currentDeparture = departure || arrival;
         window._giyaDateFrom = dateFrom;
+        _searchDateFrom  = dateFrom;
+        _searchDateTo    = dateTo;
+        _searchDuration  = calcDur(dateFrom, dateTo);
+        _searchDeparture = currentDeparture;
+
+        /* Start a fresh journey on a new form search */
+        const anchorCoords = selectedFlyIn
+          ? { lat: selectedFlyIn.lat, lng: selectedFlyIn.lng }
+          : (CITIES[arrival.toLowerCase()] ? { lat: CITIES[arrival.toLowerCase()][0], lng: CITIES[arrival.toLowerCase()][1] } : null);
+        journeyPath = [{ city: arrival, lat: anchorCoords ? anchorCoords.lat : null, lng: anchorCoords ? anchorCoords.lng : null }];
+        saveJourney(journeyPath);
         clearErr(); resetWarnings();
         giyaAddedSpots=[]; mapMarkers={}; terminalMarkers=[];
         if(mainMap){mainMap.remove();mainMap=null;}
@@ -2586,9 +2942,21 @@
           /* Screen 3 — grouped by type (fallback browse view) */
           renderSpots(experiences);
 
-          /* Show discovery screen first */
+          /* Show discovery screen */
           showScreen(2);
-          log('success',total+' spots');
+
+          /* Show explore nearby CTA */
+          const ctaBtn = document.getElementById('btn-explore-nearby');
+          if (ctaBtn) {
+            ctaBtn.classList.add('is-visible');
+            const sub = document.getElementById('explore-nearby-sub');
+            if (sub) sub.textContent = 'Currently in ' + arrival + ' · tap to branch out';
+          }
+
+          /* Render breadcrumb (will show if returning to a prior session's journey) */
+          renderBreadcrumb();
+
+          log('success', total + ' spots');
         } catch(err) {
           console.error('[Giya]',err);
           let msg='Something went wrong. Please try again.';
