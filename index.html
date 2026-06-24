@@ -529,6 +529,12 @@
     .fee-badge--ticketed { background: #fef3c7; color: #92400e; }
     .fee-badge--mixed    { background: #e0f2fe; color: #0369a1; }
 
+    /* Verification status dot — developer visibility only */
+    .verify-dot { position: absolute; top: 5px; left: 5px; width: 6px; height: 6px; border-radius: 50%; z-index: 2; opacity: 0.85; }
+    .verify-dot--full    { background: #16a34a; } /* Wikipedia verified + standoutFact + rephrase */
+    .verify-dot--partial { background: #d97706; } /* Wikipedia matched but no standoutFact */
+    .verify-dot--none    { background: #dc2626; } /* No Wikipedia match */
+
     /* Entrance fee row — in spot panel */
     .spot-panel__fee { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 8px; margin-bottom: 0.75rem; }
     .spot-panel__fee--free     { background: #f0fdf4; border: 1px solid #bbf7d0; }
@@ -638,6 +644,7 @@
       <button type="button" class="topbar__spots" id="btn-spots-badge" aria-label="Back to results">
         📍 <span id="spots-count">0</span> spots
       </button>
+      <button type="button" class="topbar__map-btn" id="btn-share-pins" aria-label="Save / share plan" style="display:none;background:var(--ember);">💾 Save plan</button>
       <div class="topbar__warnings" aria-label="Travel warnings">
         <button type="button" class="warn-icon typhoon" id="warn-typhoon" data-tooltip="No typhoon warnings" aria-label="Typhoon warning">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
@@ -674,6 +681,7 @@
 
       <h3 class="spot-panel__name" id="spot-panel-name">Spot Name</h3>
       <p  class="spot-panel__area" id="spot-panel-area"></p>
+      <p  class="spot-panel__local-name" id="spot-panel-local-name" style="font-size:0.8rem;color:#9c8e84;margin-bottom:0.4rem;display:none;"></p>
       <div class="spot-panel__fee" id="spot-panel-fee" hidden>
         <span class="spot-panel__fee-icon" id="spot-panel-fee-icon"></span>
         <div>
@@ -938,7 +946,6 @@
       }
 
       let giyaData         = null;
-      let giyaAddedSpots   = [];
       let panelCurrentSpot = null;
       let mainMap          = null;
       let mapMarkers       = {};
@@ -949,6 +956,39 @@
       let selectedFlyIn    = null;
       let selectedFlyOut   = null;
       let activePrefs      = { style: 'both', companion: null, food: 'all', entrance: 'both', interests: [] };
+
+      /* ── PHASE 5: Pin/search state separation ──
+         pinnedSpots persists across searches (localStorage).
+         giyaAddedSpots is a computed view of pinnedSpots filtered
+         to the current session for map rendering. */
+      function loadPins() {
+        try { return JSON.parse(localStorage.getItem('giya_pins') || '[]'); } catch { return []; }
+      }
+      function savePins(pins) {
+        try { localStorage.setItem('giya_pins', JSON.stringify(pins)); } catch {}
+      }
+      let pinnedSpots = loadPins(); /* persists across searches */
+      let giyaAddedSpots = pinnedSpots; /* map view — same reference for now, separated in P4 */
+
+      /* ── PHASE 5: Batch click tracking ──
+         Accumulates client-side, flushes in one Worker call. */
+      const pendingClicks = [];
+      function recordClick(city, spotName, category) {
+        const existing = pendingClicks.find(function (e) { return e.city === city && e.spotName === spotName; });
+        if (existing) { existing.count = (existing.count || 1) + 1; }
+        else pendingClicks.push({ city, spotName, category, count: 1 });
+      }
+      function flushClicks() {
+        if (!pendingClicks.length || !currentArrival) return;
+        const events = pendingClicks.splice(0, pendingClicks.length); /* drain array */
+        fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'batch-clicks', events }),
+        }).catch(function () {});
+      }
+      setInterval(flushClicks, 5 * 60 * 1000); /* flush every 5 minutes */
+      window.addEventListener('beforeunload', flushClicks); /* flush on tab close */
 
       function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
       /* ── TYPE-BASED PHOTO QUERY ── */
@@ -1348,6 +1388,45 @@
       }
 
       /* ── COUNTERS ───────────────────────────── */
+      /* ── PIN SHARING (Phase 5 P9) ── */
+      function buildShareUrl() {
+        const data = JSON.stringify(pinnedSpots.map(function (e) {
+          return { s: e.spot, c: e.categoryName, col: e.categoryColor, em: e.categoryEmoji };
+        }));
+        const encoded = btoa(unescape(encodeURIComponent(data)));
+        return location.origin + location.pathname + '?pins=' + encoded;
+      }
+
+      function restorePinsFromUrl() {
+        const params = new URLSearchParams(location.search);
+        const encoded = params.get('pins');
+        if (!encoded) return;
+        try {
+          const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+          pinnedSpots = data.map(function (e) {
+            return { spot: e.s, categoryName: e.c, categoryColor: e.col, categoryEmoji: e.em, cardEl: null };
+          });
+          giyaAddedSpots = pinnedSpots;
+          savePins(pinnedSpots);
+          updateCounters();
+          log('Restored pins from URL', pinnedSpots.length);
+        } catch (e) { log('Pin URL decode failed', e.message); }
+      }
+      restorePinsFromUrl(); /* run on page load */
+
+      document.getElementById('btn-share-pins').addEventListener('click', function () {
+        const url = buildShareUrl();
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(function () {
+            const btn = document.getElementById('btn-share-pins');
+            btn.textContent = '✅ Copied!';
+            setTimeout(function () { btn.textContent = '💾 Save plan'; }, 2000);
+          });
+        } else {
+          prompt('Copy this link to save or share your plan:', url);
+        }
+      });
+
       function updateCounters() {
         const n      = pinnedSpots.length;
         const cEl    = document.getElementById('spots-count');
@@ -1550,7 +1629,13 @@
         /* Populate text content immediately */
         set('spot-panel-name', spot.spot_name || 'Unnamed spot');
         set('spot-panel-area', spot.area      || '');
-        set('spot-panel-why',  spot.description || spot.why || '');
+        set('spot-panel-why',  spot.description_verified || spot.description || spot.why || '');
+
+        const localNameEl = document.getElementById('spot-panel-local-name');
+        if (localNameEl) {
+          if (spot.localName) { localNameEl.textContent = spot.localName; localNameEl.style.display = 'block'; }
+          else localNameEl.style.display = 'none';
+        }
 
         /* Entrance fee row */
         const feeEl      = document.getElementById('spot-panel-fee');
@@ -1624,9 +1709,12 @@
         overlay.classList.add('is-open');
         document.body.style.overflow = 'hidden';
 
-        /* Fetch 3 relevant photos from Pexels (async — does not block panel open) */
-        const photoQuery = buildPhotoQuery(spot);
-        fetchPhotos(photoQuery.trim(), 3).then(function (photos) {
+       /* Commons first for verified spots, Pexels fallback for all others */
+        const photoPromise = spot.commonsImageUrl
+          ? Promise.resolve([{ url: spot.commonsImageUrl, url_small: spot.commonsImageUrl, photographer: 'Wikimedia Commons', pexels_page: 'https://commons.wikimedia.org', alt: spot.spot_name }])
+          : fetchPhotos(buildPhotoQuery(spot).trim(), 3);
+
+        photoPromise.then(function (photos) {
           if (!gallery) return;
           gallery.classList.remove('is-loading');
 
@@ -1653,14 +1741,8 @@
           }
         });
 
-        /* Track spot + category click in KV */
-        if (currentArrival) {
-          fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'click', city: currentArrival, spotName: spot.spot_name, category: spot.type }),
-          }).catch(function () {});
-        }
+        /* Track spot + category click — batched, flushed periodically */
+        if (currentArrival) recordClick(currentArrival, spot.spot_name, spot.type);
         log('openPanel', spot.spot_name);
       }
 
@@ -1706,7 +1788,9 @@
           }
         }
 
-        giyaAddedSpots.push({ spot, categoryName: catName, categoryColor: catColor, categoryEmoji: catEmoji, cardEl });
+        const pinEntry = { spot, categoryName: catName, categoryColor: catColor, categoryEmoji: catEmoji, cardEl };
+        pinnedSpots.push(pinEntry);
+        giyaAddedSpots = pinnedSpots;
         log('added', spot.spot_name);
 
         const addBtn = document.getElementById('spot-panel-add-btn');
@@ -1741,7 +1825,7 @@
         if (cardEl) cardEl.classList.remove('is-added');
         updateCounters(); refreshMapPanel(); renumberMarkers();
         log('removed', name);
-        }
+      }
 
       /* ── RESULTS RENDERING ──────────────────── */
       function countAll(experiences) {
@@ -1827,6 +1911,15 @@
             encodeURIComponent(buildPhotoQuery(exp))
           );
           imgWrap.appendChild(img);
+
+          /* Verification status dot (developer visibility) */
+          const dot = document.createElement('span');
+          dot.className = 'verify-dot ' + (
+            exp.description_verified && exp.wikiVerified ? 'verify-dot--full' :
+            exp.wikiVerified ? 'verify-dot--partial' : 'verify-dot--none'
+          );
+          imgWrap.appendChild(dot);
+
           card.appendChild(imgWrap);
 
           /* White frame footer */
@@ -1838,6 +1931,13 @@
           const nameEl = document.createElement('div');
           nameEl.className = 'discovery-card__name';
           nameEl.textContent = exp.spot_name || 'Unnamed';
+
+          if (exp.localName) {
+            const localEl = document.createElement('div');
+            localEl.style.cssText = 'font-size:0.65rem;color:#9c8e84;line-height:1.2;margin-top:1px;';
+            localEl.textContent = exp.localName;
+            nameEl.appendChild(localEl);
+          }
 
           const feeEl = document.createElement('span');
           if (exp.entranceFee === 'free') {
@@ -1858,7 +1958,7 @@
 
           /* Tap → open spot panel */
           card.addEventListener('click', function () {
-            openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified, entranceFee: exp.entranceFee, ticketPriceNote: exp.ticketPriceNote, localName: exp.localName, commonsImageUrl: exp.commonsImageUrl }, color, null);openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified, entranceFee: exp.entranceFee, ticketPriceNote: exp.ticketPriceNote, localName: exp.localName, commonsImageUrl: exp.commonsImageUrl }, color, null);
+            openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified, entranceFee: exp.entranceFee, ticketPriceNote: exp.ticketPriceNote, localName: exp.localName, commonsImageUrl: exp.commonsImageUrl }, color, null);
           });
           card.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
