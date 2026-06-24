@@ -318,6 +318,53 @@
       color: var(--ember);
     }
 
+    /* ── MY PINS VIEW ── */
+    .pins-group { margin-bottom: 1.5rem; }
+    .pins-group__header {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 1.25rem 0.4rem;
+      font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--ink-muted);
+    }
+    .pins-group__city { color: var(--ember); }
+    .pins-group__count {
+      font-size: 0.65rem; background: var(--paper);
+      border: 1px solid var(--border); border-radius: 999px;
+      padding: 1px 7px; color: var(--ink-muted);
+    }
+    .pins-group__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      padding: 0 1.25rem;
+    }
+    @media (min-width: 520px) {
+      .pins-group__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .pin-card {
+      background: #fff; border-radius: 4px; overflow: hidden;
+      cursor: pointer; box-shadow: 0 1px 5px rgba(26,22,18,0.10);
+      transition: transform 0.15s, box-shadow 0.15s;
+      border-left: 3px solid var(--ember);
+    }
+    .pin-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(26,22,18,0.14); }
+    .pin-card__img-wrap { position: relative; width: 100%; aspect-ratio: 1/1; background: #2a2520; overflow: hidden; }
+    .pin-card__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease; }
+    .pin-card__img.is-loaded { opacity: 1; }
+    .pin-card__foot { padding: 7px 9px 9px; background: #fff; }
+    .pin-card__type-row { display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
+    .pin-card__type-emoji { font-size: 0.65rem; }
+    .pin-card__type-label { font-size: 0.62rem; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .pin-card__name { font-size: 0.8rem; font-weight: 600; color: var(--ink); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pin-card__unpin {
+      display: block; width: 100%; margin-top: 5px;
+      padding: 3px 0; font-size: 0.62rem; font-weight: 600;
+      color: #b91c1c; background: none; border: none;
+      cursor: pointer; font-family: inherit; text-align: left;
+    }
+    .pin-card__unpin:hover { text-decoration: underline; }
+
     .discovery-no-results {
       text-align: center;
       color: var(--ink-muted);
@@ -647,7 +694,7 @@
         <p class="spot-panel__section-text" id="spot-panel-why"></p>
       </div>
       <div class="spot-panel__section spot-panel__verified" id="spot-panel-verified-section" hidden>
-        <p class="spot-panel__section-label">📖 Wikipedia-checked version <span class="spot-panel__verified-badge" id="spot-panel-verified-badge"></span></p>
+        <p class="spot-panel__section-label">📖 Verified description <span class="spot-panel__verified-badge" id="spot-panel-verified-badge"></span></p>
         <p class="spot-panel__section-text" id="spot-panel-verified-text"></p>
       </div>
       <div class="spot-panel__divider"></div>
@@ -795,6 +842,7 @@
       <!-- Filter chips -->
       <div class="discovery-chips" id="discovery-chips" aria-label="Filter by type">
         <button type="button" class="discovery-chip is-active" data-filter="all">All</button>
+        <button type="button" class="discovery-chip" data-filter="pins" id="chip-my-pins" style="display:none;">📍 My Pins</button>
         <button type="button" class="discovery-chip" data-filter="sight">🏛️ Sights</button>
         <button type="button" class="discovery-chip" data-filter="food">🍜 Food</button>
         <button type="button" class="discovery-chip" data-filter="festival">🎉 Festivals</button>
@@ -807,6 +855,12 @@
         <button type="button" class="discovery-chip" data-filter="seasonal">🌸 Seasonal</button>
       </div>
       <div class="discovery-grid" id="discovery-grid"></div>
+      <div id="pins-view" hidden>
+        <div id="pins-groups"></div>
+        <p style="text-align:center;color:var(--ink-muted);font-size:0.82rem;padding:1rem 1.25rem;font-style:italic;" id="pins-empty" hidden>
+          No pinned spots yet. Browse results and tap "+ Add to my map".
+        </p>
+      </div>
       <p class="discovery-no-results" id="discovery-no-results" hidden>
         No experiences match that filter. Try another.
       </p>
@@ -1295,13 +1349,27 @@
 
       /* ── COUNTERS ───────────────────────────── */
       function updateCounters() {
-        const n = giyaAddedSpots.length;
-        const cEl = document.getElementById('spots-count');
-        const mBtn = document.getElementById('btn-view-map');
-        const sBtn = document.getElementById('btn-spots-badge');
-        if (cEl)  cEl.textContent = n;
-        if (mBtn) { n > 0 ? mBtn.classList.add('is-visible') : mBtn.classList.remove('is-visible'); }
-        if (sBtn) { n > 0 ? sBtn.classList.add('is-visible') : sBtn.classList.remove('is-visible'); }
+        const n      = pinnedSpots.length;
+        const cEl    = document.getElementById('spots-count');
+        const mBtn   = document.getElementById('btn-view-map');
+        const sBtn   = document.getElementById('btn-spots-badge');
+        const shBtn  = document.getElementById('btn-share-pins');
+        const pinChip = document.getElementById('chip-my-pins');
+        if (cEl)     cEl.textContent = n;
+        if (mBtn)    { n > 0 ? mBtn.classList.add('is-visible') : mBtn.classList.remove('is-visible'); }
+        if (sBtn)    { n > 0 ? sBtn.classList.add('is-visible') : sBtn.classList.remove('is-visible'); }
+        if (shBtn)   { shBtn.style.display = n > 0 ? 'flex' : 'none'; }
+        /* My Pins chip — show when pins exist, update count label */
+        if (pinChip) {
+          pinChip.style.display = n > 0 ? '' : 'none';
+          pinChip.textContent   = '📍 My Pins (' + n + ')';
+        }
+        /* If currently in pins view, re-render to reflect changes */
+        const activeChip = document.querySelector('.discovery-chip.is-active');
+        if (activeChip && activeChip.getAttribute('data-filter') === 'pins') {
+          renderPinsView();
+        }
+        savePins(pinnedSpots);
       }
 
       /* ── TRIP TYPE TOGGLE ── */
@@ -1515,7 +1583,7 @@
             if (verifiedText)  verifiedText.textContent = spot.description_verified;
             if (verifiedBadge) {
               verifiedBadge.textContent = spot.wikiVerified
-                ? '(matched: ' + spot.wikiVerified.matchedTitle + ', ' + spot.wikiVerified.confidence + ' confidence)'
+                ? '· ' + spot.wikiVerified.matchedTitle
                 : '';
             }
             verifiedSection.hidden = false;
@@ -1659,8 +1727,13 @@
         if (remBtn) remBtn.style.display = 'none';
       });
 
-      function removeSpotByName(name, cardEl) {
-        giyaAddedSpots = giyaAddedSpots.filter(function (e) { return e.spot.spot_name !== name; });
+      const pinEntry = {
+          spot, categoryName: catName, categoryColor: catColor,
+          categoryEmoji: catEmoji, cardEl,
+          sourceCity: currentArrival || 'Unknown',
+        };
+        pinnedSpots.push(pinEntry);
+        giyaAddedSpots = pinnedSpots;
         if (mapMarkers[name]) {
           if (mainMap && mainMap.hasLayer(mapMarkers[name].marker)) mainMap.removeLayer(mapMarkers[name].marker);
           delete mapMarkers[name];
@@ -1785,7 +1858,7 @@
 
           /* Tap → open spot panel */
           card.addEventListener('click', function () {
-            openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified, entranceFee: exp.entranceFee, ticketPriceNote: exp.ticketPriceNote }, color, null);
+            openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified, entranceFee: exp.entranceFee, ticketPriceNote: exp.ticketPriceNote, localName: exp.localName, commonsImageUrl: exp.commonsImageUrl }, color, null);openPanel({ spot_name: exp.spot_name, area: exp.area, description: exp.description, why: exp.why, must_do: exp.must_do, hidden_angle: exp.hidden_angle, food_nearby: exp.food_nearby, season_status: exp.season_status, season_note: exp.season_note, coordinates: exp.coordinates, type: exp.type, tags: exp.tags, photo_query: exp.photo_query, description_verified: exp.description_verified, wikiVerified: exp.wikiVerified, entranceFee: exp.entranceFee, ticketPriceNote: exp.ticketPriceNote, localName: exp.localName, commonsImageUrl: exp.commonsImageUrl }, color, null);
           });
           card.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
@@ -1823,6 +1896,124 @@
         grid.querySelectorAll('.discovery-card').forEach(function (c) { observer.observe(c); });
       }
 
+      /* ── MY PINS VIEW ── */
+      function renderPinsView() {
+        const pinsView  = document.getElementById('pins-view');
+        const pinsEmpty = document.getElementById('pins-empty');
+        const pinsGroups = document.getElementById('pins-groups');
+        const grid      = document.getElementById('discovery-grid');
+        const noResults = document.getElementById('discovery-no-results');
+
+        if (!pinsView) return;
+
+        /* Toggle grid vs pins view */
+        grid.hidden     = true;
+        noResults.hidden = true;
+        pinsView.hidden = false;
+        pinsGroups.innerHTML = '';
+
+        if (pinnedSpots.length === 0) {
+          if (pinsEmpty) pinsEmpty.hidden = false;
+          return;
+        }
+        if (pinsEmpty) pinsEmpty.hidden = true;
+
+        /* Group by sourceCity */
+        const groups = {};
+        pinnedSpots.forEach(function (entry) {
+          const city = entry.sourceCity || 'Unknown';
+          if (!groups[city]) groups[city] = [];
+          groups[city].push(entry);
+        });
+
+        Object.keys(groups).forEach(function (city) {
+          const entries = groups[city];
+          const groupEl = document.createElement('div');
+          groupEl.className = 'pins-group';
+
+          /* Group header */
+          const header = document.createElement('div');
+          header.className = 'pins-group__header';
+          header.innerHTML =
+            'From <span class="pins-group__city">' + esc(city) + '</span>' +
+            '<span class="pins-group__count">' + entries.length + ' spot' + (entries.length !== 1 ? 's' : '') + '</span>';
+          groupEl.appendChild(header);
+
+          /* Cards grid */
+          const cardGrid = document.createElement('div');
+          cardGrid.className = 'pins-group__grid';
+
+          entries.forEach(function (entry) {
+            const spot  = entry.spot;
+            const color = entry.categoryColor || 'var(--ember)';
+            const emoji = entry.categoryEmoji || '📍';
+
+            const card = document.createElement('article');
+            card.className = 'pin-card';
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+
+            const imgWrap = document.createElement('div');
+            imgWrap.className = 'pin-card__img-wrap';
+            const img = document.createElement('img');
+            img.className = 'pin-card__img';
+            img.alt = spot.spot_name || '';
+
+            /* Load photo */
+            const photoSrc = spot.commonsImageUrl || null;
+            if (photoSrc) {
+              img.src = photoSrc;
+              img.onload = function () { img.classList.add('is-loaded'); };
+            } else {
+              fetchPhotos(buildPhotoQuery(spot), 1).then(function (photos) {
+                if (photos[0]) {
+                  img.src = photos[0].url_small || photos[0].url;
+                  img.onload = function () { img.classList.add('is-loaded'); };
+                }
+              });
+            }
+            imgWrap.appendChild(img);
+            card.appendChild(imgWrap);
+
+            const foot = document.createElement('div');
+            foot.className = 'pin-card__foot';
+            foot.innerHTML =
+              '<div class="pin-card__type-row">' +
+                '<span class="pin-card__type-emoji">' + esc(emoji) + '</span>' +
+                '<span class="pin-card__type-label">' + esc(spot.type || '') + '</span>' +
+              '</div>' +
+              '<div class="pin-card__name">' + esc(spot.spot_name || 'Unnamed') + '</div>' +
+              '<button class="pin-card__unpin" data-name="' + esc(spot.spot_name) + '">✕ Unpin</button>';
+            card.appendChild(foot);
+
+            /* Tap card body → open panel */
+            card.addEventListener('click', function (e) {
+              if (e.target.classList.contains('pin-card__unpin')) return;
+              openPanel(spot, color, null);
+            });
+
+            /* Unpin button */
+            foot.querySelector('.pin-card__unpin').addEventListener('click', function (e) {
+              e.stopPropagation();
+              removeSpotByName(spot.spot_name, null);
+              renderPinsView(); /* re-render groups after removal */
+            });
+
+            cardGrid.appendChild(card);
+          });
+
+          groupEl.appendChild(cardGrid);
+          pinsGroups.appendChild(groupEl);
+        });
+      }
+
+      function hidePinsView() {
+        const pinsView = document.getElementById('pins-view');
+        const grid     = document.getElementById('discovery-grid');
+        if (pinsView) pinsView.hidden = true;
+        if (grid)     grid.hidden     = false;
+      }
+
       function renderDiscovery(experiences) {
         allExperiences = experiences || [];
 
@@ -1832,15 +2023,21 @@
           welcome.textContent = 'Welcome to ' + currentArrival + '. Tap anything that catches your eye.';
         }
 
-        /* Wire chip filters */
-        document.querySelectorAll('.discovery-chip').forEach(function (chip) {
+       /* Wire chip filters */
+       document.querySelectorAll('.discovery-chip').forEach(function (chip) {
           chip.addEventListener('click', function () {
             document.querySelectorAll('.discovery-chip').forEach(function (c) {
               c.classList.remove('is-active');
             });
             chip.classList.add('is-active');
             activeFilter = chip.getAttribute('data-filter') || 'all';
-            applyDiscoveryFilter();
+
+            if (activeFilter === 'pins') {
+              renderPinsView();
+            } else {
+              hidePinsView();
+              applyDiscoveryFilter();
+            }
           });
         });
 
