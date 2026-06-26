@@ -95,6 +95,36 @@
       .topbar-edit-dates input { flex: 1; width: auto; }
     }
 
+    /* ── TRANSIT PANEL ── */
+    .map-panel__tabs { display: flex; border-bottom: 1px solid var(--border); }
+    .map-panel__tab { flex: 1; padding: 0.5rem 0; font-size: 0.72rem; font-weight: 600; text-align: center; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; color: var(--ink-muted); font-family: inherit; margin-bottom: -1px; transition: color 0.15s; }
+    .map-panel__tab.is-active { color: var(--ember); border-bottom-color: var(--ember); }
+    .map-transit-list { overflow-y: auto; flex: 1; padding: 0.5rem 0; min-height: 0; }
+    .transit-segment { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); }
+    .transit-segment:last-child { border-bottom: none; }
+    .transit-seg-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-muted); margin-bottom: 0.5rem; }
+    .transit-pin-label { font-size: 0.78rem; font-weight: 700; color: var(--ink); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.35rem; }
+    .transit-stops { margin-left: 0.75rem; margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.2rem; }
+    .transit-stop { font-size: 0.72rem; color: var(--ink-muted); display: flex; align-items: baseline; gap: 0.35rem; line-height: 1.4; }
+    .transit-stop__name { color: var(--ink); font-weight: 500; }
+    .transit-stop__dist { font-size: 0.65rem; color: #a0978d; white-space: nowrap; flex-shrink: 0; }
+    .transit-stop__routes { font-size: 0.65rem; color: var(--ember); font-weight: 600; }
+    .transit-no-stops { font-size: 0.72rem; color: #b0a898; font-style: italic; margin-left: 0.75rem; margin-bottom: 0.5rem; }
+    .transit-divider { display: flex; align-items: center; gap: 0.5rem; margin: 0.4rem 0; }
+    .transit-divider__line { flex: 1; height: 1px; background: var(--border); border: none; }
+    .transit-divider__dist { font-size: 0.65rem; font-weight: 700; color: var(--ember); white-space: nowrap; flex-shrink: 0; }
+    .transit-groq { margin-top: 0.4rem; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 0.5rem 0.65rem; }
+    .transit-groq__modes { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.3rem; }
+    .transit-groq__mode { font-size: 0.62rem; font-weight: 700; background: var(--paper); border: 1px solid var(--border); border-radius: 999px; padding: 1px 7px; color: var(--ink-muted); }
+    .transit-groq__summary { font-size: 0.75rem; color: var(--ink); margin-bottom: 0.3rem; line-height: 1.45; }
+    .transit-groq__meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.3rem; }
+    .transit-groq__meta-item { font-size: 0.7rem; font-weight: 600; color: var(--ink); }
+    .transit-groq__meta-label { font-weight: 400; color: var(--ink-muted); }
+    .transit-groq__note { font-size: 0.68rem; color: #7a5020; line-height: 1.4; margin-bottom: 0.3rem; }
+    .transit-groq__disclaimer { font-size: 0.62rem; color: #92400e; font-style: italic; }
+    .transit-no-groq { font-size: 0.72rem; color: #b0a898; font-style: italic; margin-top: 0.4rem; line-height: 1.4; }
+    .transit-loading-msg { padding: 1rem; text-align: center; font-size: 0.8rem; color: var(--ink-muted); }
+
     /* ── ROUTE LINE ── */
     .map-panel__route-btn {
       font-size: 0.7rem; color: var(--ember); background: none;
@@ -736,12 +766,21 @@
           <button type="button" class="map-panel__show-all" id="btn-hide-all-pins" style="margin-left:0.25rem;">Hide all</button>
           <button type="button" class="map-panel__route-btn" id="btn-toggle-route">Route</button>
         </div>
+        <!-- Tabs: Pins | Route — only shown when route is active -->
+        <div class="map-panel__tabs" id="map-panel-tabs" hidden>
+          <button type="button" class="map-panel__tab is-active" id="tab-pins">📍 Pins</button>
+          <button type="button" class="map-panel__tab" id="tab-route">🗺️ Route</button>
+        </div>
         <div class="map-panel__terminals" id="map-terminals" hidden>
           <p class="map-panel__terminals-label">Your journey</p>
           <div id="map-terminals-list"></div>
         </div>
         <div class="map-panel__list" id="map-spot-list">
           <p class="map-panel__empty">No spots added yet. Browse results and tap "+ Add to my map".</p>
+        </div>
+        <!-- Route / transit view -->
+        <div class="map-transit-list" id="map-transit-panel" hidden>
+          <p class="transit-loading-msg" id="transit-loading-msg">Finding transit info…</p>
         </div>
       </aside>
     </div>
@@ -1653,8 +1692,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ── Route drawing ── */
+  /* ── Route drawing + transit info ── */
   let routePolyline  = null;
+  let transitData    = null;
   let routeLegs      = [];
   let routeActive    = false;
 
@@ -1697,7 +1737,230 @@ document.addEventListener('DOMContentLoaded', function () {
     this.classList.toggle('is-active', routeActive);
     this.textContent = routeActive ? 'Route on' : 'Route';
     drawRoute();
+    const tabs     = document.getElementById('map-panel-tabs');
+    const pinsView = document.getElementById('map-spot-list');
+    const terminals= document.getElementById('map-terminals');
+    const routeView= document.getElementById('map-transit-panel');
+    if (routeActive) {
+      if (tabs) { tabs.hidden = false; setMapTab('route'); }
+      fetchAndRenderTransit();
+    } else {
+      if (tabs) { tabs.hidden = true; setMapTab('pins'); }
+    }
   });
+
+  /* ── Tab switching ── */
+  function setMapTab(which) {
+    const pinsView  = document.getElementById('map-spot-list');
+    const terminals = document.getElementById('map-terminals');
+    const routeView = document.getElementById('map-transit-panel');
+    const tabPins   = document.getElementById('tab-pins');
+    const tabRoute  = document.getElementById('tab-route');
+    if (which === 'pins') {
+      if (pinsView)  pinsView.hidden  = false;
+      if (terminals) terminals.hidden = !currentArrival;
+      if (routeView) routeView.hidden = true;
+      if (tabPins)   tabPins.classList.add('is-active');
+      if (tabRoute)  tabRoute.classList.remove('is-active');
+    } else {
+      if (pinsView)  pinsView.hidden  = true;
+      if (terminals) terminals.hidden = true;
+      if (routeView) routeView.hidden = false;
+      if (tabPins)   tabPins.classList.remove('is-active');
+      if (tabRoute)  tabRoute.classList.add('is-active');
+    }
+  }
+
+  document.getElementById('tab-pins').addEventListener('click', function(){ setMapTab('pins'); });
+  document.getElementById('tab-route').addEventListener('click', function(){ setMapTab('route'); });
+
+  /* ── Transit fetch ── */
+  async function fetchAndRenderTransit() {
+    const routeView = document.getElementById('map-transit-panel');
+    const loadingMsg = document.getElementById('transit-loading-msg');
+    if (!routeView) return;
+    routeView.hidden = false;
+    if (loadingMsg) { loadingMsg.hidden = false; loadingMsg.textContent = 'Finding transit info…'; }
+
+    /* Build segments from consecutive pinned spots with coordinates */
+    const withCoords = pinnedSpots.filter(function(e){
+      return e.spot.coordinates && e.spot.coordinates.lat && e.spot.coordinates.lng;
+    });
+    if (withCoords.length < 2) {
+      if (loadingMsg) loadingMsg.textContent = 'Add at least 2 spots with map coordinates to see transit info.';
+      return;
+    }
+
+    const segments = [];
+    for (let i = 0; i < withCoords.length - 1; i++) {
+      segments.push({
+        fromName: withCoords[i].spot.spot_name,
+        fromLat:  withCoords[i].spot.coordinates.lat,
+        fromLng:  withCoords[i].spot.coordinates.lng,
+        toName:   withCoords[i+1].spot.spot_name,
+        toLat:    withCoords[i+1].spot.coordinates.lat,
+        toLng:    withCoords[i+1].spot.coordinates.lng,
+      });
+    }
+
+    try {
+      const res  = await fetch(WORKER_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ action: 'transit', segments }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error('Transit fetch failed');
+      transitData = data.segments;
+      renderTransitPanel(transitData, withCoords);
+    } catch(err) {
+      if (loadingMsg) loadingMsg.textContent = 'Could not load transit info. Check your connection.';
+    }
+  }
+
+  /* ── Transit panel renderer ── */
+  function renderTransitPanel(segments, withCoords) {
+    const routeView = document.getElementById('map-transit-panel');
+    if (!routeView) return;
+    routeView.innerHTML = '';
+
+    segments.forEach(function(seg, idx) {
+      const fromEntry = withCoords[idx];
+      const toEntry   = withCoords[idx + 1];
+
+      /* Distance between the two pins */
+      const fromC = fromEntry.spot.coordinates;
+      const toC   = toEntry.spot.coordinates;
+      const distKm = fromC && toC
+        ? Math.round(haversineKmClient(fromC.lat, fromC.lng, toC.lat, toC.lng))
+        : null;
+
+      const card = document.createElement('div');
+      card.className = 'transit-segment';
+
+      /* Segment label */
+      const segLabel = document.createElement('div');
+      segLabel.className = 'transit-seg-label';
+      segLabel.textContent = 'Segment ' + (idx + 1);
+      card.appendChild(segLabel);
+
+      /* FROM pin */
+      card.appendChild(makePinBlock('📍', fromEntry.spot.spot_name, seg.fromStops));
+
+      /* Distance divider */
+      if (distKm !== null) {
+        const divider = document.createElement('div');
+        divider.className = 'transit-divider';
+        divider.innerHTML = '<hr class="transit-divider__line"><span class="transit-divider__dist">' + distKm + ' km</span><hr class="transit-divider__line">';
+        card.appendChild(divider);
+      }
+
+      /* TO pin */
+      card.appendChild(makePinBlock('📍', toEntry.spot.spot_name, seg.toStops));
+
+      /* Groq insight */
+      if (seg.groqInsight) {
+        card.appendChild(makeGroqBlock(seg.groqInsight));
+      } else {
+        const noInfo = document.createElement('p');
+        noInfo.className = 'transit-no-groq';
+        noInfo.textContent = 'AI not able to find transit information for this route. Check Google Maps or local transport apps.';
+        card.appendChild(noInfo);
+      }
+
+      routeView.appendChild(card);
+    });
+  }
+
+  function makePinBlock(icon, pinName, stops) {
+    const wrap = document.createElement('div');
+    const label = document.createElement('div');
+    label.className = 'transit-pin-label';
+    label.innerHTML = '<span>' + esc(icon) + '</span><span>' + esc(pinName) + '</span>';
+    wrap.appendChild(label);
+
+    if (!stops || stops.length === 0) {
+      const none = document.createElement('p');
+      none.className = 'transit-no-stops';
+      none.textContent = 'No transit stops found nearby in OpenStreetMap.';
+      wrap.appendChild(none);
+      return wrap;
+    }
+
+    const stopList = document.createElement('div');
+    stopList.className = 'transit-stops';
+    stops.forEach(function(stop){
+      const row = document.createElement('div');
+      row.className = 'transit-stop';
+      const dist = stop.distM >= 1000
+        ? (stop.distM / 1000).toFixed(1) + ' km'
+        : stop.distM + ' m';
+      row.innerHTML =
+        '<span>' + esc(stop.typeLabel) + '</span>' +
+        '<span class="transit-stop__name">' + esc(stop.name) + '</span>' +
+        '<span class="transit-stop__dist">(' + esc(dist) + ')</span>' +
+        (stop.routes ? '<span class="transit-stop__routes">· ' + esc(stop.routes) + '</span>' : '') +
+        (stop.operator && !stop.routes ? '<span class="transit-stop__routes">· ' + esc(stop.operator) + '</span>' : '');
+      stopList.appendChild(row);
+    });
+    wrap.appendChild(stopList);
+    return wrap;
+  }
+
+  function makeGroqBlock(insight) {
+    const box = document.createElement('div');
+    box.className = 'transit-groq';
+
+    /* Mode chips */
+    if (insight.modes && insight.modes.length) {
+      const modes = document.createElement('div');
+      modes.className = 'transit-groq__modes';
+      insight.modes.forEach(function(m){
+        const chip = document.createElement('span');
+        chip.className = 'transit-groq__mode';
+        chip.textContent = m;
+        modes.appendChild(chip);
+      });
+      box.appendChild(modes);
+    }
+
+    /* Summary */
+    if (insight.summary) {
+      const s = document.createElement('p');
+      s.className = 'transit-groq__summary';
+      s.textContent = insight.summary;
+      box.appendChild(s);
+    }
+
+    /* Duration + cost */
+    if (insight.approxDuration || insight.approxCost) {
+      const meta = document.createElement('div');
+      meta.className = 'transit-groq__meta';
+      if (insight.approxDuration) {
+        meta.innerHTML += '<span class="transit-groq__meta-item"><span class="transit-groq__meta-label">⏱ </span>' + esc(insight.approxDuration) + '</span>';
+      }
+      if (insight.approxCost) {
+        meta.innerHTML += '<span class="transit-groq__meta-item"><span class="transit-groq__meta-label">💰 </span>' + esc(insight.approxCost) + '</span>';
+      }
+      box.appendChild(meta);
+    }
+
+    /* Key note */
+    if (insight.keyNote) {
+      const note = document.createElement('p');
+      note.className = 'transit-groq__note';
+      note.textContent = '💡 ' + insight.keyNote;
+      box.appendChild(note);
+    }
+
+    /* Disclaimer */
+    const disc = document.createElement('p');
+    disc.className = 'transit-groq__disclaimer';
+    disc.textContent = '⚠️ AI estimate — verify schedules and prices locally before travelling.';
+    box.appendChild(disc);
+
+    return box;
+  }
 
   function renumberMarkers() {
     pinnedSpots.forEach(function(entry,idx){
