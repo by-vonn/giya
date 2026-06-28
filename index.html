@@ -71,12 +71,13 @@
       position: fixed; top: var(--topbar-h); left: 0; right: 0;
       background: #fff; border-bottom: 2px solid var(--ember);
       box-shadow: 0 6px 24px rgba(26,22,18,0.12);
-      padding: 0.75rem 1rem; z-index: 98;
-      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1rem; z-index: 98;
       transform: translateY(-110%); transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
     }
     .topbar-edit-panel.is-open { transform: translateY(0); }
-    .topbar-edit-panel .airport-wrap { flex: 1; min-width: 0; position: relative; }
+    .topbar-edit-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .topbar-edit-airport { flex: 1; min-width: 140px; position: relative; }
+    .topbar-edit-panel .airport-wrap { position: relative; }
     .topbar-edit-panel input[type="text"],
     .topbar-edit-panel input[type="date"] {
       width: 100%; padding: 0.45rem 0.75rem; font-family: inherit;
@@ -422,6 +423,9 @@
     .map-terminal-type { font-size: 0.68rem; color: var(--ink-muted); }
     .map-spot-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-bottom: 1px solid rgba(26,22,18,0.05); transition: background 0.1s; }
     .map-spot-row:hover { background: rgba(26,22,18,0.03); }
+    .map-spot-row.drag-over { border-top: 2px solid var(--ember); background: rgba(200,98,42,0.04); }
+    .map-spot-row[draggable="true"] { cursor: grab; }
+    .map-spot-drag-handle { color: #c0b8b0; font-size: 0.8rem; padding: 0 0.15rem; flex-shrink: 0; cursor: grab; user-select: none; }
     .map-spot-num { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(26,22,18,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: #fff; flex-shrink: 0; }
     .map-spot-emoji { font-size: 1rem; flex-shrink: 0; line-height: 1; }
     .map-spot-info { flex: 1; overflow: hidden; }
@@ -489,16 +493,22 @@
 
 <!-- TOPBAR INLINE EDIT PANEL -->
 <div class="topbar-edit-panel" id="topbar-edit-panel" aria-label="Edit search">
-  <div class="airport-wrap">
-    <input type="text" id="edit-arrival-input" placeholder="City or airport (e.g. Osaka, KIX)" autocomplete="off" aria-label="Flying into">
-    <div class="airport-dropdown" id="edit-arrival-dropdown"></div>
+  <div class="topbar-edit-row">
+    <div class="airport-wrap topbar-edit-airport">
+      <input type="text" id="edit-arrival-input" placeholder="🛬 Flying into (e.g. Osaka)" autocomplete="off" aria-label="Flying into">
+      <div class="airport-dropdown" id="edit-arrival-dropdown"></div>
+    </div>
+    <div class="airport-wrap topbar-edit-airport">
+      <input type="text" id="edit-departure-input" placeholder="🛫 Flying out from (optional)" autocomplete="off" aria-label="Flying out from">
+      <div class="airport-dropdown" id="edit-departure-dropdown"></div>
+    </div>
+    <div class="topbar-edit-dates">
+      <input type="date" id="edit-date-from" aria-label="From">
+      <input type="date" id="edit-date-to" aria-label="To">
+    </div>
+    <button type="button" class="topbar-edit-go" id="btn-topbar-go">Search →</button>
+    <button type="button" class="topbar-edit-cancel" id="btn-topbar-cancel" aria-label="Cancel">✕</button>
   </div>
-  <div class="topbar-edit-dates">
-    <input type="date" id="edit-date-from" aria-label="From">
-    <input type="date" id="edit-date-to" aria-label="To">
-  </div>
-  <button type="button" class="topbar-edit-go" id="btn-topbar-go">Search →</button>
-  <button type="button" class="topbar-edit-cancel" id="btn-topbar-cancel" aria-label="Cancel">✕</button>
 </div>
 
 <!-- SPOT DETAIL PANEL -->
@@ -1686,10 +1696,47 @@ document.addEventListener('DOMContentLoaded', function () {
       const spot=entry.spot,color=entry.categoryColor,emoji=entry.categoryEmoji||'📍';
       const isVisible=!mapMarkers[spot.spot_name]||mapMarkers[spot.spot_name].visible!==false;
       const row=document.createElement('div'); row.className='map-spot-row'+(isVisible?'':' is-hidden-pin');
-      row.innerHTML='<div class="map-spot-num" style="background:'+esc(color)+'">'+(idx+1)+'</div><span class="map-spot-emoji">'+emoji+'</span><div class="map-spot-info"><div class="map-spot-name">'+esc(spot.spot_name)+'</div><div class="map-spot-area">'+esc(spot.area||entry.categoryName)+'</div></div><button class="map-spot-toggle" data-active="'+isVisible+'" aria-label="'+(isVisible?'Hide':'Show')+' pin">'+(isVisible?'👁':'🚫')+'</button><button class="map-spot-remove" aria-label="Remove" title="Remove">🗑</button>';
-      row.querySelector('.map-spot-toggle').addEventListener('click',function(){const mk=mapMarkers[spot.spot_name];if(!mk||!mainMap) return;if(mk.visible){mainMap.removeLayer(mk.marker);mk.visible=false;}else{mk.marker.addTo(mainMap);mk.visible=true;}refreshMapPanel();});
-      row.querySelector('.map-spot-remove').addEventListener('click',function(){removeSpotByName(spot.spot_name,entry.cardEl);});
-      list.appendChild(row);
+      row.setAttribute('draggable', 'true');
+      row.setAttribute('data-idx', String(idx));
+      row.innerHTML=
+        '<span class="map-spot-drag-handle" title="Drag to reorder">⠿</span>'+
+        '<div class="map-spot-num" style="background:'+esc(color)+'">'+(idx+1)+'</div>'+
+        '<span class="map-spot-emoji">'+emoji+'</span>'+
+        '<div class="map-spot-info"><div class="map-spot-name">'+esc(spot.spot_name)+'</div>'+
+        '<div class="map-spot-area">'+esc(spot.area||entry.categoryName)+'</div></div>'+
+        '<button class="map-spot-toggle" data-active="'+isVisible+'" aria-label="'+(isVisible?'Hide':'Show')+' pin">'+(isVisible?'👁':'🚫')+'</button>'+
+        '<button class="map-spot-remove" aria-label="Remove" title="Remove">🗑</button>';
+        row.querySelector('.map-spot-remove').addEventListener('click',function(){removeSpotByName(spot.spot_name,entry.cardEl);});
+
+/* Drag-to-reorder handlers */
+row.addEventListener('dragstart',function(e){
+  e.dataTransfer.effectAllowed='move';
+  e.dataTransfer.setData('text/plain',String(idx));
+  setTimeout(function(){row.style.opacity='0.45';},0);
+});
+row.addEventListener('dragend',function(){
+  row.style.opacity='';
+  list.querySelectorAll('.map-spot-row').forEach(function(r){r.classList.remove('drag-over');});
+});
+row.addEventListener('dragover',function(e){
+  e.preventDefault(); e.dataTransfer.dropEffect='move';
+  list.querySelectorAll('.map-spot-row').forEach(function(r){r.classList.remove('drag-over');});
+  row.classList.add('drag-over');
+});
+row.addEventListener('dragleave',function(){ row.classList.remove('drag-over'); });
+row.addEventListener('drop',function(e){
+  e.preventDefault(); row.classList.remove('drag-over');
+  const fromIdx=parseInt(e.dataTransfer.getData('text/plain'),10);
+  const toIdx=parseInt(row.getAttribute('data-idx'),10);
+  if(isNaN(fromIdx)||isNaN(toIdx)||fromIdx===toIdx) return;
+  const moved=pinnedSpots.splice(fromIdx,1)[0];
+  pinnedSpots.splice(toIdx,0,moved);
+  giyaAddedSpots=pinnedSpots;
+  refreshMapPanel(); renumberMarkers(); drawRoute();
+  if(routeActive) fetchAndRenderTransit();
+});
+
+list.appendChild(row);
     });
   }
 
@@ -1733,7 +1780,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  document.getElementById('btn-toggle-route').addEventListener('click', function(){
+  const routeToggleBtn = document.getElementById('btn-toggle-route');
+  if (routeToggleBtn) routeToggleBtn.addEventListener('click', function(){
     routeActive = !routeActive;
     this.classList.toggle('is-active', routeActive);
     this.textContent = routeActive ? 'Route on' : 'Route';
@@ -1772,8 +1820,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  document.getElementById('tab-pins').addEventListener('click', function(){ setMapTab('pins'); });
-  document.getElementById('tab-route').addEventListener('click', function(){ setMapTab('route'); });
+  const tabPinsEl  = document.getElementById('tab-pins');
+  const tabRouteEl = document.getElementById('tab-route');
+  if (tabPinsEl)  tabPinsEl.addEventListener('click',  function(){ setMapTab('pins'); });
+  if (tabRouteEl) tabRouteEl.addEventListener('click', function(){ setMapTab('route'); });
 
   /* ── Transit fetch ── */
   async function fetchAndRenderTransit() {
@@ -2044,7 +2094,8 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('btn-start').addEventListener('click',function(){showScreen(1);});
 
   /* ── Topbar inline edit ── */
-  let editSelectedFlyIn = null;
+  let editSelectedFlyIn  = null;
+  let editSelectedFlyOut = null;
 
   function openTopbarEdit() {
     /* Only available from Screen 2 onward */
@@ -2057,9 +2108,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const dfrom    = document.getElementById('edit-date-from');
     const dto      = document.getElementById('edit-date-to');
     if (arrInput) arrInput.value = currentArrival || '';
-    if (dfrom)    dfrom.value    = _searchDateFrom || '';
-    if (dto)      dto.value      = _searchDateTo   || '';
-    editSelectedFlyIn = selectedFlyIn;
+    const depInput = document.getElementById('edit-departure-input');
+    if (depInput)  depInput.value = currentDeparture && currentDeparture !== currentArrival ? currentDeparture : '';
+    if (dfrom)     dfrom.value    = _searchDateFrom || '';
+    if (dto)       dto.value      = _searchDateTo   || '';
+    editSelectedFlyIn  = selectedFlyIn;
+    editSelectedFlyOut = selectedFlyOut;
     panel.classList.add('is-open');
     if (arrInput) setTimeout(function(){ arrInput.focus(); }, 80);
   }
@@ -2078,20 +2132,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const arrInput = document.getElementById('edit-arrival-input');
     const dfrom    = document.getElementById('edit-date-from');
     const dto      = document.getElementById('edit-date-to');
-    const arrival  = editSelectedFlyIn ? editSelectedFlyIn.city : (arrInput ? arrInput.value.trim() : '');
-    const dateFrom = dfrom ? dfrom.value : '';
-    const dateTo   = dto  ? dto.value   : '';
+    const arrival     = editSelectedFlyIn  ? editSelectedFlyIn.city  : (arrInput ? arrInput.value.trim() : '');
+    const depInput    = document.getElementById('edit-departure-input');
+    const departureRaw = editSelectedFlyOut ? editSelectedFlyOut.city : (depInput ? depInput.value.trim() : '');
+    const departure   = departureRaw || arrival;
+    const dateFrom    = dfrom ? dfrom.value : '';
+    const dateTo      = dto   ? dto.value   : '';
     if (!arrival || !dateFrom || !dateTo) return;
     closeTopbarEdit();
-    /* Update search params */
-    if (editSelectedFlyIn) selectedFlyIn = editSelectedFlyIn;
-    _searchDateFrom  = dateFrom; _searchDateTo = dateTo;
-    _searchDuration  = calcDur(dateFrom, dateTo);
-    updateTopBarFlight(arrival, _searchDeparture || arrival, dateFrom, dateTo);
+    if (editSelectedFlyIn)  { selectedFlyIn  = editSelectedFlyIn; }
+    if (editSelectedFlyOut) { selectedFlyOut = editSelectedFlyOut; }
+    currentDeparture   = departure;
+    _searchDeparture   = departure;
+    _searchDateFrom    = dateFrom;
+    _searchDateTo      = dateTo;
+    _searchDuration    = calcDur(dateFrom, dateTo);
+    updateTopBarFlight(arrival, departure, dateFrom, dateTo);
     searchFromAnchor(arrival, editSelectedFlyIn ? editSelectedFlyIn.lat : null, editSelectedFlyIn ? editSelectedFlyIn.lng : null, false);
   });
 
-  initAutocomplete('edit-arrival-input', 'edit-arrival-dropdown', function(ap){ editSelectedFlyIn = ap; });
+  initAutocomplete('edit-arrival-input',   'edit-arrival-dropdown',   function(ap){ editSelectedFlyIn  = ap; });
+  initAutocomplete('edit-departure-input', 'edit-departure-dropdown', function(ap){ editSelectedFlyOut = ap; });
   document.getElementById('btn-explore-anywhere').addEventListener('click',function(){showScreen(1);const btnExp=document.getElementById('btn-explore');if(btnExp) btnExp.click();setTimeout(function(){const expEl=document.getElementById('explore-dest');if(expEl) expEl.focus();},150);});
   document.getElementById('btn-view-map').addEventListener('click',function(){showScreen(4);});
   document.getElementById('btn-spots-badge').addEventListener('click',function(){allExperiences.length>0?showScreen(2):showScreen(2);});
