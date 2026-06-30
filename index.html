@@ -225,6 +225,22 @@
     .discovery-screen { padding: 0; }
     .discovery-header { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.25rem 0.25rem; gap: 1rem; }
     .discovery-welcome { font-family: "Playfair Display", Georgia, serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
+    .discovery-growth-note { font-size: 0.72rem; color: var(--ink-muted); padding: 0 1.25rem 0.5rem; line-height: 1.5; }
+
+    .budget-banner {
+      margin: 0.5rem 1.25rem 0.75rem; padding: 0.65rem 0.85rem;
+      background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 0.76rem; color: #7a5020; line-height: 1.5;
+    }
+    .budget-banner__icon { flex-shrink: 0; font-size: 0.95rem; }
+    .budget-banner__text { flex: 1; }
+    .budget-banner__close {
+      flex-shrink: 0; background: none; border: none; cursor: pointer;
+      color: #92400e; font-size: 0.9rem; padding: 0; line-height: 1;
+      opacity: 0.6; transition: opacity 0.15s;
+    }
+    .budget-banner__close:hover { opacity: 1; }
     .discovery-topbar { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 1.25rem; background: #fff; border-bottom: 1px solid var(--border); margin: 0 -1.25rem; }
     .discovery-search { flex: 1; min-width: 0; padding: 0.35rem 0.85rem; font-family: inherit; font-size: 0.82rem; border: 1px solid var(--border); border-radius: 999px; background: var(--paper); color: var(--ink); outline: none; }
     .discovery-search:focus { border-color: var(--ember); box-shadow: 0 0 0 2px rgba(200,98,42,0.15); background: #fff; }
@@ -725,10 +741,16 @@
         </div></div>
       </div>
     </div>
+    <div class="budget-banner" id="budget-banner" hidden>
+      <span class="budget-banner__icon">ℹ️</span>
+      <span class="budget-banner__text">Giya runs on free-tier AI services as a portfolio project. During busy periods, results may take a little longer or occasionally fall back to fewer spots — thanks for your patience.</span>
+      <button type="button" class="budget-banner__close" id="budget-banner-close" aria-label="Dismiss">✕</button>
+    </div>
     <div class="discovery-header">
       <p class="discovery-welcome" id="discovery-welcome">Welcome. Tap anything that catches your eye.</p>
       <button type="button" id="btn-pin-all" style="font-family:inherit;font-size:0.72rem;font-weight:600;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:0.3rem 0.8rem;cursor:pointer;white-space:nowrap;flex-shrink:0;">📍 Pin all</button>
     </div>
+    <p class="discovery-growth-note">💡 Giya's spot list for this destination grows with each search — check back later for more recommendations.</p>
     <div class="discovery-chips" id="discovery-chips" aria-label="Filter by type">
       <button type="button" class="discovery-chip is-active" data-filter="all">All</button>
       <button type="button" class="discovery-chip" data-filter="pins" id="chip-my-pins" style="display:none;">📍 My Pins</button>
@@ -1179,6 +1201,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     results.sort(function(a,b){return a.distKm-b.distKm;});
     return results.slice(0,12);
+  }
+
+  /* Resolves a typed location name to coordinates: prefers an explicit
+  airport selection, falls back to fuzzy-matching the full APT list,
+     then the CITIES list. Prevents map/search failures when autocomplete
+     selection didn't register cleanly. */
+  function resolveLocationCoords(typedName, selectedAirport) {
+    if (selectedAirport) return { lat: selectedAirport.lat, lng: selectedAirport.lng, city: selectedAirport.city };
+    if (!typedName) return null;
+    const clean = typedName.replace(/^[A-Z]{3}\s*—\s*/, '').toLowerCase().trim();
+    /* Try APT first — broader coverage */
+    const aptMatch = searchAirports(clean)[0];
+    if (aptMatch) return { lat: aptMatch.lat, lng: aptMatch.lng, city: aptMatch.city };
+    /* Fall back to CITIES */
+    if (CITIES[clean]) return { lat: CITIES[clean][0], lng: CITIES[clean][1], city: typedName };
+    return null;
   }
 
   function getCurrentAnchorCoords() {
@@ -1654,8 +1692,10 @@ document.addEventListener('DOMContentLoaded', function () {
     mainMap=L.map(mapEl,{zoomControl:true,scrollWheelZoom:true});
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> © <a href="https://carto.com/" target="_blank">CARTO</a>',subdomains:'abcd',maxZoom:19}).addTo(mainMap);
     const allBounds=[];
-    const arrCoords=selectedFlyIn?[selectedFlyIn.lat,selectedFlyIn.lng]:CITIES[currentArrival.toLowerCase()];
-    const depCoords=selectedFlyOut?[selectedFlyOut.lat,selectedFlyOut.lng]:CITIES[currentDeparture.toLowerCase()];
+    const arrResolved = resolveLocationCoords(currentArrival, selectedFlyIn);
+    const depResolved = resolveLocationCoords(currentDeparture, selectedFlyOut);
+    const arrCoords = arrResolved ? [arrResolved.lat, arrResolved.lng] : null;
+    const depCoords = depResolved ? [depResolved.lat, depResolved.lng] : null;
     const sameCity=currentArrival.toLowerCase()===currentDeparture.toLowerCase();
     const arrLabel=selectedFlyIn?selectedFlyIn.iata+' — '+selectedFlyIn.name:currentArrival;
     const depLabel=selectedFlyOut?selectedFlyOut.iata+' — '+selectedFlyOut.name:currentDeparture;
@@ -2034,7 +2074,7 @@ list.appendChild(row);
   function stopMsgs(){msgOn=false;if(msgTO){clearTimeout(msgTO);msgTO=null;}const el=document.getElementById('loading-message');if(el) el.classList.remove('is-visible');}
   function initLoadMap(coords,city){destroyLoadMap();const el=document.getElementById('loading-map');if(!el||typeof L==='undefined') return;loadMap=L.map(el,{center:coords,zoom:5,dragging:false,zoomControl:false,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false,touchZoom:false});L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'',subdomains:'abcd',maxZoom:19}).addTo(loadMap);const icon=L.divIcon({html:'<div class="loading-map-marker">✈️</div>',className:'loading-map-pin',iconSize:[48,48],iconAnchor:[24,24]});L.marker(coords,{icon}).addTo(loadMap).bindPopup(city||'Your destination').openPopup();setTimeout(function(){if(loadMap) loadMap.invalidateSize();},150);}
   function destroyLoadMap(){if(loadMap){loadMap.remove();loadMap=null;}}
-  function showLoading(city){const el=document.getElementById('loading-state'),mapWrap=document.getElementById('loading-map-wrap'),globe=document.getElementById('loading-globe'),cityTxt=document.getElementById('loading-city-text');if(!el) return;const coords=CITIES[city.trim().toLowerCase()];if(coords){if(mapWrap) mapWrap.hidden=false;if(globe) globe.hidden=true;if(cityTxt) cityTxt.textContent='You\'re heading to '+city.trim();setTimeout(function(){initLoadMap(coords,city.trim());},100);}else{if(mapWrap) mapWrap.hidden=true;if(globe) globe.hidden=false;if(cityTxt) cityTxt.textContent='Mapping your route to '+city.trim()+'...';destroyLoadMap();}el.classList.add('is-visible');el.removeAttribute('hidden');startMsgs();}
+  function showLoading(city){const el=document.getElementById('loading-state'),mapWrap=document.getElementById('loading-map-wrap'),globe=document.getElementById('loading-globe'),cityTxt=document.getElementById('loading-city-text');if(!el) return;const resolved=resolveLocationCoords(city,selectedFlyIn);const coords=resolved?[resolved.lat,resolved.lng]:null;if(coords){if(mapWrap) mapWrap.hidden=false;if(globe) globe.hidden=true;if(cityTxt) cityTxt.textContent='You\'re heading to '+city.trim();setTimeout(function(){initLoadMap(coords,city.trim());},100);}else{if(mapWrap) mapWrap.hidden=true;if(globe) globe.hidden=false;if(cityTxt) cityTxt.textContent='Mapping your route to '+city.trim()+'...';destroyLoadMap();}el.classList.add('is-visible');el.removeAttribute('hidden');startMsgs();}
   function hideLoading(){stopMsgs();destroyLoadMap();const el=document.getElementById('loading-state');if(el){el.classList.remove('is-visible');el.setAttribute('hidden','');}}
   function calcDur(f,t){const d=Math.floor((new Date(t+'T00:00:00')-new Date(f+'T00:00:00'))/86400000)+1;return d>=1?d:1;}
 
@@ -2053,7 +2093,7 @@ list.appendChild(row);
     /* Always start fresh — clear all previous pins and journey */
     pinnedSpots=[]; giyaAddedSpots=pinnedSpots;
     /* Start fresh journey */
-    const anchorCoords=selectedFlyIn?{lat:selectedFlyIn.lat,lng:selectedFlyIn.lng}:(CITIES[arrival.toLowerCase()]?{lat:CITIES[arrival.toLowerCase()][0],lng:CITIES[arrival.toLowerCase()][1]}:null);
+    const anchorCoords = resolveLocationCoords(arrival, selectedFlyIn);
     journeyPath=[{city:arrival,lat:anchorCoords?anchorCoords.lat:null,lng:anchorCoords?anchorCoords.lng:null}];
     saveJourney(journeyPath);
     clearErr(); resetWarnings();
@@ -2151,8 +2191,15 @@ list.appendChild(row);
     searchFromAnchor(arrival, editSelectedFlyIn ? editSelectedFlyIn.lat : null, editSelectedFlyIn ? editSelectedFlyIn.lng : null, false);
   });
 
-  initAutocomplete('edit-arrival-input',   'edit-arrival-dropdown',   function(ap){ editSelectedFlyIn  = ap; });
+ initAutocomplete('edit-arrival-input',   'edit-arrival-dropdown',   function(ap){ editSelectedFlyIn  = ap; });
   initAutocomplete('edit-departure-input', 'edit-departure-dropdown', function(ap){ editSelectedFlyOut = ap; });
+
+  (function () {
+    const eArrEl = document.getElementById('edit-arrival-input');
+    const eDepEl = document.getElementById('edit-departure-input');
+    if (eArrEl) eArrEl.addEventListener('input', function () { editSelectedFlyIn = null; });
+    if (eDepEl) eDepEl.addEventListener('input', function () { editSelectedFlyOut = null; });
+  })();
   document.getElementById('btn-explore-anywhere').addEventListener('click',function(){showScreen(1);const btnExp=document.getElementById('btn-explore');if(btnExp) btnExp.click();setTimeout(function(){const expEl=document.getElementById('explore-dest');if(expEl) expEl.focus();},150);});
   document.getElementById('btn-view-map').addEventListener('click',function(){showScreen(4);});
   document.getElementById('btn-spots-badge').addEventListener('click',function(){allExperiences.length>0?showScreen(2):showScreen(2);});
@@ -2183,9 +2230,17 @@ list.appendChild(row);
     if(added>0){var btn=document.getElementById('btn-pin-all');if(btn){btn.textContent='✅ '+added+' pinned';setTimeout(function(){btn.textContent='📍 Pin all';},2000);}}
   });
 
-  /* Airport autocomplete */
-  initAutocomplete('arrival-city','arrival-dropdown',function(ap){selectedFlyIn=ap;});
-  initAutocomplete('departure-city','departure-dropdown',function(ap){selectedFlyOut=ap;});
+/* Airport autocomplete */
+  initAutocomplete('arrival-city',   'arrival-dropdown',   function (ap) { selectedFlyIn  = ap; });
+  initAutocomplete('departure-city', 'departure-dropdown', function (ap) { selectedFlyOut = ap; });
+
+  /* Clear stale selection if user edits the field after picking an airport */
+  (function () {
+    const arrEl = document.getElementById('arrival-city');
+    const depEl = document.getElementById('departure-city');
+    if (arrEl) arrEl.addEventListener('input', function () { selectedFlyIn = null; });
+    if (depEl) depEl.addEventListener('input', function () { selectedFlyOut = null; });
+  })();
 
   /* ── Hero tagline rotation ── */
   (function(){
@@ -2198,6 +2253,19 @@ list.appendChild(row);
     function stopCycle(){clearInterval(timer);}
     document.addEventListener('visibilitychange',function(){document.hidden?stopCycle():startCycle();});
     setTimeout(startCycle,2800);
+  })();
+
+  /* Budget banner — shown once per browser, dismissible */
+  (function () {
+    const banner = document.getElementById('budget-banner');
+    const closeBtn = document.getElementById('budget-banner-close');
+    if (!banner) return;
+    const dismissed = localStorage.getItem('giya_budget_banner_dismissed');
+    if (!dismissed) banner.hidden = false;
+    if (closeBtn) closeBtn.addEventListener('click', function () {
+      banner.hidden = true;
+      try { localStorage.setItem('giya_budget_banner_dismissed', '1'); } catch {}
+    });
   })();
 
   /* Restore pins from URL */
