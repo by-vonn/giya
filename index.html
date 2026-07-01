@@ -1850,7 +1850,7 @@ list.appendChild(row);
     }
   }
 
-  const routeToggleBtn = document.getElementById('btn-toggle-route');
+ const routeToggleBtn = document.getElementById('btn-toggle-route');
   if (routeToggleBtn) routeToggleBtn.addEventListener('click', function(){
     routeActive = !routeActive;
     this.classList.toggle('is-active', routeActive);
@@ -1867,6 +1867,7 @@ list.appendChild(row);
       if (tabs) { tabs.hidden = true; setMapTab('pins'); }
     }
   });
+  }
 
   /* ── Tab switching ── */
   function setMapTab(which) {
