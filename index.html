@@ -833,6 +833,29 @@ document.addEventListener('DOMContentLoaded', function () {
   const DEBUG      = true;
   function log(s, d) { if (DEBUG) { d !== undefined ? console.log('[Giya]', s, d) : console.log('[Giya]', s); } }
 
+  /* Strips "IATA — " prefix from a displayed airport string, returning
+     just the city name. Used as the reliable source of truth for the
+     city name regardless of whether the selection object is set —
+     prevents "KIX — Osaka" being treated as a different city than "Osaka". */
+     function parseAirportCity(text) {
+    if (!text) return '';
+    const m = text.match(/^[A-Za-z]{3}\s*—\s*(.+)$/);
+    return m ? m[1].trim() : text.trim();
+  }
+
+  /* Page 1 autocomplete — wired immediately via a microtask so it
+     does not depend on the rest of the script finishing without error */
+  Promise.resolve().then(function () {
+    try {
+      initAutocomplete('arrival-city',   'arrival-dropdown',   function (ap) { selectedFlyIn  = ap; });
+      initAutocomplete('departure-city', 'departure-dropdown', function (ap) { selectedFlyOut = ap; });
+      const arrEl = document.getElementById('arrival-city');
+      const depEl = document.getElementById('departure-city');
+      if (arrEl) arrEl.addEventListener('input', function () { selectedFlyIn = null; });
+      if (depEl) depEl.addEventListener('input', function () { selectedFlyOut = null; });
+    } catch (e) { console.error('[Giya] Page 1 autocomplete init failed:', e); }
+  });
+
   /* ── normaliseType ── */
   function normaliseType(type) {
     const valid = ['sight','food','activity','festival','sport','nature','nightlife','market','day-trip','seasonal'];
@@ -1342,7 +1365,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const verifiedText=document.getElementById('spot-panel-verified-text');
     const verifiedBadge=document.getElementById('spot-panel-verified-badge');
     if(verifiedSection){
-      if(spot.description_verified&&spot.wikiVerified){
+      const primaryText = spot.description||spot.why||'';
+      const isDuplicate  = spot.description_verified && spot.description_verified.trim()===primaryText.trim();
+      if(spot.description_verified&&spot.wikiVerified&&!isDuplicate){
         if(verifiedText) verifiedText.textContent=spot.description_verified;
         if(verifiedBadge) verifiedBadge.textContent=spot.wikiVerified?'· '+spot.wikiVerified.matchedTitle:'';
         verifiedSection.hidden=false;
@@ -1389,6 +1414,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if(!gallery) return;
       gallery.classList.remove('is-loading');
       const ids=['spot-gallery-0','spot-gallery-1','spot-gallery-2'];
+      /* Reset all slots first — hide any without a photo to avoid broken icons */
+      ids.forEach(function(id){
+        const img=document.getElementById(id);
+        if(img){ img.src=''; img.alt=''; img.style.display='none'; }
+      });
       const usedUrls=new Set(); let slotIndex=0;
       photos.forEach(function(photo){
         if(slotIndex>2) return;
@@ -1397,7 +1427,7 @@ document.addEventListener('DOMContentLoaded', function () {
         usedUrls.add(url);
         const img=document.getElementById(ids[slotIndex]);
         if(!img) return;
-        img.src=url; img.alt=photo.alt||spot.spot_name; slotIndex++;
+        img.src=url; img.alt=photo.alt||spot.spot_name; img.style.display='block'; slotIndex++;
       });
       if(photos.length>0&&credit){
         const isCommons=photos[0].photographer==='Wikimedia Commons';
@@ -2084,7 +2114,7 @@ list.appendChild(row);
     const arrEl=document.getElementById('arrival-city'),depEl=document.getElementById('departure-city'),frEl=document.getElementById('date-from'),toEl=document.getElementById('date-to');
     let arrival,departure;
     if(tripType==='explore'){var expEl=document.getElementById('explore-dest');arrival=expEl?expEl.value.trim():'';departure=arrival;}
-    else{arrival=selectedFlyIn?selectedFlyIn.city:(arrEl?arrEl.value.trim():'');departure=tripType==='oneway'?arrival:(selectedFlyOut?selectedFlyOut.city:(depEl?depEl.value.trim():arrival));}
+    else{arrival=selectedFlyIn?selectedFlyIn.city:parseAirportCity(arrEl?arrEl.value.trim():'');departure=tripType==='oneway'?arrival:(selectedFlyOut?selectedFlyOut.city:parseAirportCity(depEl?depEl.value.trim():arrival));}
     const dateFrom=frEl?frEl.value:'',dateTo=toEl?toEl.value:'';
     if(!arrival||!dateFrom||!dateTo){showErr('Please fill in all fields.');return;}
     currentArrival=arrival; currentDeparture=departure||arrival;
@@ -2172,9 +2202,9 @@ list.appendChild(row);
     const arrInput = document.getElementById('edit-arrival-input');
     const dfrom    = document.getElementById('edit-date-from');
     const dto      = document.getElementById('edit-date-to');
-    const arrival     = editSelectedFlyIn  ? editSelectedFlyIn.city  : (arrInput ? arrInput.value.trim() : '');
-    const depInput    = document.getElementById('edit-departure-input');
-    const departureRaw = editSelectedFlyOut ? editSelectedFlyOut.city : (depInput ? depInput.value.trim() : '');
+    const arrival      = editSelectedFlyIn  ? editSelectedFlyIn.city  : parseAirportCity(arrInput ? arrInput.value.trim() : '');
+    const depInput      = document.getElementById('edit-departure-input');
+    const departureRaw  = editSelectedFlyOut ? editSelectedFlyOut.city : parseAirportCity(depInput ? depInput.value.trim() : '');
     const departure   = departureRaw || arrival;
     const dateFrom    = dfrom ? dfrom.value : '';
     const dateTo      = dto   ? dto.value   : '';
@@ -2229,18 +2259,6 @@ list.appendChild(row);
     updateCounters();
     if(added>0){var btn=document.getElementById('btn-pin-all');if(btn){btn.textContent='✅ '+added+' pinned';setTimeout(function(){btn.textContent='📍 Pin all';},2000);}}
   });
-
-/* Airport autocomplete */
-  initAutocomplete('arrival-city',   'arrival-dropdown',   function (ap) { selectedFlyIn  = ap; });
-  initAutocomplete('departure-city', 'departure-dropdown', function (ap) { selectedFlyOut = ap; });
-
-  /* Clear stale selection if user edits the field after picking an airport */
-  (function () {
-    const arrEl = document.getElementById('arrival-city');
-    const depEl = document.getElementById('departure-city');
-    if (arrEl) arrEl.addEventListener('input', function () { selectedFlyIn = null; });
-    if (depEl) depEl.addEventListener('input', function () { selectedFlyOut = null; });
-  })();
 
   /* ── Hero tagline rotation ── */
   (function(){
