@@ -1405,35 +1405,80 @@ document.addEventListener('DOMContentLoaded', function () {
     panel.getBoundingClientRect(); panel.classList.add('is-open'); overlay.classList.add('is-open');
     document.body.style.overflow='hidden';
 
-    /* Photos: Commons first, Pexels fallback */
-    const photoPromise=spot.commonsImageUrl
-      ?Promise.resolve([{url:spot.commonsImageUrl,url_small:spot.commonsImageUrl,photographer:'Wikimedia Commons',pexels_page:'https://commons.wikimedia.org',alt:spot.spot_name}])
-      :fetchPhotos(buildPhotoQuery(spot).trim(),3);
+    /* Photos:
+       1. Use commonsImages array (up to 3 verified photos) for filled slots
+       2. Pexels fills any remaining slots (or all 3 if no Commons images)
+       3. Unused slots are hidden — no broken image icons */
+    const ids = ['spot-gallery-0','spot-gallery-1','spot-gallery-2'];
 
-    photoPromise.then(function(photos){
-      if(!gallery) return;
-      gallery.classList.remove('is-loading');
-      const ids=['spot-gallery-0','spot-gallery-1','spot-gallery-2'];
-      /* Reset all slots first — hide any without a photo to avoid broken icons */
-      ids.forEach(function(id){
-        const img=document.getElementById(id);
-        if(img){ img.src=''; img.alt=''; img.style.display='none'; }
-      });
-      const usedUrls=new Set(); let slotIndex=0;
-      photos.forEach(function(photo){
-        if(slotIndex>2) return;
-        const url=photo.url_small||photo.url;
-        if(usedUrls.has(url)) return;
-        usedUrls.add(url);
-        const img=document.getElementById(ids[slotIndex]);
-        if(!img) return;
-        img.src=url; img.alt=photo.alt||spot.spot_name; img.style.display='block'; slotIndex++;
-      });
-      if(photos.length>0&&credit){
-        const isCommons=photos[0].photographer==='Wikimedia Commons';
-        credit.innerHTML=isCommons?'Photo: <a href="'+esc(photos[0].pexels_page)+'" target="_blank" rel="noopener">Wikimedia Commons</a>':'Photo by <a href="'+esc(photos[0].pexels_page)+'" target="_blank" rel="noopener">'+esc(photos[0].photographer)+'</a> on Pexels';
-      }
+    /* Reset all slots */
+    ids.forEach(function(id){
+      const img=document.getElementById(id);
+      if(img){ img.src=''; img.alt=''; img.style.display='none'; }
     });
+    if(gallery) gallery.classList.remove('is-loading');
+
+    const commonsImages = spot.commonsImages || (spot.commonsImageUrl ? [spot.commonsImageUrl] : []);
+    let slotIndex = 0;
+    const usedUrls = new Set();
+    let hasCommonsCredit = false;
+
+    /* Fill slots from Commons */
+    commonsImages.forEach(function(url){
+      if(slotIndex > 2) return;
+      if(usedUrls.has(url)) return;
+      usedUrls.add(url);
+      const img = document.getElementById(ids[slotIndex]);
+      if(!img) return;
+      img.src     = url;
+      img.alt     = spot.spot_name || '';
+      img.style.display = 'block';
+      slotIndex++;
+      hasCommonsCredit = true;
+    });
+
+    const slotsRemaining = 3 - slotIndex;
+
+    /* Fill remaining slots from Pexels (or all 3 if no Commons images) */
+    if (slotsRemaining > 0) {
+      fetchPhotos(buildPhotoQuery(spot).trim(), slotsRemaining).then(function(photos){
+        photos.forEach(function(photo){
+          if(slotIndex > 2) return;
+          const url = photo.url_small || photo.url;
+          if(usedUrls.has(url)) return;
+          usedUrls.add(url);
+          const img = document.getElementById(ids[slotIndex]);
+          if(!img) return;
+          img.src     = url;
+          img.alt     = photo.alt || spot.spot_name;
+          img.style.display = 'block';
+          slotIndex++;
+        });
+
+        /* Credit line — show Wikimedia Commons if any Commons images shown,
+           Pexels otherwise, combined credit if both */
+        if (credit) {
+          const pexelsPhotographer = photos.length > 0 ? photos[0].photographer : null;
+          const pexelsPage         = photos.length > 0 ? photos[0].pexels_page  : null;
+          if (hasCommonsCredit && pexelsPhotographer) {
+            credit.innerHTML =
+              'Photos: <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>' +
+              ' &amp; <a href="' + esc(pexelsPage) + '" target="_blank" rel="noopener">' + esc(pexelsPhotographer) + '</a> on Pexels';
+          } else if (hasCommonsCredit) {
+            credit.innerHTML = 'Photos: <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>';
+          } else if (pexelsPhotographer) {
+            credit.innerHTML = 'Photo by <a href="' + esc(pexelsPage) + '" target="_blank" rel="noopener">' + esc(pexelsPhotographer) + '</a> on Pexels';
+          }
+        }
+      });
+    } else {
+      /* All 3 slots filled from Commons alone */
+      if (credit && hasCommonsCredit) {
+        credit.innerHTML = 'Photos: <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>';
+      }
+    }
+
+    /* Pass commonsImages through card click so panel re-open works */
 
     /* Record click */
     if(currentArrival) recordClick(currentArrival,spot.spot_name,spot.type);
@@ -1636,7 +1681,7 @@ document.addEventListener('DOMContentLoaded', function () {
       card.appendChild(foot);
 
       card.addEventListener('click',function(){
-        openPanel({spot_name:exp.spot_name,area:exp.area,description:exp.description,why:exp.why,must_do:exp.must_do,hidden_angle:exp.hidden_angle,food_nearby:exp.food_nearby,season_status:exp.season_status,season_note:exp.season_note,coordinates:exp.coordinates,type:exp.type,tags:exp.tags,photo_query:exp.photo_query,description_verified:exp.description_verified,wikiVerified:exp.wikiVerified,entranceFee:exp.entranceFee,ticketPriceNote:exp.ticketPriceNote,localName:exp.localName,commonsImageUrl:exp.commonsImageUrl},color,null);
+        openPanel({spot_name:exp.spot_name,area:exp.area,description:exp.description,why:exp.why,must_do:exp.must_do,hidden_angle:exp.hidden_angle,food_nearby:exp.food_nearby,season_status:exp.season_status,season_note:exp.season_note,coordinates:exp.coordinates,type:exp.type,tags:exp.tags,photo_query:exp.photo_query,description_verified:exp.description_verified,wikiVerified:exp.wikiVerified,entranceFee:exp.entranceFee,ticketPriceNote:exp.ticketPriceNote,localName:exp.localName,commonsImageUrl:exp.commonsImageUrl,commonsImages:exp.commonsImages},color,null);
       });
       card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();card.click();}});
       grid.appendChild(card);
