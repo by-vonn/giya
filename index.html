@@ -370,9 +370,7 @@
     .spot-panel__fee-icon  { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
     .spot-panel__fee-text  { font-size: 0.82rem; color: var(--ink); line-height: 1.5; }
     .spot-panel__fee-price { font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 1px; }
-    .spot-panel__season { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--paper); padding: 0.3rem 0.75rem; border-radius: 999px; margin-bottom: 0.4rem; }
-    .spot-panel__season .season-badge { width: 10px; height: 10px; }
-    .spot-panel__season .season-label { font-size: 0.75rem; }
+    .spot-panel__season { display: none; } /* badge removed — season_note text carries the information */
     .spot-panel__season-note { font-size: 0.82rem; color: var(--ink-muted); margin-bottom: 1rem; line-height: 1.55; font-style: italic; }
     .spot-panel__section { margin-bottom: 1rem; }
     .spot-panel__section-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.3rem; }
@@ -1308,6 +1306,7 @@ document.addEventListener('DOMContentLoaded', function () {
     currentArrival=cityName;
     updateTopBarFlight(cityName,_searchDeparture||cityName,_searchDateFrom,_searchDateTo);
     window._giyaDateFrom=_searchDateFrom;
+    resetWarnings(); /* clear stale warnings before new search completes */
     const welcome=document.getElementById('discovery-welcome');
     if(welcome) welcome.textContent='Finding the best of '+cityName+'…';
     const grid=document.getElementById('discovery-grid');
@@ -1357,8 +1356,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if(feePriceEl) feePriceEl.textContent=priceNote;
     }
 
-    /* Description — show verified as primary if available */
-    set('spot-panel-why', spot.description_verified || spot.description || spot.why || '');
+    /* Always show the original description as primary.
+       description_verified is shown separately only when it adds
+       meaningful new content (first search only — baked into KV after). */
+    set('spot-panel-why', spot.description || spot.why || '');
 
     /* Verified description box — show only if description_verified exists AND differs from primary */
     const verifiedSection=document.getElementById('spot-panel-verified-section');
