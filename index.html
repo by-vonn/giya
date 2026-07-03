@@ -1365,8 +1365,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const verifiedText=document.getElementById('spot-panel-verified-text');
     const verifiedBadge=document.getElementById('spot-panel-verified-badge');
     if(verifiedSection){
-      const primaryText = spot.description||spot.why||'';
-      const isDuplicate  = spot.description_verified && spot.description_verified.trim()===primaryText.trim();
+      const primaryText   = (spot.description||spot.why||'').trim();
+      const verifiedText2 = (spot.description_verified||'').trim();
+      /* Hide verified box if descriptions are near-identical —
+         length difference < 30 chars means the rephrase added nothing meaningful */
+      const isDuplicate = !verifiedText2 ||
+        verifiedText2 === primaryText ||
+        Math.abs(verifiedText2.length - primaryText.length) < 30;
       if(spot.description_verified&&spot.wikiVerified&&!isDuplicate){
         if(verifiedText) verifiedText.textContent=spot.description_verified;
         if(verifiedBadge) verifiedBadge.textContent=spot.wikiVerified?'· '+spot.wikiVerified.matchedTitle:'';
