@@ -12,7 +12,7 @@
   <style>
     :root {
       --ember:     #C1662F;
-      --paper:     #FBF3E7;
+      --paper:     #FFFFFF;
       --ink:       #1a1612;
       --ink-muted: #5c5349;
       --border:    rgba(26,22,18,0.12);
@@ -138,36 +138,51 @@
     .route-leg { font-size: 0.62rem; color: var(--ink-muted); padding: 0.2rem 1rem 0.35rem 4.25rem; }
 
     /* ── SCREEN 0 — Hero ── */
-    .landing { text-align: center; padding: 1.5rem 1.25rem 3rem; display: flex; flex-direction: column; align-items: center; }
-    .hero-scene { width: 100%; max-width: 420px; margin: 0 auto 1.25rem; position: relative; }
-    .hero-svg { width: 100%; height: auto; display: block; overflow: visible; }
-    @keyframes pin-drop { 0% { transform: translateY(-70px); opacity: 0; } 55% { transform: translateY(5px); opacity: 1; } 72% { transform: translateY(-3px); } 85% { transform: translateY(1px); } 100% { transform: translateY(0); opacity: 1; } }
-    @keyframes arc-reveal { 0% { clip-path: inset(0 100% 0 0 round 4px); opacity: 0.4; } 100% { clip-path: inset(0 0% 0 0 round 4px); opacity: 1; } }
-    @keyframes q-pop { 0% { transform: scale(0); opacity: 0; } 65% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
-    @keyframes q-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    .landing { position: relative; text-align: center; padding: 2.5rem 1.25rem 3rem; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - var(--topbar-h)); overflow: hidden; }
     @keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .hero-pin--1 { animation: pin-drop 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
-    .hero-pin--2 { animation: pin-drop 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.9s both; }
-    .hero-arc { animation: arc-reveal 0.7s ease-out 0.5s both; }
-    .q-badge--1 { animation: q-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) 1.4s both, q-pulse 2.4s ease-in-out 2s infinite; }
-    .q-badge--2 { animation: q-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) 1.6s both, q-pulse 2.4s ease-in-out 2.3s infinite; }
-    .q-badge--3 { animation: q-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) 1.8s both, q-pulse 2.4s ease-in-out 2.6s infinite; }
-    @media (prefers-reduced-motion: reduce) { .hero-pin--1, .hero-pin--2, .hero-arc, .q-badge--1, .q-badge--2, .q-badge--3 { animation: none !important; opacity: 1 !important; clip-path: none !important; transform: none !important; } }
-    .hero-headline { font-family: "Playfair Display", Georgia, serif; font-size: clamp(1.65rem,5.5vw,2.4rem); font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 0.2rem; animation: fade-up 0.5s ease 0.1s both; }
-    .hero-tagline-wrap { min-height: 2.4rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; animation: fade-up 0.5s ease 0.25s both; }
+
+    /* Flight-network ambient background — full-bleed regardless of the 640px content column */
+    .network-svg { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
+    .network-svg .arc { fill: none; stroke: var(--ember); stroke-width: 1.6; opacity: 0; }
+    .network-svg .node { fill: var(--border); opacity: 0.6; }
+    .network-svg .traveler { fill: var(--ember); opacity: 0; filter: drop-shadow(0 0 4px rgba(193,102,47,0.55)); }
+    @media (prefers-reduced-motion: reduce) { .network-svg { display: none; } }
+
+    /* Frosted glass hero card */
+    .hero-card {
+      position: relative; z-index: 2;
+      max-width: 560px; width: 100%;
+      padding: 2.8rem 2.4rem;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(26,22,18,0.08);
+      box-shadow: 0 30px 70px rgba(26,22,18,0.10), inset 0 1px 0 rgba(255,255,255,0.7);
+      opacity: 0; transform: translateY(14px);
+      animation: fade-up 0.6s cubic-bezier(0.2,0.8,0.2,1) forwards 0.1s;
+    }
+    .hero-headline { font-family: "Playfair Display", Georgia, serif; font-size: clamp(1.65rem,5.5vw,2.4rem); font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 0.2rem; }
+    .hero-tagline-wrap { min-height: 2.4rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
     .hero-tagline { font-size: clamp(1rem,3.5vw,1.2rem); color: var(--ember); font-weight: 600; transition: opacity 0.35s ease, transform 0.35s ease; }
     .hero-tagline.is-exiting { opacity: 0; transform: translateY(-8px); }
     .hero-tagline.is-entering { opacity: 0; transform: translateY(8px); }
-    .landing .subheading { color: var(--ink-muted); font-size: 0.95rem; max-width: 34ch; margin: 0 auto 1.75rem; line-height: 1.65; animation: fade-up 0.5s ease 0.4s both; }
-    .hero-ctas { display: flex; flex-direction: column; align-items: stretch; gap: 0.75rem; width: 100%; max-width: 300px; margin: 0 auto; animation: fade-up 0.5s ease 0.55s both; }
-    .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; font-family: inherit; font-size: 1rem; font-weight: 600; padding: 0.9rem 1.75rem; background: var(--ember); color: #fff; border: none; border-radius: 999px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: var(--shadow); }
+    .landing .subheading { color: var(--ink-muted); font-size: 0.95rem; max-width: 34ch; margin: 0 auto 1.75rem; line-height: 1.65; }
+    .hero-ctas { display: flex; flex-direction: column; align-items: stretch; gap: 0.75rem; width: 100%; max-width: 300px; margin: 0 auto; }
+    .btn-primary { position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; font-family: inherit; font-size: 1rem; font-weight: 600; padding: 0.9rem 1.75rem; background: var(--ember); color: #fff; border: none; border-radius: 999px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: var(--shadow); }
     .hero-ctas .btn-primary, .hero-ctas .btn-secondary, .form-screen .btn-primary { width: 100%; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,98,42,0.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(193,102,47,0.35); }
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; font-family: inherit; font-size: 0.95rem; font-weight: 600; padding: 0.85rem 1.75rem; background: transparent; color: var(--ink); border: 1.5px solid var(--border); border-radius: 999px; cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
-    .btn-secondary:hover { border-color: var(--ember); color: var(--ember); background: rgba(200,98,42,0.04); }
-    .landing__note { margin-top: 1rem; font-size: 0.8rem; color: #b0a898; letter-spacing: 0.04em; animation: fade-up 0.5s ease 0.65s both; }
+    .btn-secondary:hover { border-color: var(--ember); color: var(--ember); background: rgba(193,102,47,0.05); }
+    .landing__note { margin-top: 1rem; font-size: 0.8rem; color: #b0a898; letter-spacing: 0.04em; }
+
+    /* Morph transition wash — reused for Screen0→1 and Screen1→loading */
+    .morph-wash { position: fixed; z-index: 500; background: var(--ember); border-radius: 999px; pointer-events: none; opacity: 0; }
+    .morph-wash.is-growing { opacity: 1; transition: width 0.55s cubic-bezier(0.6,0,0.15,1), height 0.55s cubic-bezier(0.6,0,0.15,1), border-radius 0.55s ease, top 0.55s cubic-bezier(0.6,0,0.15,1), left 0.55s cubic-bezier(0.6,0,0.15,1); }
+    .morph-loading-mark { position: fixed; z-index: 501; color: #fff; font-family: "DM Sans", sans-serif; font-size: 0.85rem; font-weight: 600; opacity: 0; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+    .morph-loading-mark.is-visible { opacity: 1; transition: opacity 0.25s ease 0.3s; }
 
     /* ── SCREEN 1 ── */
     .form-screen h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
@@ -207,8 +222,6 @@
     .pref-chip.is-boost-active { background: #fdf3e0; color: #7a5020; border-color: #d4b060; }
 
     /* ── LOADING ── */
-    .loading-state { display: none; }
-    .loading-state.is-visible { display: block; }
     .loading-screen { max-width: 480px; margin: 0 auto; padding: 2rem; text-align: center; }
     .loading-city-text { font-family: "Playfair Display", Georgia, serif; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--ink); }
     .loading-message { min-height: 2.5rem; font-size: 1rem; color: var(--ink-muted); opacity: 0; transition: opacity 0.4s ease; }
@@ -223,6 +236,8 @@
     .loader-ring .dot:nth-child(2) { animation-delay: -0.47s; opacity: 0.6; }
     .loader-ring .dot:nth-child(3) { animation-delay: -0.93s; opacity: 0.3; }
     @keyframes orbit { from { transform: rotate(0deg) translateX(24px) rotate(0deg); } to { transform: rotate(360deg) translateX(24px) rotate(-360deg); } }
+    .loading-screen-full { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - var(--topbar-h)); text-align: center; }
+    .loading-screen-full .loading-screen { max-width: 420px; padding: 2rem; }
 
     /* ── SCREEN 2 — Discovery Grid ── */
     .discovery-screen { padding: 0; }
@@ -607,45 +622,19 @@
 <main>
   <!-- Screen 0 — Hero -->
   <section id="screen-0" class="screen landing is-visible" data-screen-index="0" aria-label="Welcome">
-    <div class="hero-scene" aria-hidden="true">
-      <svg class="hero-svg" viewBox="0 0 400 185" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 130 Q60 112 130 122 Q200 132 270 115 Q330 102 400 118 L400 185 L0 185 Z" fill="rgba(200,98,42,0.06)"/>
-        <path d="M0 150 Q100 138 200 145 Q300 152 400 140 L400 185 L0 185 Z" fill="rgba(200,98,42,0.04)"/>
-        <path class="hero-arc" d="M 72 125 Q 200 52 328 118" stroke="#c8622a" stroke-width="2.5" stroke-dasharray="7 5" fill="none" stroke-linecap="round"/>
-        <g class="q-badge q-badge--1" style="transform-origin:148px 80px">
-          <circle cx="148" cy="80" r="15" fill="#fff" stroke="#f0e8e0" stroke-width="1.5"/>
-          <text x="148" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#c8622a">?</text>
-        </g>
-        <g class="q-badge q-badge--2" style="transform-origin:200px 63px">
-          <circle cx="200" cy="63" r="15" fill="#fff" stroke="#f0e8e0" stroke-width="1.5"/>
-          <text x="200" y="69" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#c8622a">?</text>
-        </g>
-        <g class="q-badge q-badge--3" style="transform-origin:255px 72px">
-          <circle cx="255" cy="72" r="15" fill="#fff" stroke="#f0e8e0" stroke-width="1.5"/>
-          <text x="255" y="78" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#c8622a">?</text>
-        </g>
-        <g class="hero-pin hero-pin--1" style="transform-origin:72px 125px">
-          <path d="M62 97 C62 97 82 113 82 122 A10 10 0 0 1 62 122 C62 113 62 97 62 97 Z" fill="#1a1612"/>
-          <circle cx="72" cy="120" r="4.5" fill="rgba(255,255,255,0.88)"/>
-          <text x="72" y="93" text-anchor="middle" font-size="16" fill="#1a1612" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.2))">✈</text>
-        </g>
-        <g class="hero-pin hero-pin--2" style="transform-origin:328px 118px">
-          <path d="M318 90 C318 90 338 106 338 115 A10 10 0 0 1 318 115 C318 106 318 90 318 90 Z" fill="#c8622a"/>
-          <circle cx="328" cy="113" r="4.5" fill="rgba(255,255,255,0.88)"/>
-          <text x="350" y="91" text-anchor="middle" font-size="16" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.2))">✈</text>
-        </g>
-      </svg>
+    <svg class="network-svg" id="networkSvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+    <div class="hero-card" id="heroCard">
+      <h1 class="hero-headline">Found a cheap flight.</h1>
+      <div class="hero-tagline-wrap">
+        <span class="hero-tagline" id="hero-tagline">Don't know what to do with it?</span>
+      </div>
+      <p class="subheading">Tell us where you're flying in and out of — we'll surface the destinations, hidden spots, local food, and what's in between.</p>
+      <div class="hero-ctas">
+        <button type="button" class="btn-primary" id="btn-start">Plan my trip →</button>
+        <button type="button" class="btn-secondary" id="btn-explore-anywhere">🧭 Explore anywhere</button>
+      </div>
+      <p class="landing__note">No sign-up &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Free</p>
     </div>
-    <h1 class="hero-headline">Found a cheap flight.</h1>
-    <div class="hero-tagline-wrap">
-      <span class="hero-tagline" id="hero-tagline">Don't know what to do with it?</span>
-    </div>
-    <p class="subheading">Tell us where you're flying in and out of — we'll surface the destinations, hidden spots, local food, and what's in between.</p>
-    <div class="hero-ctas">
-      <button type="button" class="btn-primary" id="btn-start">Plan my trip →</button>
-      <button type="button" class="btn-secondary" id="btn-explore-anywhere">🧭 Explore anywhere</button>
-    </div>
-    <p class="landing__note">No sign-up &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Free</p>
   </section>
 
   <!-- Screen 1 — Form -->
@@ -684,18 +673,18 @@
           <input type="date" id="date-to" name="dateTo" required>
         </div>
       </div>
-      <div id="loading-state" class="loading-state" aria-live="polite" hidden>
-        <div class="loading-screen">
-          <div id="loading-phase1">
-            <div class="loader-ring" aria-hidden="true"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-            <p id="loading-city-text" class="loading-city-text"></p>
-          </div>
-          <p id="loading-message" class="loading-message"></p>
-        </div>
-      </div>
       <p id="form-error" class="form-error" role="alert" hidden></p>
       <button type="submit" class="btn-primary" id="btn-submit-trip">Show me what's possible →</button>
     </form>
+  </section>
+
+  <!-- Screen 1.5 — Loading -->
+  <section id="screen-loading" class="screen loading-screen-full" data-screen-index="1.5" aria-label="Finding your trip" aria-live="polite" hidden>
+    <div class="loading-screen">
+      <div class="loader-ring" aria-hidden="true"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <p id="loading-city-text" class="loading-city-text"></p>
+      <p id="loading-message" class="loading-message"></p>
+    </div>
   </section>
 
   <!-- Screen 2 — Photo Discovery Grid -->
@@ -2150,8 +2139,7 @@ list.appendChild(row);
   function showMsg(idx,skip){if(!msgOn) return;const el=document.getElementById('loading-message');if(!el) return;const m=MSGS[idx%MSGS.length];function apply(){if(!msgOn) return;el.textContent=m.e+' '+m.t;el.classList.add('is-visible');const ni=(idx+1)%MSGS.length;msgTO=setTimeout(function(){el.classList.remove('is-visible');setTimeout(function(){showMsg(ni,false);},400);},msgDur(ni));}if(skip) apply();else{el.classList.remove('is-visible');setTimeout(apply,400);}}
   function startMsgs(){stopMsgs();msgOn=true;showMsg(0,true);}
   function stopMsgs(){msgOn=false;if(msgTO){clearTimeout(msgTO);msgTO=null;}const el=document.getElementById('loading-message');if(el) el.classList.remove('is-visible');}
-  function showLoading(city){const el=document.getElementById('loading-state'),cityTxt=document.getElementById('loading-city-text');if(!el) return;if(cityTxt) cityTxt.textContent='You\'re heading to '+city.trim();el.classList.add('is-visible');el.removeAttribute('hidden');startMsgs();}
-  function hideLoading(){stopMsgs();const el=document.getElementById('loading-state');if(el){el.classList.remove('is-visible');el.setAttribute('hidden','');}}
+  function hideLoading(){stopMsgs();}
   function calcDur(f,t){const d=Math.floor((new Date(t+'T00:00:00')-new Date(f+'T00:00:00'))/86400000)+1;return d>=1?d:1;}
 
   /* ── Form submit ── */
@@ -2174,8 +2162,11 @@ list.appendChild(row);
     saveJourney(journeyPath);
     clearErr(); resetWarnings();
     if(mainMap){mainMap.remove();mainMap=null;mapMarkers={};terminalMarkers=[];}
-    updateCounters(); showLoading(arrival);
+    updateCounters();
     const submitBtn=document.getElementById('btn-submit-trip');
+    const cityTxt0=document.getElementById('loading-city-text');
+    if(cityTxt0) cityTxt0.textContent='You\'re heading to '+arrival.trim();
+    morphTransition(submitBtn,1.5,'',function(){ startMsgs(); });
     if(submitBtn) submitBtn.disabled=true;
     updateTopBarFlight(arrival,currentDeparture,dateFrom,dateTo);
     try{
@@ -2198,6 +2189,7 @@ list.appendChild(row);
       let msg='Something went wrong. Please try again.';
       if(err.message&&err.message.includes('Failed to fetch')) msg='Could not reach Giya. Try again in a moment.';
       else if(err.message) msg=err.message;
+      showScreen(1);
       showErr(msg);
     }finally{hideLoading();if(submitBtn) submitBtn.disabled=false;}
   });
@@ -2207,7 +2199,120 @@ list.appendChild(row);
   if(frEl&&toEl2){const today=new Date().toISOString().split('T')[0];frEl.min=today;toEl2.min=today;frEl.addEventListener('change',function(){toEl2.min=frEl.value||today;if(toEl2.value&&toEl2.value<frEl.value) toEl2.value='';});}
 
   /* ── Main button wiring ── */
-  document.getElementById('btn-start').addEventListener('click',function(){showScreen(1);});
+  /* ── Morph transition — grows from the clicked button into a full-screen wash ── */
+  const morphWash = document.createElement('div');
+  morphWash.className = 'morph-wash';
+  morphWash.id = 'morphWash';
+  document.body.appendChild(morphWash);
+  const morphMark = document.createElement('div');
+  morphMark.className = 'morph-loading-mark';
+  morphMark.id = 'morphMark';
+  document.body.appendChild(morphMark);
+
+  function morphTransition(triggerBtn, toScreenId, label, afterShow) {
+    const r = triggerBtn.getBoundingClientRect();
+    morphWash.style.transition = '';
+    morphWash.style.top = r.top + 'px';
+    morphWash.style.left = r.left + 'px';
+    morphWash.style.width = r.width + 'px';
+    morphWash.style.height = r.height + 'px';
+    morphWash.style.borderRadius = '999px';
+    morphMark.textContent = label || '';
+
+    requestAnimationFrame(function() {
+      morphWash.classList.add('is-growing');
+      const diag = Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) * 1.1;
+      morphWash.style.top = (window.innerHeight / 2 - diag / 2) + 'px';
+      morphWash.style.left = (window.innerWidth / 2 - diag / 2) + 'px';
+      morphWash.style.width = diag + 'px';
+      morphWash.style.height = diag + 'px';
+      morphWash.style.borderRadius = '50%';
+    });
+
+    setTimeout(function () { morphMark.classList.add('is-visible'); }, 250);
+
+    setTimeout(function () {
+      showScreen(toScreenId);
+      if (afterShow) afterShow();
+    }, 560);
+
+    setTimeout(function () {
+      morphMark.classList.remove('is-visible');
+      morphWash.classList.remove('is-growing');
+      morphWash.style.transition = 'opacity 0.35s ease';
+      morphWash.style.opacity = '0';
+      setTimeout(function () {
+        morphWash.style.transition = '';
+        morphWash.style.opacity = '';
+        morphWash.style.width = '0'; morphWash.style.height = '0';
+      }, 380);
+    }, 1050);
+  }
+
+  /* ── Flight-network ambient background (Screen 0 only) ── */
+  (function () {
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.getElementById('networkSvg');
+    if (!svg) return;
+    const nodes = {
+      ny:[120,360], la:[70,420], sao:[300,660], cpt:[820,690],
+      lon:[760,230], par:[800,270], ist:[900,310], dxb:[1020,390],
+      nbo:[880,530], bom:[1070,440], bkk:[1230,480], sin:[1240,530],
+      tyo:[1420,320], syd:[1420,700]
+    };
+    const arcs = [
+      ['ny','lon'],['lon','dxb'],['dxb','tyo'],['tyo','syd'],['sin','syd'],
+      ['sao','cpt'],['la','tyo'],['bom','nbo'],['ist','dxb'],['bkk','sin'],
+      ['ny','sao'],['lon','ist']
+    ];
+    function arcPath(a, b, bend) {
+      const [x1,y1]=nodes[a], [x2,y2]=nodes[b];
+      const mx=(x1+x2)/2, my=(y1+y2)/2, dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+      const nx=-dy/len, ny2=dx/len;
+      return `M${x1},${y1} Q${mx+nx*len*bend},${my+ny2*len*bend} ${x2},${y2}`;
+    }
+    Object.values(nodes).forEach(function ([x,y]) {
+      const c = document.createElementNS(svgNS,'circle');
+      c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r',4); c.setAttribute('class','node');
+      svg.appendChild(c);
+    });
+    const arcData = arcs.map(function ([a,b], i) {
+      const bend=(i%2===0?1:-1)*(0.12+(i%3)*0.05);
+      const path=document.createElementNS(svgNS,'path');
+      path.setAttribute('d', arcPath(a,b,bend)); path.setAttribute('class','arc');
+      svg.appendChild(path);
+      const length=path.getTotalLength();
+      path.setAttribute('stroke-dasharray', length);
+      const traveler=document.createElementNS(svgNS,'circle');
+      traveler.setAttribute('r',4); traveler.setAttribute('class','traveler');
+      svg.appendChild(traveler);
+      return { path, traveler, length, duration:4800+(i%5)*650, delay:i*420 };
+    });
+    const t0 = performance.now();
+    function animateNetwork(now) {
+      const elapsed = now - t0;
+      arcData.forEach(function (a) {
+        let p = ((elapsed - a.delay) % a.duration) / a.duration;
+        if (elapsed < a.delay) p = -1;
+        if (p < 0) { a.path.style.opacity = 0; a.traveler.style.opacity = 0; return; }
+        let drawP, opacity, travelOn, travelP;
+        if (p < 0.5) { drawP = p/0.5; opacity = Math.min(1, p/0.05) * 0.4; travelOn = true; travelP = drawP; }
+        else if (p < 0.8) { drawP = 1; opacity = 0.4; travelOn = false; }
+        else { drawP = 1; opacity = 0.4 * (1 - (p-0.8)/0.2); travelOn = false; }
+        a.path.style.strokeDashoffset = a.length * (1 - drawP);
+        a.path.style.opacity = opacity;
+        if (travelOn) {
+          const pt = a.path.getPointAtLength(a.length * travelP);
+          a.traveler.setAttribute('cx', pt.x); a.traveler.setAttribute('cy', pt.y);
+          a.traveler.style.opacity = Math.min(1, travelP*6) * Math.min(1, (1-travelP)*6 + 0.3);
+        } else { a.traveler.style.opacity = 0; }
+      });
+      requestAnimationFrame(animateNetwork);
+    }
+    requestAnimationFrame(animateNetwork);
+  })();
+
+  document.getElementById('btn-start').addEventListener('click',function(){morphTransition(this,1,'');});
 
   /* ── Topbar inline edit ── */
   let editSelectedFlyIn  = null;
@@ -2276,7 +2381,13 @@ list.appendChild(row);
     if (eArrEl) eArrEl.addEventListener('input', function () { editSelectedFlyIn = null; });
     if (eDepEl) eDepEl.addEventListener('input', function () { editSelectedFlyOut = null; });
   })();
-  document.getElementById('btn-explore-anywhere').addEventListener('click',function(){showScreen(1);const btnExp=document.getElementById('btn-explore');if(btnExp) btnExp.click();setTimeout(function(){const expEl=document.getElementById('explore-dest');if(expEl) expEl.focus();},150);});
+  document.getElementById('btn-explore-anywhere').addEventListener('click',function(){
+    const self=this;
+    morphTransition(self,1,'',function(){
+      const btnExp=document.getElementById('btn-explore');if(btnExp) btnExp.click();
+      setTimeout(function(){const expEl=document.getElementById('explore-dest');if(expEl) expEl.focus();},150);
+    });
+  });
   document.getElementById('btn-view-map').addEventListener('click',function(){showScreen(4);});
   document.getElementById('btn-spots-badge').addEventListener('click',function(){allExperiences.length>0?showScreen(2):showScreen(2);});
   document.getElementById('btn-explore-nearby').addEventListener('click',openNearbyPanel);
