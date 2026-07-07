@@ -11,8 +11,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root {
-      --ember:     #c8622a;
-      --paper:     #f5f0e8;
+      --ember:     #C1662F;
+      --paper:     #FBF3E7;
       --ink:       #1a1612;
       --ink-muted: #5c5349;
       --border:    rgba(26,22,18,0.12);
@@ -210,16 +210,19 @@
     .loading-state { display: none; }
     .loading-state.is-visible { display: block; }
     .loading-screen { max-width: 480px; margin: 0 auto; padding: 2rem; text-align: center; }
-    .loading-map-wrap { margin-bottom: 1.25rem; }
-    .loading-map { height: 200px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
-    .loading-map-pin { background: transparent; border: none; }
-    .loading-map-marker { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: var(--ember); border: 3px solid #fff; border-radius: 50%; box-shadow: 0 2px 10px rgba(26,22,18,0.3); font-size: 1.75rem; line-height: 1; }
-    .loading-globe { font-size: 4rem; display: block; margin-bottom: 0.75rem; }
     .loading-city-text { font-family: "Playfair Display", Georgia, serif; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--ink); }
     .loading-message { min-height: 2.5rem; font-size: 1rem; color: var(--ink-muted); opacity: 0; transition: opacity 0.4s ease; }
     .loading-message.is-visible { opacity: 1; }
     .form-error { display: none; color: #b91c1c; margin-top: 0.75rem; font-size: 0.9rem; }
     .form-error.is-visible { display: block; }
+
+    /* ── LOADER RING — replaces globe/map ── */
+    .loader-ring { width: 56px; height: 56px; margin: 0 auto 1.25rem; position: relative; }
+    .loader-ring .dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--ember); top: 50%; left: 50%; transform-origin: 0 0; animation: orbit 1.4s linear infinite; }
+    .loader-ring .dot:nth-child(1) { animation-delay: 0s;     opacity: 1; }
+    .loader-ring .dot:nth-child(2) { animation-delay: -0.47s; opacity: 0.6; }
+    .loader-ring .dot:nth-child(3) { animation-delay: -0.93s; opacity: 0.3; }
+    @keyframes orbit { from { transform: rotate(0deg) translateX(24px) rotate(0deg); } to { transform: rotate(360deg) translateX(24px) rotate(-360deg); } }
 
     /* ── SCREEN 2 — Discovery Grid ── */
     .discovery-screen { padding: 0; }
@@ -650,7 +653,6 @@
     <h2>Let's build your trip.</h2>
     <form id="trip-form">
       <div class="trip-type-toggle" role="group">
-        <button type="button" class="trip-type-btn" id="btn-oneway">One way</button>
         <button type="button" class="trip-type-btn is-active" id="btn-return">Return trip</button>
         <button type="button" class="trip-type-btn" id="btn-explore">🧭 Exploring</button>
       </div>
@@ -685,10 +687,7 @@
       <div id="loading-state" class="loading-state" aria-live="polite" hidden>
         <div class="loading-screen">
           <div id="loading-phase1">
-            <div id="loading-map-wrap" class="loading-map-wrap" hidden>
-              <div id="loading-map" class="loading-map"></div>
-            </div>
-            <span id="loading-globe" class="loading-globe" hidden aria-hidden="true">🌍</span>
+            <div class="loader-ring" aria-hidden="true"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
             <p id="loading-city-text" class="loading-city-text"></p>
           </div>
           <p id="loading-message" class="loading-message"></p>
@@ -1120,23 +1119,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ── Trip type toggle ── */
   (function(){
-    var btnOne=document.getElementById('btn-oneway'),btnRet=document.getElementById('btn-return');
+    var btnRet=document.getElementById('btn-return');
     var btnExp=document.getElementById('btn-explore'),flyoutGroup=document.getElementById('flyout-group');
     var arrivalGroup=document.getElementById('arrival-group'),exploreGroup=document.getElementById('explore-group');
-    if(!btnOne||!btnRet||!flyoutGroup) return;
+    if(!btnRet||!flyoutGroup) return;
     function setType(t) {
       tripType=t;
-      btnOne.classList.toggle('is-active',t==='oneway');
       btnRet.classList.toggle('is-active',t==='return');
       if(btnExp) btnExp.classList.toggle('is-active',t==='explore');
-      flyoutGroup.style.display=(t==='oneway'||t==='explore')?'none':'';
+      flyoutGroup.style.display=(t==='explore')?'none':'';
       if(arrivalGroup) arrivalGroup.style.display=t==='explore'?'none':'';
       if(exploreGroup) exploreGroup.style.display=t==='explore'?'':'none';
       const arrivalInput=document.getElementById('arrival-city'),exploreInput=document.getElementById('explore-dest');
       if(arrivalInput) arrivalInput.required=t!=='explore';
       if(exploreInput) exploreInput.required=t==='explore';
     }
-    btnOne.addEventListener('click',function(){setType('oneway');});
     btnRet.addEventListener('click',function(){setType('return');});
     if(btnExp) btnExp.addEventListener('click',function(){setType('explore');});
   })();
@@ -2149,14 +2146,12 @@ list.appendChild(row);
   /* ── Loading ── */
   const MSGS=[{e:'🗺️',t:'Plotting your escape...'},{e:'💎',t:'Scanning for hidden gems...'},{e:'🌀',t:'Checking if it\'s typhoon season...'},{e:'🍜',t:'Finding the best street food nearby...'},{e:'🎒',t:'Asking backpackers who\'ve been there...'},{e:'🚫',t:'Avoiding the tourist traps...'},{e:'🗓️',t:'Checking local festivals and events...'},{e:'🚌',t:'Mapping out transport options...'},{e:'🌅',t:'Finding the best sunrise spots...'},{e:'🤫',t:'Finding spots the guidebooks left out...'},{e:'✈️',t:'Almost there...'}];
   function msgDur(i){return i<=1?9000:i<=2?7000:i<=5?5000:4000;}
-  let loadMap=null,msgTO=null,msgOn=false;
+  let msgTO=null,msgOn=false;
   function showMsg(idx,skip){if(!msgOn) return;const el=document.getElementById('loading-message');if(!el) return;const m=MSGS[idx%MSGS.length];function apply(){if(!msgOn) return;el.textContent=m.e+' '+m.t;el.classList.add('is-visible');const ni=(idx+1)%MSGS.length;msgTO=setTimeout(function(){el.classList.remove('is-visible');setTimeout(function(){showMsg(ni,false);},400);},msgDur(ni));}if(skip) apply();else{el.classList.remove('is-visible');setTimeout(apply,400);}}
   function startMsgs(){stopMsgs();msgOn=true;showMsg(0,true);}
   function stopMsgs(){msgOn=false;if(msgTO){clearTimeout(msgTO);msgTO=null;}const el=document.getElementById('loading-message');if(el) el.classList.remove('is-visible');}
-  function initLoadMap(coords,city){destroyLoadMap();const el=document.getElementById('loading-map');if(!el||typeof L==='undefined') return;loadMap=L.map(el,{center:coords,zoom:5,dragging:false,zoomControl:false,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false,touchZoom:false});L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'',subdomains:'abcd',maxZoom:19}).addTo(loadMap);const icon=L.divIcon({html:'<div class="loading-map-marker">✈️</div>',className:'loading-map-pin',iconSize:[48,48],iconAnchor:[24,24]});L.marker(coords,{icon}).addTo(loadMap).bindPopup(city||'Your destination').openPopup();setTimeout(function(){if(loadMap) loadMap.invalidateSize();},150);}
-  function destroyLoadMap(){if(loadMap){loadMap.remove();loadMap=null;}}
-  function showLoading(city){const el=document.getElementById('loading-state'),mapWrap=document.getElementById('loading-map-wrap'),globe=document.getElementById('loading-globe'),cityTxt=document.getElementById('loading-city-text');if(!el) return;const resolved=resolveLocationCoords(city,selectedFlyIn);const coords=resolved?[resolved.lat,resolved.lng]:null;if(coords){if(mapWrap) mapWrap.hidden=false;if(globe) globe.hidden=true;if(cityTxt) cityTxt.textContent='You\'re heading to '+city.trim();setTimeout(function(){initLoadMap(coords,city.trim());},100);}else{if(mapWrap) mapWrap.hidden=true;if(globe) globe.hidden=false;if(cityTxt) cityTxt.textContent='Mapping your route to '+city.trim()+'...';destroyLoadMap();}el.classList.add('is-visible');el.removeAttribute('hidden');startMsgs();}
-  function hideLoading(){stopMsgs();destroyLoadMap();const el=document.getElementById('loading-state');if(el){el.classList.remove('is-visible');el.setAttribute('hidden','');}}
+  function showLoading(city){const el=document.getElementById('loading-state'),cityTxt=document.getElementById('loading-city-text');if(!el) return;if(cityTxt) cityTxt.textContent='You\'re heading to '+city.trim();el.classList.add('is-visible');el.removeAttribute('hidden');startMsgs();}
+  function hideLoading(){stopMsgs();const el=document.getElementById('loading-state');if(el){el.classList.remove('is-visible');el.setAttribute('hidden','');}}
   function calcDur(f,t){const d=Math.floor((new Date(t+'T00:00:00')-new Date(f+'T00:00:00'))/86400000)+1;return d>=1?d:1;}
 
   /* ── Form submit ── */
@@ -2165,7 +2160,7 @@ list.appendChild(row);
     const arrEl=document.getElementById('arrival-city'),depEl=document.getElementById('departure-city'),frEl=document.getElementById('date-from'),toEl=document.getElementById('date-to');
     let arrival,departure;
     if(tripType==='explore'){var expEl=document.getElementById('explore-dest');arrival=expEl?expEl.value.trim():'';departure=arrival;}
-    else{arrival=selectedFlyIn?selectedFlyIn.city:parseAirportCity(arrEl?arrEl.value.trim():'');departure=tripType==='oneway'?arrival:(selectedFlyOut?selectedFlyOut.city:parseAirportCity(depEl?depEl.value.trim():arrival));}
+    else{arrival=selectedFlyIn?selectedFlyIn.city:parseAirportCity(arrEl?arrEl.value.trim():'');departure=selectedFlyOut?selectedFlyOut.city:parseAirportCity(depEl?depEl.value.trim():arrival);}
     const dateFrom=frEl?frEl.value:'',dateTo=toEl?toEl.value:'';
     if(!arrival||!dateFrom||!dateTo){showErr('Please fill in all fields.');return;}
     currentArrival=arrival; currentDeparture=departure||arrival;
