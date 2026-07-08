@@ -262,8 +262,21 @@
     .discovery-topbar { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 1.25rem; background: #fff; border-bottom: 1px solid var(--border); margin: 0 -1.25rem; }
     .discovery-search { flex: 1; min-width: 0; padding: 0.35rem 0.85rem; font-family: inherit; font-size: 0.82rem; border: 1px solid var(--border); border-radius: 999px; background: var(--paper); color: var(--ink); outline: none; }
     .discovery-search:focus { border-color: var(--ember); box-shadow: 0 0 0 2px rgba(200,98,42,0.15); background: #fff; }
-    .discovery-chips { display: flex; gap: 6px; padding: 0.6rem 1.25rem 0.75rem; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .discovery-chips { display: flex; gap: 6px; padding: 0.6rem 1.25rem 0.75rem; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; flex: 1; min-width: 0; }
     .discovery-chips::-webkit-scrollbar { display: none; }
+
+    .discovery-chips-row { position: relative; display: flex; align-items: center; }
+    .chips-scroll-btn {
+      flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+      border: 1px solid var(--border); background: #fff; color: var(--ink-muted);
+      font-size: 1rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 1px 4px rgba(26,22,18,0.12); z-index: 3; margin: 0 4px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .chips-scroll-btn:hover { color: var(--ember); border-color: var(--ember); }
+    .chips-fade { position: absolute; top: 0; bottom: 0; width: 28px; pointer-events: none; z-index: 2; }
+    .chips-fade--left  { left: 30px;  background: linear-gradient(90deg, var(--paper) 0%, rgba(255,255,255,0) 100%); }
+    .chips-fade--right { right: 30px; background: linear-gradient(270deg, var(--paper) 0%, rgba(255,255,255,0) 100%); }
     .discovery-chip { flex-shrink: 0; font-family: inherit; font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1.5px solid var(--border); background: #fff; color: var(--ink-muted); cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; white-space: nowrap; }
     .discovery-chip.is-active { background: var(--ember); color: #fff; border-color: var(--ember); }
     .discovery-chip:hover:not(.is-active) { border-color: var(--ember); color: var(--ember); }
@@ -737,19 +750,25 @@
       <button type="button" id="btn-pin-all" style="font-family:inherit;font-size:0.72rem;font-weight:600;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:0.3rem 0.8rem;cursor:pointer;white-space:nowrap;flex-shrink:0;">📍 Pin all</button>
     </div>
     <p class="discovery-growth-note">💡 Giya's spot list for this destination grows with each search — check back later for more recommendations.</p>
-    <div class="discovery-chips" id="discovery-chips" aria-label="Filter by type">
-      <button type="button" class="discovery-chip is-active" data-filter="all">All</button>
-      <button type="button" class="discovery-chip" data-filter="pins" id="chip-my-pins" style="display:none;">📍 My Pins</button>
-      <button type="button" class="discovery-chip" data-filter="sight">🏛️ Sights</button>
-      <button type="button" class="discovery-chip" data-filter="food">🍜 Food</button>
-      <button type="button" class="discovery-chip" data-filter="festival">🎉 Festivals</button>
-      <button type="button" class="discovery-chip" data-filter="sport">🏟️ Sport</button>
-      <button type="button" class="discovery-chip" data-filter="nature">🌿 Nature</button>
-      <button type="button" class="discovery-chip" data-filter="nightlife">🌙 Nightlife</button>
-      <button type="button" class="discovery-chip" data-filter="market">🛍️ Markets</button>
-      <button type="button" class="discovery-chip" data-filter="activity">🎯 Activities</button>
-      <button type="button" class="discovery-chip" data-filter="day-trip">🚌 Day trips</button>
-      <button type="button" class="discovery-chip" data-filter="seasonal">🌸 Seasonal</button>
+    <div class="discovery-chips-row" id="discoveryChipsRow">
+      <button type="button" class="chips-scroll-btn chips-scroll-btn--left" id="chipsScrollLeft" aria-label="Scroll filters left" hidden>‹</button>
+      <div class="chips-fade chips-fade--left" id="chipsFadeLeft" hidden></div>
+      <div class="discovery-chips" id="discovery-chips" aria-label="Filter by type">
+        <button type="button" class="discovery-chip is-active" data-filter="all">All</button>
+        <button type="button" class="discovery-chip" data-filter="pins" id="chip-my-pins" style="display:none;">📍 My Pins</button>
+        <button type="button" class="discovery-chip" data-filter="sight">🏛️ Sights</button>
+        <button type="button" class="discovery-chip" data-filter="food">🍜 Food</button>
+        <button type="button" class="discovery-chip" data-filter="festival">🎉 Festivals</button>
+        <button type="button" class="discovery-chip" data-filter="sport">🏟️ Sport</button>
+        <button type="button" class="discovery-chip" data-filter="nature">🌿 Nature</button>
+        <button type="button" class="discovery-chip" data-filter="nightlife">🌙 Nightlife</button>
+        <button type="button" class="discovery-chip" data-filter="market">🛍️ Markets</button>
+        <button type="button" class="discovery-chip" data-filter="activity">🎯 Activities</button>
+        <button type="button" class="discovery-chip" data-filter="day-trip">🚌 Day trips</button>
+        <button type="button" class="discovery-chip" data-filter="seasonal">🌸 Seasonal</button>
+      </div>
+      <div class="chips-fade chips-fade--right" id="chipsFadeRight" hidden></div>
+      <button type="button" class="chips-scroll-btn chips-scroll-btn--right" id="chipsScrollRight" aria-label="Scroll filters right" hidden>›</button>
     </div>
     <div class="discovery-grid" id="discovery-grid"></div>
     <div id="pins-view" hidden>
@@ -1101,10 +1120,33 @@ document.addEventListener('DOMContentLoaded', function () {
     if(sBtn){n>0?sBtn.classList.add('is-visible'):sBtn.classList.remove('is-visible');}
     if(shBtn){shBtn.style.display=n>0?'flex':'none';}
     if(pinChip){pinChip.style.display=n>0?'':'none';pinChip.textContent='📍 My Pins ('+n+')';}
+    updateChipsScrollState();
     const activeChip=document.querySelector('.discovery-chip.is-active');
     if(activeChip&&activeChip.getAttribute('data-filter')==='pins') renderPinsView();
     savePins(pinnedSpots);
   }
+
+  /* ── Filter chip scroll row (arrows + edge fades) ── */
+  function updateChipsScrollState() {
+    const track=document.getElementById('discovery-chips');
+    const btnL=document.getElementById('chipsScrollLeft'), btnR=document.getElementById('chipsScrollRight');
+    const fadeL=document.getElementById('chipsFadeLeft'), fadeR=document.getElementById('chipsFadeRight');
+    if(!track) return;
+    const hasOverflow = track.scrollWidth > track.clientWidth + 2;
+    const atStart = track.scrollLeft <= 2;
+    const atEnd   = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+    [btnL,fadeL].forEach(function(el){ if(el) el.hidden = !hasOverflow || atStart; });
+    [btnR,fadeR].forEach(function(el){ if(el) el.hidden = !hasOverflow || atEnd; });
+  }
+  (function(){
+    const track=document.getElementById('discovery-chips');
+    const btnL=document.getElementById('chipsScrollLeft'), btnR=document.getElementById('chipsScrollRight');
+    if(!track) return;
+    if(btnL) btnL.addEventListener('click', function(){ track.scrollBy({ left: -160, behavior: 'smooth' }); });
+    if(btnR) btnR.addEventListener('click', function(){ track.scrollBy({ left: 160, behavior: 'smooth' }); });
+    track.addEventListener('scroll', updateChipsScrollState);
+    window.addEventListener('resize', updateChipsScrollState);
+  })();
 
   /* ── Trip type toggle ── */
   (function(){
@@ -1736,6 +1778,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var count=allExperiences.filter(function(exp){var addT=exp.additionalTypes||[];return normaliseType(exp.type)===f||addT.indexOf(f)>=0;}).length;
       chip.style.display=count===0?'none':'';
     });
+    updateChipsScrollState();
 
     /* Show explore CTA */
     const ctaBtn=document.getElementById('btn-explore-nearby');
