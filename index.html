@@ -1464,6 +1464,7 @@ document.addEventListener('DOMContentLoaded', function () {
       usedUrls.add(url);
       const img = document.getElementById(ids[slotIndex]);
       if(!img) return;
+      img.onerror = function(){ img.style.display='none'; img.onerror=null; };
       img.src     = url;
       img.alt     = spot.spot_name || '';
       img.style.display = 'block';
@@ -1483,6 +1484,7 @@ document.addEventListener('DOMContentLoaded', function () {
           usedUrls.add(url);
           const img = document.getElementById(ids[slotIndex]);
           if(!img) return;
+          img.onerror = function(){ img.style.display='none'; img.onerror=null; };
           img.src     = url;
           img.alt     = photo.alt || spot.spot_name;
           img.style.display = 'block';
@@ -1636,7 +1638,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const card=document.createElement('article'); card.className='pin-card'; card.setAttribute('role','button'); card.setAttribute('tabindex','0');
         const imgWrap=document.createElement('div'); imgWrap.className='pin-card__img-wrap';
         const img=document.createElement('img'); img.className='pin-card__img'; img.alt=spot.spot_name||'';
-        if(spot.commonsImageUrl){img.src=spot.commonsImageUrl;img.onload=function(){img.classList.add('is-loaded');};}
+        if(spot.commonsImageUrl){
+          img.onerror=function(){ img.onerror=null; fetchPhotos(buildPhotoQuery(spot),1).then(function(photos){if(photos[0]){img.src=photos[0].url_small||photos[0].url;img.onload=function(){img.classList.add('is-loaded');};}});};
+          img.src=spot.commonsImageUrl;img.onload=function(){img.classList.add('is-loaded');};
+        }
         else{fetchPhotos(buildPhotoQuery(spot),1).then(function(photos){if(photos[0]){img.src=photos[0].url_small||photos[0].url;img.onload=function(){img.classList.add('is-loaded');};}});}
         imgWrap.appendChild(img); card.appendChild(imgWrap);
         const foot=document.createElement('div'); foot.className='pin-card__foot';
@@ -1728,7 +1733,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const c=entry.target,im=c.querySelector('.discovery-card__img');
         if(!im||im.src){observer.unobserve(c);return;}
         const exp=allExperiences.find(function(e){return e.spot_name===(c.getAttribute('aria-label'));});
-        if(exp&&exp.commonsImageUrl){c.classList.remove('is-loading');im.src=exp.commonsImageUrl;im.onload=function(){im.classList.add('is-loaded');};observer.unobserve(c);return;}
+        if(exp&&exp.commonsImageUrl){
+          c.classList.remove('is-loading');
+          im.onerror=function(){
+            im.onerror=null;
+            const q2=decodeURIComponent(im.getAttribute('data-query')||'travel');
+            fetchPhotos(q2,1).then(function(photos){ if(photos[0]){const url=photos[0].url_small||photos[0].url;im.src=url;im.onload=function(){im.classList.add('is-loaded');};} });
+          };
+          im.src=exp.commonsImageUrl;im.onload=function(){im.classList.add('is-loaded');};observer.unobserve(c);return;
+        }
         const q=decodeURIComponent(im.getAttribute('data-query')||'travel');
         fetchPhotos(q,3).then(function(photos){
           c.classList.remove('is-loading');
