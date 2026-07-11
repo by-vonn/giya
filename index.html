@@ -1021,6 +1021,10 @@ document.addEventListener('DOMContentLoaded', function () {
     ['VCE','Marco Polo','Venice','IT',45.5053,12.3519],['XIY','Xianyang International','Xi\'an','CN',34.4471,108.7517],
     ['KWL','Liangjiang International','Guilin','CN',25.2181,110.0393],['ZNZ','Abeid Amani Karume International','Zanzibar','TZ',-6.2222,39.2249],
     ['MRU','Sir Seewoosagur Ramgoolam International','Mauritius','MU',-20.4302,57.6836],
+    ['XMN','Xiamen Gaoqi International','Xiamen','CN',24.5440,118.1275],['JJN','Quanzhou Jinjiang','Quanzhou','CN',24.7964,118.5892],
+    ['SWA','Jieyang Chaoshan International','Shantou','CN',23.5533,116.5133],['FOC','Fuzhou Changle International','Fuzhou','CN',25.9350,119.6631],
+    ['HGH','Hangzhou Xiaoshan International','Hangzhou','CN',30.2295,120.4344],['NKG','Nanjing Lukou International','Nanjing','CN',31.7420,118.8620],
+    ['SZX','Shenzhen Bao\'an International','Shenzhen','CN',22.6393,113.8107],
   ];
 
   function searchAirports(query) {
@@ -1206,89 +1210,19 @@ document.addEventListener('DOMContentLoaded', function () {
     return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
   }
 
-  const CITIES={
-    'osaka':[34.6937,135.5023],'tokyo':[35.6762,139.6503],'kyoto':[35.0116,135.7681],
-    'seoul':[37.5665,126.9780],'busan':[35.1796,129.0756],'taipei':[25.0330,121.5654],
-    'hong kong':[22.3193,114.1694],'shanghai':[31.2304,121.4737],'beijing':[39.9042,116.4074],
-    'chengdu':[30.5728,104.0668],'guangzhou':[23.1291,113.2644],'xian':[34.3416,108.9398],
-    'dali':[25.6065,100.2679],'lijiang':[26.8720,100.2199],'kunming':[24.8801,102.8329],
-    'zhangjiajie':[29.1243,110.4792],'guilin':[25.2736,110.2907],'yangshuo':[24.7782,110.4974],
-    'bangkok':[13.7563,100.5018],'chiang mai':[18.7883,98.9853],'phuket':[7.8804,98.3923],
-    'kuala lumpur':[3.1390,101.6869],'singapore':[1.3521,103.8198],
-    'bali':[-8.3405,115.0920],'jakarta':[-6.2088,106.8456],
-    'hanoi':[21.0278,105.8342],'ho chi minh city':[10.8231,106.6297],'danang':[16.0544,108.2022],
-    'manila':[14.5995,120.9842],'cebu':[10.3157,123.8854],
-    'kathmandu':[27.7172,85.3240],'mumbai':[19.0760,72.8777],'delhi':[28.6139,77.2090],
-    'bangalore':[12.9716,77.5946],'colombo':[6.9271,79.8612],
-    'dubai':[25.2048,55.2708],'doha':[25.2854,51.5310],
-    'istanbul':[41.0082,28.9784],'cairo':[30.0444,31.2357],'marrakech':[31.6295,-7.9811],
-    'nairobi':[-1.2921,36.8219],'cape town':[-33.9249,18.4241],'johannesburg':[-26.2041,28.0473],
-    'london':[51.5074,-0.1278],'paris':[48.8566,2.3522],'barcelona':[41.3851,2.1734],
-    'madrid':[40.4168,-3.7038],'amsterdam':[52.3676,4.9041],'berlin':[52.5200,13.4050],
-    'munich':[48.1351,11.5820],'prague':[50.0755,14.4378],'budapest':[47.4979,19.0402],
-    'vienna':[48.2082,16.3738],'lisbon':[38.7169,-9.1395],'rome':[41.9028,12.4964],
-    'milan':[45.4654,9.1859],'athens':[37.9838,23.7275],'copenhagen':[55.6761,12.5683],
-    'stockholm':[59.3293,18.0686],'dublin':[53.3498,-6.2603],'edinburgh':[55.9533,-3.1883],
-    'new york':[40.7128,-74.0060],'los angeles':[34.0522,-118.2437],'miami':[25.7617,-80.1918],
-    'chicago':[41.8781,-87.6298],'san francisco':[37.7749,-122.4194],'toronto':[43.6532,-79.3832],
-    'vancouver':[49.2827,-123.1207],'mexico city':[19.4326,-99.1332],'cancun':[21.1619,-86.8515],
-    'bogota':[4.7110,-74.0721],'lima':[-12.0464,-77.0428],'buenos aires':[-34.6037,-58.3816],
-    'santiago':[-33.4489,-70.6693],'rio de janeiro':[-22.9068,-43.1729],'sao paulo':[-23.5505,-46.6333],
-    'sydney':[-33.8688,151.2093],'melbourne':[-37.8136,144.9631],'auckland':[-36.8509,174.7645],
-    'reykjavik':[64.1466,-21.9426],
-  };
-
-  function getNearbyAreas(lat,lng,radiusKm) {
-    const results=[],seen=new Set(),currentKey=(currentArrival||'').toLowerCase().trim();
-    Object.keys(CITIES).forEach(function(cityName){
-      if(cityName===currentKey) return;
-      const coords=CITIES[cityName],dist=Math.round(haversineKmClient(lat,lng,coords[0],coords[1]));
-      if(dist<=radiusKm&&!seen.has(cityName)){seen.add(cityName);results.push({city:cityName.charAt(0).toUpperCase()+cityName.slice(1).replace(/-/g,' '),lat:coords[0],lng:coords[1],distKm:dist,country:''});}
-    });
-    APT.forEach(function(a){
-      const key=a[2].toLowerCase();
-      if(key===currentKey) return;
-      const dist=Math.round(haversineKmClient(lat,lng,a[4],a[5]));
-      if(dist<=radiusKm&&!seen.has(key)){seen.add(key);results.push({city:a[2],lat:a[4],lng:a[5],distKm:dist,country:a[3]});}
-    });
-    results.sort(function(a,b){return a.distKm-b.distKm;});
-    return results.slice(0,12);
-  }
-
-  /* Resolves a typed location name to coordinates: prefers an explicit
-  airport selection, falls back to fuzzy-matching the full APT list,
-     then the CITIES list. Prevents map/search failures when autocomplete
-     selection didn't register cleanly. */
+  /* Resolves a typed location name to coordinates using the airport list
+     (a genuinely finite, slow-changing dataset — unlike general city
+     coordinates, which now come from the worker's geocoding endpoint
+     rather than a hardcoded table). Used for placing the arrival/departure
+     pins on the trip map. */
   function resolveLocationCoords(typedName, selectedAirport) {
     const clean = (typedName || '').replace(/^[A-Z]{3}\s*—\s*/, '').toLowerCase().trim();
     if (selectedAirport && selectedAirport.city && selectedAirport.city.toLowerCase().trim() === clean) {
       return { lat: selectedAirport.lat, lng: selectedAirport.lng, city: selectedAirport.city };
     }
     if (!typedName) return null;
-    /* Try APT first — broader coverage */
     const aptMatch = searchAirports(clean)[0];
     if (aptMatch) return { lat: aptMatch.lat, lng: aptMatch.lng, city: aptMatch.city };
-    /* Fall back to CITIES */
-    if (CITIES[clean]) return { lat: CITIES[clean][0], lng: CITIES[clean][1], city: typedName };
-    return null;
-  }
-
-  function getCurrentAnchorCoords() {
-    const key=(currentArrival||'').toLowerCase().trim();
-    /* Only trust selectedFlyIn if it actually matches the city currently
-       being explored — otherwise it's a stale leftover from an earlier
-       search (e.g. after navigating via "Explore nearby" or the
-       breadcrumb, currentArrival changes but selectedFlyIn does not). */
-    if(selectedFlyIn && selectedFlyIn.city && selectedFlyIn.city.toLowerCase().trim()===key) {
-      return {lat:selectedFlyIn.lat,lng:selectedFlyIn.lng};
-    }
-    if(CITIES[key]) return {lat:CITIES[key][0],lng:CITIES[key][1]};
-    const aptMatch=searchAirports(key)[0];
-    if(aptMatch) return {lat:aptMatch.lat,lng:aptMatch.lng};
-    if(journeyPath.length>0){
-      const last=journeyPath[journeyPath.length-1];
-      if(last.city && last.city.toLowerCase().trim()===key && last.lat) return {lat:last.lat,lng:last.lng};
-    }
     return null;
   }
 
@@ -1311,19 +1245,30 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ── Nearby panel ── */
-  function openNearbyPanel() {
+  async function openNearbyPanel() {
     const panel=document.getElementById('nearby-panel'),overlay=document.getElementById('nearby-overlay'),list=document.getElementById('nearby-list'),title=document.getElementById('nearby-panel-title');
     if(!panel||!overlay) return;
     if(title) title.textContent='Explore from '+(currentArrival||'here');
     panel.hidden=false; overlay.setAttribute('aria-hidden','false');
     panel.getBoundingClientRect(); panel.classList.add('is-open'); overlay.classList.add('is-open');
     document.body.style.overflow='hidden';
-    if(list){
-      list.innerHTML='<p class="nearby-loading">Finding nearby areas…</p>';
-      const coords=getCurrentAnchorCoords();
-      if(!coords){list.innerHTML='<p class="nearby-loading">Could not determine current location.</p>';return;}
-      const areas=getNearbyAreas(coords.lat,coords.lng,600);
-      if(areas.length===0){list.innerHTML='<p class="nearby-loading">No areas found within 600km.</p>';return;}
+    if(!list) return;
+    list.innerHTML='<p class="nearby-loading">Finding nearby areas…</p>';
+
+    /* Pass coordinates through if we already have a matching, non-stale
+       airport selection — saves the worker a geocoding round-trip.
+       Otherwise the worker geocodes currentArrival itself. */
+    const key=(currentArrival||'').toLowerCase().trim();
+    const hasMatchingAirport = selectedFlyIn && selectedFlyIn.city && selectedFlyIn.city.toLowerCase().trim()===key;
+    const payload = { action:'nearby', city: currentArrival };
+    if (hasMatchingAirport) { payload.lat = selectedFlyIn.lat; payload.lng = selectedFlyIn.lng; }
+
+    try {
+      const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (!data.ok) { list.innerHTML = '<p class="nearby-loading">Could not find nearby areas for '+esc(currentArrival||'this location')+'.</p>'; return; }
+      const areas = data.areas || [];
+      if (areas.length===0) { list.innerHTML = '<p class="nearby-loading">No nearby areas found within 600km.</p>'; return; }
       list.innerHTML='';
       areas.forEach(function(area){
         const distClass=area.distKm<100?'near':area.distKm<400?'medium':'far';
@@ -1332,8 +1277,11 @@ document.addEventListener('DOMContentLoaded', function () {
         row.addEventListener('click',function(){closeNearbyPanel();searchFromAnchor(area.city,area.lat,area.lng,false);});
         list.appendChild(row);
       });
+    } catch (err) {
+      list.innerHTML = '<p class="nearby-loading">Could not reach Giya. Try again in a moment.</p>';
     }
   }
+
 
   function closeNearbyPanel() {
     const panel=document.getElementById('nearby-panel'),overlay=document.getElementById('nearby-overlay');
@@ -1836,8 +1784,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const sameCity=currentArrival.toLowerCase()===currentDeparture.toLowerCase();
     const arrLabel=selectedFlyIn?selectedFlyIn.iata+' — '+selectedFlyIn.name:currentArrival;
     const depLabel=selectedFlyOut?selectedFlyOut.iata+' — '+selectedFlyOut.name:currentDeparture;
-    if(arrCoords){const m=L.marker(arrCoords,{icon:L.divIcon({html:'<div class="terminal-pin terminal-pin--in">🛬</div>',className:'',iconSize:[36,36],iconAnchor:[18,18]})}).addTo(mainMap);m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛬 Flying into</strong><br>'+esc(arrLabel)+'</div>',{maxWidth:200});terminalMarkers.push(m);allBounds.push(arrCoords);}
-    if(depCoords&&!sameCity&&tripType==='return'){const m=L.marker(depCoords,{icon:L.divIcon({html:'<div class="terminal-pin terminal-pin--out">🛫</div>',className:'',iconSize:[36,36],iconAnchor:[18,18]})}).addTo(mainMap);m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛫 Flying out from</strong><br>'+esc(depLabel)+'</div>',{maxWidth:200});terminalMarkers.push(m);allBounds.push(depCoords);}
+    if(arrCoords){
+      const m=L.marker(arrCoords,{icon:L.divIcon({html:'<div class="terminal-pin terminal-pin--in">🛬</div>',className:'',iconSize:[36,36],iconAnchor:[18,18]})}).addTo(mainMap);
+      m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛬 Flying into</strong><br>'+esc(arrLabel)+'<button class="giya-pin-popup__btn" style="margin-top:0.5rem;">Explore here →</button></div>',{maxWidth:200});
+      m.on('popupopen',function(){const btn=m.getPopup().getElement().querySelector('.giya-pin-popup__btn');if(!btn) return;btn.addEventListener('click',function(){m.closePopup();showScreen(2);searchFromAnchor(currentArrival,arrCoords[0],arrCoords[1],false);});});
+      terminalMarkers.push(m);allBounds.push(arrCoords);
+    }
+    if(depCoords&&!sameCity&&tripType==='return'){
+      const m=L.marker(depCoords,{icon:L.divIcon({html:'<div class="terminal-pin terminal-pin--out">🛫</div>',className:'',iconSize:[36,36],iconAnchor:[18,18]})}).addTo(mainMap);
+      m.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;padding:0.5rem"><strong>🛫 Flying out from</strong><br>'+esc(depLabel)+'<button class="giya-pin-popup__btn" style="margin-top:0.5rem;">Explore here →</button></div>',{maxWidth:200});
+      m.on('popupopen',function(){const btn=m.getPopup().getElement().querySelector('.giya-pin-popup__btn');if(!btn) return;btn.addEventListener('click',function(){m.closePopup();showScreen(2);searchFromAnchor(currentDeparture,depCoords[0],depCoords[1],false);});});
+      terminalMarkers.push(m);allBounds.push(depCoords);
+    }
     pinnedSpots.forEach(function(entry,idx){
       const spot=entry.spot,color=entry.categoryColor,lat=spot.coordinates&&spot.coordinates.lat,lng=spot.coordinates&&spot.coordinates.lng;
       if(!lat||!lng) return;
