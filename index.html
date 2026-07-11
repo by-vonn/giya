@@ -1266,7 +1266,7 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       const data = await res.json();
-      if (!data.ok) { list.innerHTML = '<p class="nearby-loading">Could not find nearby areas for '+esc(currentArrival||'this location')+'.</p>'; return; }
+      if (!data.ok) { list.innerHTML = '<p class="nearby-loading">Could not find nearby areas for '+esc(currentArrival||'this location')+(data.error?'<br><span style="font-size:0.72rem;opacity:0.7;">'+esc(data.error)+'</span>':'')+'</p>'; return; }
       const areas = data.areas || [];
       if (areas.length===0) { list.innerHTML = '<p class="nearby-loading">No nearby areas found within 600km.</p>'; return; }
       list.innerHTML='';
