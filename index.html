@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
       --ember:     #C1662F;
@@ -468,6 +469,8 @@
     .map-spot-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-bottom: 1px solid rgba(26,22,18,0.05); transition: background 0.1s; }
     .map-spot-row:hover { background: rgba(26,22,18,0.03); }
     .map-spot-row.drag-over { border-top: 2px solid var(--ember); background: rgba(200,98,42,0.04); }
+    .map-spot-day { flex-shrink: 0; font-family: inherit; font-size: 0.68rem; font-weight: 600; color: var(--ink-muted); border: 1px solid var(--border); border-radius: 6px; padding: 2px 4px; background: #fff; cursor: pointer; }
+    .map-spot-day:focus { outline: 2px solid var(--ember); outline-offset: 1px; }
     .map-spot-row[draggable="true"] { cursor: grab; }
     .map-spot-drag-handle { color: #c0b8b0; font-size: 0.8rem; padding: 0 0.15rem; flex-shrink: 0; cursor: grab; user-select: none; }
     .map-spot-num { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(26,22,18,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: #fff; flex-shrink: 0; }
@@ -787,6 +790,10 @@
           <button type="button" class="map-panel__show-all" id="btn-hide-all-pins" style="margin-left:0.25rem;">Hide all</button>
           <button type="button" class="map-panel__route-btn" id="btn-toggle-route">Route</button>
         </div>
+        <div class="map-panel__header" style="border-top:1px solid var(--border);">
+          <button type="button" class="map-panel__show-all" id="btn-share-pins">💾 Save plan</button>
+          <button type="button" class="map-panel__show-all" id="btn-export-image">🖼️ Export image</button>
+        </div>
         <!-- Tabs: Pins | Route — only shown when route is active -->
         <div class="map-panel__tabs" id="map-panel-tabs" hidden>
           <button type="button" class="map-panel__tab is-active" id="tab-pins">📍 Pins</button>
@@ -809,6 +816,17 @@
 </main>
 
 <!-- FOOTER -->
+<!-- EXPORT CARD (off-screen, captured by html2canvas on demand) -->
+<div id="export-card-wrap" style="position:absolute; left:-9999px; top:0;">
+  <div id="export-card" style="width:800px; background:#fff; font-family:'DM Sans',sans-serif; padding:2.5rem;">
+    <div style="font-family:'Playfair Display',Georgia,serif; font-weight:700; font-size:1.5rem; color:#c8622a;">Giya</div>
+    <div id="export-card-route" style="font-family:'Playfair Display',Georgia,serif; font-weight:700; font-size:1.8rem; color:#1a1612; margin-top:0.75rem;"></div>
+    <div id="export-card-dates" style="font-size:0.95rem; color:#5c5349; margin-top:0.25rem;"></div>
+    <div id="export-card-days" style="margin-top:1.75rem;"></div>
+    <div style="margin-top:2rem; padding-top:1rem; border-top:1px solid rgba(26,22,18,0.12); font-size:0.8rem; color:#5c5349;">Planned with Giya &middot; by-vonn.github.io/giya</div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <p>AI-generated content is for planning purposes only. Always verify before booking.</p>
   <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors • Photos: <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a> / Wikimedia Commons</p>
@@ -1294,7 +1312,19 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ── Anchor search ── */
   async function searchFromAnchor(cityName,lat,lng,isReturn) {
     if(!cityName) return;
-    if(!isReturn){journeyPath.push({city:cityName,lat:lat||null,lng:lng||null});saveJourney(journeyPath);}
+    if(!isReturn){
+      const key=cityName.toLowerCase().trim();
+      const existingIdx=journeyPath.findIndex(function(e){ return (e.city||'').toLowerCase().trim()===key; });
+      if(existingIdx>=0){
+        /* Already visited this city earlier in the path — collapse back
+           to that point instead of growing the breadcrumb with a repeat
+           (e.g. A -> B -> A -> B bouncing shouldn't produce 4 entries). */
+        journeyPath=journeyPath.slice(0,existingIdx+1);
+      } else {
+        journeyPath.push({city:cityName,lat:lat||null,lng:lng||null});
+      }
+      saveJourney(journeyPath);
+    }
     currentArrival=cityName;
     updateTopBarFlight(cityName,_searchDeparture||cityName,_searchDateFrom,_searchDateTo);
     window._giyaDateFrom=_searchDateFrom;
@@ -1508,7 +1538,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if(pinnedSpots.some(function(e){return e.spot.spot_name===spot.spot_name;})) return;
     let catName='Unknown',catColor='#E8892B',catEmoji='📍';
     if(giyaData&&giyaData.experiences){const found=giyaData.experiences.find(function(e){return e.spot_name===spot.spot_name;});if(found){catName=found.type||'sight';catColor=getTypeColor(found.type);catEmoji=getTypeEmoji(found.type);}}
-    const pinEntry={spot,categoryName:catName,categoryColor:catColor,categoryEmoji:catEmoji,cardEl,sourceCity:currentArrival||'Unknown'};
+    const pinEntry={spot,categoryName:catName,categoryColor:catColor,categoryEmoji:catEmoji,cardEl,sourceCity:currentArrival||'Unknown',day:1};
     pinnedSpots.push(pinEntry); giyaAddedSpots=pinnedSpots;
     const addBtn=document.getElementById('spot-panel-add-btn'),remBtn=document.getElementById('spot-panel-remove-btn');
     if(addBtn){addBtn.textContent='✅ Added to map';addBtn.classList.add('is-added');addBtn.disabled=true;}
@@ -1827,21 +1857,26 @@ document.addEventListener('DOMContentLoaded', function () {
     if(!list) return;
     if(pinnedSpots.length===0){list.innerHTML='<p class="map-panel__empty">No spots added yet. Browse results and tap "+ Add to my map".</p>';return;}
     list.innerHTML='';
+    const maxDay = Math.max(1, ...pinnedSpots.map(function(e){ return e.day||1; }));
     pinnedSpots.forEach(function(entry,idx){
       const spot=entry.spot,color=entry.categoryColor,emoji=entry.categoryEmoji||'📍';
       const isVisible=!mapMarkers[spot.spot_name]||mapMarkers[spot.spot_name].visible!==false;
       const row=document.createElement('div'); row.className='map-spot-row'+(isVisible?'':' is-hidden-pin');
       row.setAttribute('draggable', 'true');
       row.setAttribute('data-idx', String(idx));
+      const dayOptions = Array.from({length: Math.max(maxDay, (entry.day||1)) + 1}, function(_,i){ return i+1; })
+        .map(function(d){ return '<option value="'+d+'"'+(d===(entry.day||1)?' selected':'')+'>Day '+d+'</option>'; }).join('');
       row.innerHTML=
         '<span class="map-spot-drag-handle" title="Drag to reorder">⠿</span>'+
         '<div class="map-spot-num" style="background:'+esc(color)+'">'+(idx+1)+'</div>'+
         '<span class="map-spot-emoji">'+emoji+'</span>'+
         '<div class="map-spot-info"><div class="map-spot-name">'+esc(spot.spot_name)+'</div>'+
         '<div class="map-spot-area">'+esc(spot.area||entry.categoryName)+'</div></div>'+
+        '<select class="map-spot-day" aria-label="Assign to day">'+dayOptions+'</select>'+
         '<button class="map-spot-toggle" data-active="'+isVisible+'" aria-label="'+(isVisible?'Hide':'Show')+' pin">'+(isVisible?'👁':'🚫')+'</button>'+
         '<button class="map-spot-remove" aria-label="Remove" title="Remove">🗑</button>';
         row.querySelector('.map-spot-remove').addEventListener('click',function(){removeSpotByName(spot.spot_name,entry.cardEl);});
+        row.querySelector('.map-spot-day').addEventListener('change',function(e){ entry.day=parseInt(e.target.value,10)||1; refreshMapPanel(); });
 
 /* Drag-to-reorder handlers */
 row.addEventListener('dragstart',function(e){
@@ -2437,7 +2472,7 @@ list.appendChild(row);
     allExperiences.forEach(function(exp){
       var alreadyAdded=pinnedSpots.some(function(e){return e.spot.spot_name===exp.spot_name;});
       if(alreadyAdded) return;
-      pinnedSpots.push({spot:exp,categoryName:exp.type,categoryColor:getTypeColor(exp.type),categoryEmoji:getTypeEmoji(exp.type),cardEl:null,sourceCity:currentArrival||'Unknown'});
+      pinnedSpots.push({spot:exp,categoryName:exp.type,categoryColor:getTypeColor(exp.type),categoryEmoji:getTypeEmoji(exp.type),cardEl:null,sourceCity:currentArrival||'Unknown',day:1});
       added++;
     });
     giyaAddedSpots=pinnedSpots;
