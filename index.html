@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="preload" as="image" href="images/onboarding/card1-discover.png">
+  <link rel="preload" as="image" href="images/onboarding/card2-learns.png">
+  <link rel="preload" as="image" href="images/onboarding/card3-honest.png">
+  <link rel="preload" as="image" href="images/onboarding/card4-portfolio.png">
   <style>
     :root {
       --ember:     #C1662F;
@@ -2562,21 +2566,21 @@ list.appendChild(row);
   const ONBOARDING_CARDS = [
     {
       title: 'Discover Beyond the Guidebooks',
-      image: 'data:image/jpeg;base64,__CARD1_B64__',
+      image: 'images/onboarding/card1-discover.png',
       html: '<p>Most travel planners are great at helping you visit the places everyone already knows.</p>'
           + '<p>Giya was built with a different goal: helping travellers discover interesting places they might never have searched for.</p>'
           + '<p>Whether you\'re planning a backpacking trip or simply exploring somewhere new, Giya is designed to surface ideas—not just repeat the same famous attractions.</p>',
     },
     {
       title: 'A Travel Planner That Learns',
-      image: 'data:image/jpeg;base64,__CARD2_B64__',
+      image: 'images/onboarding/card2-learns.png',
       html: '<p>Instead of relying on a massive pre-written travel database, Giya explores destinations as they\'re searched.</p>'
           + '<p>When someone searches a destination for the first time, Giya discovers places using AI and trusted mapping data. Once discovered, those results are remembered to make future searches richer, faster and more consistent.</p>'
           + '<p>This approach allows Giya to grow naturally over time while keeping the project lightweight and scalable.</p>',
     },
     {
       title: 'Honest by Design',
-      image: 'data:image/jpeg;base64,__CARD3_B64__',
+      image: 'images/onboarding/card3-honest.png',
       html: '<p>Giya aims to be transparent about what it knows—and what it doesn\'t.</p>'
           + '<ul>'
           + '<li><strong>Coverage varies by destination.</strong> Popular places naturally have richer recommendations, while newly explored destinations may begin with fewer spots.</li>'
@@ -2587,7 +2591,7 @@ list.appendChild(row);
     },
     {
       title: 'Built with Thoughtful Trade-offs',
-      image: 'data:image/jpeg;base64,__CARD4_B64__',
+      image: 'images/onboarding/card4-portfolio.png',
       html: '<p>Giya is an independent portfolio project created by a single developer using free-tier AI, mapping and cloud services.</p>'
           + '<p>Rather than building the largest travel database, the focus has been on solving interesting engineering problems:</p>'
           + '<ul>'
