@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Giya — AI Travel Planner</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -508,10 +508,10 @@
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
     /* ── ONBOARDING ── */
-    .onboarding-overlay { position: fixed; inset: 0; background: rgba(26,22,18,0.55); backdrop-filter: blur(3px); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 280ms ease-out; }
+    .onboarding-overlay { position: fixed; inset: 0; background: rgba(26,22,18,0.55); backdrop-filter: blur(3px); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 280ms ease-out; overscroll-behavior: none; }
     .onboarding-overlay.is-open { opacity: 1; pointer-events: auto; }
     .onboarding-overlay.is-closing { opacity: 0; transition: opacity 240ms ease-in; }
-    .onboarding-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.98); width: min(92vw, 460px); max-height: 88vh; z-index: 301; opacity: 0; pointer-events: none; transition: opacity 280ms cubic-bezier(0.16,1,0.3,1), transform 280ms cubic-bezier(0.16,1,0.3,1); display: flex; flex-direction: column; }
+    .onboarding-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.98); width: min(92vw, 460px); max-height: min(88vh, 88dvh); z-index: 301; opacity: 0; pointer-events: none; transition: opacity 280ms cubic-bezier(0.16,1,0.3,1), transform 280ms cubic-bezier(0.16,1,0.3,1); display: flex; flex-direction: column; min-height: 0; overscroll-behavior: contain; }
     .onboarding-modal.is-open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
     /* Skip/dismiss: settles back down slightly — reads as closing a panel */
     .onboarding-modal.is-closing { opacity: 0; transform: translate(-50%, -50%) scale(0.98); transition: opacity 240ms ease-in, transform 240ms ease-in; }
@@ -519,10 +519,11 @@
     .onboarding-modal.is-completing { opacity: 0; transform: translate(-50%, -50%) scale(1.03); transition: opacity 240ms ease-in, transform 240ms ease-in; }
     .onboarding-skip { position: absolute; top: -2.6rem; right: 0; background: none; border: none; color: rgba(255,255,255,0.85); font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; padding: 0.3rem 0.5rem; }
     .onboarding-skip:hover { color: #fff; text-decoration: underline; }
-    .onboarding-card { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(26,22,18,0.28); display: flex; flex-direction: column; max-height: calc(88vh - 4.5rem); }
-    #onboarding-content { display: flex; flex-direction: column; opacity: 1; transition: opacity 100ms ease; }
+    /* Card fills remaining modal height; body scrolls when content exceeds available space */
+    .onboarding-card { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(26,22,18,0.28); display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; max-height: 100%; }
+    #onboarding-content { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; opacity: 1; transition: opacity 100ms ease; }
     .onboarding-illustration { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; flex-shrink: 0; background: var(--paper); }
-    .onboarding-body { padding: 1.5rem 1.75rem 1.75rem; overflow-y: auto; }
+    .onboarding-body { padding: 1.5rem 1.75rem 1.75rem; flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y; }
     .onboarding-title { font-family: "Playfair Display", Georgia, serif; font-size: 1.35rem; font-weight: 700; color: var(--ink); margin-bottom: 0.7rem; line-height: 1.3; }
     .onboarding-text { font-size: 0.92rem; line-height: 1.65; color: var(--ink-muted); }
     .onboarding-text p { margin-bottom: 0.85rem; }
@@ -532,7 +533,7 @@
     .onboarding-text li:last-child { margin-bottom: 0; }
     .onboarding-text li::before { content: '•'; position: absolute; left: 0; color: var(--ember); font-weight: 700; }
     .onboarding-text li strong { color: var(--ink); font-weight: 600; }
-    .onboarding-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; flex-shrink: 0; }
+    .onboarding-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; flex-shrink: 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
     .onboarding-dots { display: flex; gap: 6px; }
     .onboarding-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: background 0.2s ease, transform 0.2s ease; }
     .onboarding-dot.is-active { background: #fff; transform: scale(1.3); }
@@ -541,7 +542,34 @@
     .onboarding-back:hover { border-color: #fff; }
     .onboarding-next { background: var(--ember); border: none; color: #fff; font-family: inherit; font-size: 0.9rem; font-weight: 600; padding: 0.6rem 1.3rem; border-radius: 999px; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.15s, box-shadow 0.15s; }
     .onboarding-next:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,98,42,0.4); }
-    @media (max-width: 480px) { .onboarding-modal { width: 94vw; } .onboarding-illustration { aspect-ratio: 16/9; } }
+    /* Phones / small tablets: keep footer reachable; scroll only the text body */
+    @media (max-width: 640px) {
+      .onboarding-modal {
+        width: min(94vw, 460px);
+        max-height: calc(100svh - 3.5rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 3.5rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+      }
+      .onboarding-skip { top: -2.4rem; }
+      .onboarding-illustration { aspect-ratio: 16/9; max-height: 36svh; }
+      .onboarding-body { padding: 1.25rem 1.35rem 1.35rem; }
+      .onboarding-footer {
+        margin-top: 0.75rem;
+        padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0px));
+      }
+    }
+    /* Short viewports: shrink image first so text + buttons stay usable */
+    @media (max-height: 700px) {
+      .onboarding-illustration { aspect-ratio: 16/8; max-height: 30svh; }
+      .onboarding-body { padding-top: 1.1rem; padding-bottom: 1.1rem; }
+      .onboarding-title { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    }
+    @media (max-height: 600px) {
+      .onboarding-illustration { max-height: 24svh; aspect-ratio: 2/1; }
+      .onboarding-skip { top: -2.1rem; }
+    }
+    @media (max-height: 500px) {
+      .onboarding-illustration { max-height: 18svh; }
+    }
 
     /* Respect reduced-motion: keep full functionality, drop the motion */
     @media (prefers-reduced-motion: reduce) {
@@ -2625,8 +2653,8 @@ list.appendChild(row);
         dots.appendChild(d);
       });
     }
-    const body=document.getElementById('onboarding-card');
-    if(body) body.scrollTop=0;
+    const scrollBody=document.querySelector('.onboarding-body');
+    if(scrollBody) scrollBody.scrollTop=0;
   }
 
   function openOnboarding(){
