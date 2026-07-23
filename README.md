@@ -17,19 +17,25 @@ Search for **Tokyo**, and you'll receive Tokyo.
 
 Search for **Paris**, and you'll receive Paris.
 
-But discovering places you've **never heard of** is surprisingly difficult.
+These recommendations aren't wrong.
 
-As someone who enjoys backpacking, I wanted to explore a different question:
+They're simply the places everyone already knows.
 
-> **Can AI help travellers discover places they never thought to search for?**
+As someone who enjoys backpacking, I began wondering:
 
-Giya is my attempt to answer that question.
+> **Can AI encourage people to discover destinations beyond the typical travel route?**
 
-Rather than relying on a massive pre-built travel database, Giya generates recommendations on demand using AI, verifies information whenever possible, and continuously improves through intelligent caching.
+Giya was created around a simple belief:
 
-The goal isn't to replace official travel information.
+> **Some of the most memorable journeys begin with places you weren't originally planning to visit.**
 
-The goal is to make discovering the next destination easier.
+Rather than replacing traditional travel planning, Giya aims to inspire curiosity by introducing travellers to destinations they might never have considered, while providing enough context and verification for them to decide whether those places are worth exploring.
+
+Rather than relying on a massive pre-built travel database, Giya generates recommendations using AI, verifies information whenever possible, and continuously improves through intelligent caching.
+
+Travel isn't only about planning where to go.
+
+It's about discovering possibilities you didn't know existed.
 
 ---
 
