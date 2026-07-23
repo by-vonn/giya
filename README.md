@@ -148,6 +148,16 @@ This behaviour is intentional and reflects the product's design philosophy rathe
 
 ---
 
+## Demo Limitations
+
+Giya is currently hosted on a zero-cost infrastructure using free-tier AI services.
+
+To keep the public demo available, request limits are intentionally constrained. If the demo becomes temporarily unavailable after several searches, please try again later.
+
+The focus of this project is on exploring product design, recommendation quality, and AI system architecture rather than operating a production-scale service.
+
+---
+
 # Technology Stack
 
 ### Frontend
