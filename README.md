@@ -17,19 +17,25 @@ Search for **Tokyo**, and you'll receive Tokyo.
 
 Search for **Paris**, and you'll receive Paris.
 
-But discovering places you've **never heard of** is surprisingly difficult.
+These recommendations aren't wrong.
 
-As someone who enjoys backpacking, I wanted to explore a different question:
+They're simply the places everyone already knows.
 
-> **Can AI help travellers discover places they never thought to search for?**
+As someone who enjoys backpacking, I began wondering:
 
-Giya is my attempt to answer that question.
+> **Can AI encourage people to discover destinations beyond the typical travel route?**
 
-Rather than relying on a massive pre-built travel database, Giya generates recommendations on demand using AI, verifies information whenever possible, and continuously improves through intelligent caching.
+Giya was created around a simple belief:
 
-The goal isn't to replace official travel information.
+> **Some of the most memorable journeys begin with places you weren't originally planning to visit.**
 
-The goal is to make discovering the next destination easier.
+Rather than replacing traditional travel planning, Giya aims to inspire curiosity by introducing travellers to destinations they might never have considered, while providing enough context and verification for them to decide whether those places are worth exploring.
+
+Rather than relying on a massive pre-built travel database, Giya generates recommendations using AI, verifies information whenever possible, and continuously improves through intelligent caching.
+
+Travel isn't only about planning where to go.
+
+It's about discovering possibilities you didn't know existed.
 
 ---
 
@@ -139,6 +145,16 @@ Rather than building the largest travel database possible, Giya focuses on:
 Some destinations naturally contain richer recommendations than others because Giya generates knowledge as destinations are explored.
 
 This behaviour is intentional and reflects the product's design philosophy rather than missing content.
+
+---
+
+## Demo Limitations
+
+Giya is currently hosted on a zero-cost infrastructure using free-tier AI services.
+
+To keep the public demo available, request limits are intentionally constrained. If the demo becomes temporarily unavailable after several searches, please try again later.
+
+The focus of this project is on exploring product design, recommendation quality, and AI system architecture rather than operating a production-scale service.
 
 ---
 
